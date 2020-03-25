@@ -1,0 +1,9 @@
+{:source-paths ["src"]
+ :dependencies [[reagent "0.10.0"]]
+ :dev-http {8080 ["public/"
+                  "target/public/"]}
+ :builds {:dev {:target :browser
+                :output-dir "target/public/dev"
+                :asset-path "/dev"
+                :modules {:main {:init-fn demo.core/render!}}
+                :devtools {:after-load demo.core/render!}}}}

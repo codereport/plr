@@ -1,0 +1,4 @@
+/target
+/node_modules
+.shadow-cljs
+package-lock.json
