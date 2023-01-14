@@ -4,26 +4,10 @@
    [reagent.core :as r]
    [clojure.string :as str]
    [plr.imgs :as imgs]
+   [plr.data :as data]
    ))
 
-(defonce state (r/atom {:top-padding "100px"
-                        :results-table [:tr]}))
-
-(def octoverse ["JavaScript" "Python" "Java" "TypeScript" "C#" "C++" "PHP" "Shell" "C" "Ruby"])
-(def ieee ["Python" "C" "C++" "C#" "Java" "SQL" "JavaScript" "R" "HTML" "TypeScript" "Go" "PHP" "Shell" "Ruby" "Scala" "MATLAB" "SAS" "Assembly" "Kotlin" "Rust"])
-(def redmonk ["JavaScript" "Python" "Java" "PHP" "C#" "CSS" "C++" "TypeScript" "Ruby" "C" "Swift" "R" "Objective-C" "Shell" "Scala" "Go" "PowerShell" "Kotlin" "Rust" "Dart"])
-(def languish ["Python" "JavaScript" "TypeScript" "Java" "C++" "C#" "Go" "HTML" "Markdown" "C" "PHP" "Rust" "CSS" "Shell" "Kotlin" "Jupyter Notebook" "R" "Dart" "Swift" "Vue" "SQL" "Ruby" "JSON" "Lua" "Dockerfile" "PowerShell"])
-(def stack-overflow ["JavaScript" "HTML" "SQL" "Python" "TypeScript" "Java" "Shell" "C#" "C++" "PHP" "C" "PowerShell" "Go" "Rust" "Kotlin" "Dart" "Ruby" "Assembly" "Swift" "R" "VBA" "MATLAB" "Lua" "Groovy" "Delphi" "Scala" "Objective-C" "Perl"])
-(def pypl ["Python" "Java" "JavaScript" "C#" "C++" "PHP" "R" "TypeScript" "Swift" "Objective-C" "Go" "Rust" "Kotlin" "MATLAB" "Ruby" "VBA" "Ada" "Dart" "Scala" "Visual Basic"])
-
-(def extras [; Languish
-             [29 "VBA"]
-             [32 "Objective-C"]
-             [39 "Assembly"]
-             [166 "Ada"]
-             [261 "Visual Basic"]])
-
-(def odd ["Markdown" "CSS" "HTML" "SAS" "Jupyter Notebook" "Vue" "JSON" "Dockerfile" "SQL"])
+(defonce state (r/atom {:results-table [:tr]}))
 
 (defn avg [coll] (/ (reduce + coll) (count coll)))
 (defn format [num] (/ (int (* num 100)) 100))
@@ -38,17 +22,17 @@
    [:td {:style {:padding "12px 30px"}} (format n)]])
 
 (defn generate-table [rankings]
-  [:table {:style {:font-family "Consolas"
+  [:table {:style {:font-family "Courier"
                    :padding "12px 12px"
                    :font-size "30"
                    :margin-left "auto"
                    :margin-right "auto"
                    :text-align "center"}}
    (->> rankings
-        (map (partial remove #(in? % odd)))
+        (map (partial remove #(in? % data/odd)))
         (map (partial map-indexed vector))
         (apply concat)
-        (concat extras)
+        (concat data/extras)
         (group-by last)
         (map (fn [[k v]] [(+ (avg (map first v)) 1)
                           (count (map first v))
@@ -60,7 +44,7 @@
   ])
 
 (defn style [font-size]
-  {:style {:font-family "Consolas"
+  {:style {:font-family "Courier"
            :font-size (str font-size)
            :font-weight "bold"}})
 
@@ -69,7 +53,7 @@
 (defn app-view []
   [:div {:style {:search-text ""
                  :text-align "center"
-                 :padding (@state :top-padding)}}
+                 :padding "100px"}}
    [:label (style 50) "Programming Language Rankings"] [:br] [:br]
    [:label (style 25) "brought to you by code_report"] [:br] [:br]
    [:div
@@ -82,12 +66,12 @@
     [:input {:type "checkbox"}] [:label cb-style " IEE Spectrum "]
     [:input {:type "checkbox"}] [:label cb-style " TIOBE "]] [:br]
    (@state :resutls-table
-           (generate-table [octoverse
-                            ;; ieee
-                            redmonk
-                            ;; pypl
-                            languish
-                            stack-overflow]))])
+           (generate-table [data/octoverse
+                            data/ieee
+                            data/redmonk
+                            data/pypl
+                            data/languish
+                            data/stack-overflow]))])
 
 (defn render! []
   (rdom/render
