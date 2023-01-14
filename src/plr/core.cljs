@@ -29,7 +29,7 @@
                    :margin-right "auto"
                    :text-align "center"}}
    (->> rankings
-        (map (partial remove #(in? % data/odd)))
+        ;; (map (partial remove #(in? % data/odd)))
         (map (partial map-indexed vector))
         (apply concat)
         (concat data/extras)
@@ -53,7 +53,7 @@
 (defn app-view []
   [:div {:style {:search-text ""
                  :text-align "center"
-                 :padding "100px"}}
+                 :padding "50px"}}
    [:label (style 50) "Programming Language Rankings"] [:br] [:br]
    [:label (style 25) "brought to you by code_report"] [:br] [:br]
    [:div
@@ -64,13 +64,17 @@
     [:br]
     [:input {:type "checkbox"}] [:label cb-style " PYPL "]
     [:input {:type "checkbox"}] [:label cb-style " IEE Spectrum "]
-    [:input {:type "checkbox"}] [:label cb-style " TIOBE "]] [:br]
+    [:input {:type "checkbox"}] [:label cb-style " TIOBE "] [:br]
+    [:br]
+    [:br]
+    [:input {:type "checkbox"}] [:label cb-style " Exclude \"Edge Languages\""] [:br] [:br]]
    (@state :resutls-table
            (generate-table [data/octoverse
                             data/ieee
                             data/redmonk
                             data/pypl
                             data/languish
+                            data/tiobe
                             data/stack-overflow]))])
 
 (defn render! []
