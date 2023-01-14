@@ -1,19 +1,23 @@
 {
   "name": "plr",
   "version": "1.0.0",
-  "description": "A minimal ClojureScript + Reagent project",
-  "dependencies": {
-    "react": "^16.13.0",
-    "react-dom": "^16.13.1",
+  "description": "The GitHub repo that backes the Programming Language Rankings Website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/clojurecraft/cljs-starter.git"
+    "url": "git+https://github.com/codereport/plr.git"
   },
-  "author": "Rafal Dittwald",
+  "author": "Conor Hoekstra",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/clojurecraft/cljs-starter/issues"
+    "url": "https://github.com/codereport/plr/issues"
   },
-  "homepage": "https://github.com/clojurecraft/cljs-starter#readme"
+  "homepage": "https://github.com/codereport/plr#readme",
+  "dependencies": {
+    "react": "16.13.0",
+    "react-dom": "16.13.0"
+  }
 }
