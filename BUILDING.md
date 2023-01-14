@@ -1,8 +1,4 @@
-# ClojureScript Starter
-
-A minimal clojurescript + reagent project (using shadow-cljs)
-
-## Getting Started
+## Building
 
 - install node
 - `npm install -g shadow-cljs`
