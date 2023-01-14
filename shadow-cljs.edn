@@ -1,9 +1,10 @@
 {:source-paths ["src"]
- :dependencies [[reagent "0.10.0"]]
+ :dependencies [[reagent "0.10.0"]
+                [stylefy "1.14.1"]]
  :dev-http {8080 ["public/"
                   "target/public/"]}
  :builds {:dev {:target :browser
                 :output-dir "target/public/dev"
                 :asset-path "/dev"
-                :modules {:main {:init-fn demo.core/render!}}
-                :devtools {:after-load demo.core/render!}}}}
+                :modules {:main {:init-fn plr.core/render!}}
+                :devtools {:after-load plr.core/render!}}}}
