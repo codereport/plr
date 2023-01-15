@@ -24,12 +24,12 @@
 (defn format [num] (/ (int (* num 100)) 100))
 (defn in? [e coll] (some #(= e %) coll))
 
-(defn generate-row [rank [score n lang]]
+(defn generate-row [rank [avg n lang]]
   [:tr
    [:td styles/cell (str (+ rank 1))]
-   [:td [:img {:src (str/join ["/media/" (get imgs/logo-map lang)]) :width "40px" :height "40px"}]]
+   [:td [:img {:src (str/join ["/media/logos/" (get imgs/logo-map lang)]) :width "40px" :height "40px"}]]
    [:td styles/cell lang]
-   [:td styles/cell (format score)]
+   [:td styles/cell (format avg)]
    [:td styles/cell n]])
 
 (defn generate-table [rankings mask]
@@ -43,12 +43,12 @@
         (apply concat)
         (concat data/extras)
         (group-by last)
-        (map (fn [[k v]] [(+ (avg (map first v)) 1) ; score
+        (map (fn [[k v]] [(+ (avg (map first v)) 1) ; avg
                           (count (map first v))     ; n
                           k]))                      ; lang
         (sort)
         (map-indexed vector)
-        (take 10)
+        (take 20)
         (map (partial apply generate-row)))])
 
 (defn app-view []
@@ -56,7 +56,11 @@
                  :text-align "center"
                  :padding "50px"}}
    [:label (styles/font 50) "Programming Language Rankings"] [:br] [:br]
-   [:label (styles/font 25) "by code_report"] [:br] [:br]
+   [:label (styles/font 25) "by code_report"] [:br]
+   [:a {:href "https://www.twitter.com/code_report"} [:img {:src (str/join ["/media/icons/twitter.png"]) :width "40px" :height "40px"}]]
+   [:a {:href "https://www.youtube.com/c/codereport"} [:img {:src (str/join ["/media/icons/youtube.png"]) :width "40px" :height "40px"}]]
+   [:a {:href "https://www.github.com/codereport"} [:img {:src (str/join ["/media/icons/github.png"]) :width "40px" :height "40px"}]]
+   [:br] [:br]
    [:div
     [:input {:type "checkbox"
              :checked @cb-stack-overflow
