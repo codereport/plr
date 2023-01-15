@@ -2,3 +2,5 @@
 /node_modules
 .shadow-cljs
 src/plr/TODO
+.clj-kondo/
+.lsp/
