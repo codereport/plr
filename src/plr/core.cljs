@@ -18,6 +18,9 @@
 (defonce cb-tiobe          (r/atom false))
 (defonce num-langs         (r/atom 10))
 
+(def media "/public/media")
+;; (def media "/media")
+
 (def sites [data/stack-overflow data/octoverse data/redmonk data/languish data/pypl data/ieee data/tiobe])
 
 (defn avg [coll] (/ (reduce + coll) (count coll)))
@@ -27,7 +30,7 @@
 (defn generate-row [rank [avg n lang]]
   [:tr
    [:td styles/cell (str (+ rank 1))]
-   [:td [:img {:src (str/join ["./media/logos/" (get imgs/logo-map lang)]) :width "40px" :height "40px"}]]
+   [:td [:img {:src (str/join [media "/logos/" (get imgs/logo-map lang)]) :width "40px" :height "40px"}]]
    [:td styles/cell lang]
    [:td styles/cell (format avg)]
    [:td styles/cell n]])
@@ -59,9 +62,9 @@
                  :font-family "Courier"}}
    [:label (styles/font 50) "Programming Language Rankings"] [:br] [:br]
    [:label (styles/font 25) "by code_report"] [:br]
-   [:a {:href "https://www.twitter.com/code_report"}  [:img {:src "/media/icons/twitter.png" :width "40px" :height "40px"}]]
-   [:a {:href "https://www.youtube.com/c/codereport"} [:img {:src "/media/icons/youtube.png" :width "40px" :height "40px"}]]
-   [:a {:href "https://www.github.com/codereport"}    [:img {:src "/media/icons/github.png"  :width "40px" :height "40px"}]]
+   [:a {:href "https://www.twitter.com/code_report"}  [:img {:src "public/media/icons/twitter.png" :width "40px" :height "40px"}]]
+   [:a {:href "https://www.youtube.com/c/codereport"} [:img {:src "./public/media/icons/youtube.png" :width "40px" :height "40px"}]]
+   [:a {:href "https://www.github.com/codereport"}    [:img {:src "/public/media/icons/github.png"  :width "40px" :height "40px"}]]
    [:br] [:br]
 
    ; TODO clean up repetitive checkbox code.
