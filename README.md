@@ -16,3 +16,5 @@
 </p>
 
 The GitHub repo that backes the Programming Language Rankings Website.
+
+![image](https://user-images.githubusercontent.com/36027403/212602165-956612e5-bb33-4cc1-85d7-82f6deca6797.png)
