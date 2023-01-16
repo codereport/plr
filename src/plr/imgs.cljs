@@ -40,7 +40,6 @@
    "Objective-C"          "objc_logo.png"
    "OCaml"                "ocaml_logo.jpg"
    "Perl"                 "perl.png"
-
    "Pharo"                "pharo_logo.png"
    "PHP"                  "php_logo.png"
    "PowerShell"           "powershell_logo.png"

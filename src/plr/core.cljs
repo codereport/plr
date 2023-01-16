@@ -23,9 +23,7 @@
 
 (def sites [data/stack-overflow data/octoverse data/redmonk data/languish data/pypl data/ieee data/tiobe])
 
-(defn map-indexed-from [n f coll]
-  (map f (range n 1000) coll))
-
+(defn map-indexed-from [n f coll] (map f (range n 1000) coll))
 (defn avg [coll] (/ (reduce + coll) (count coll)))
 (defn format [num] (/ (int (* num 100)) 100))
 (defn in? [e coll] (some #(= e %) coll))
