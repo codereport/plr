@@ -23,6 +23,9 @@
 
 (def sites [data/stack-overflow data/octoverse data/redmonk data/languish data/pypl data/ieee data/tiobe])
 
+(defn map-indexed-from [n f coll]
+  (map f (range n 1000) coll))
+
 (defn avg [coll] (/ (reduce + coll) (count coll)))
 (defn format [num] (/ (int (* num 100)) 100))
 (defn in? [e coll] (some #(= e %) coll))
@@ -47,13 +50,16 @@
    (->> rankings
         (filter-langs mask)
         (map (partial remove #(and (in? % data/odd) @cb-edge-langs)))
-        (map (partial map-indexed vector))
+        (map (partial map-indexed-from 1 vector))
         (apply concat)
-        (concat (apply concat (filter-langs mask data/extras)))
+        (concat (->> data/extras
+                     (filter-langs mask)
+                     (map (partial remove #(and (in? (last %) data/odd) @cb-edge-langs)))
+                     (apply concat)))
         (group-by last)
-        (map (fn [[k v]] [(+ (avg (map first v)) 1) ; avg
-                          (count (map first v))     ; n
-                          k]))                      ; lang
+        (map (fn [[k v]] [(avg (map first v))   ; avg
+                          (count (map first v)) ; n
+                          k]))                  ; lang
         (sort)
         (map-indexed vector)
         (take @num-langs)
