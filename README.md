@@ -15,6 +15,6 @@
         <img src="https://img.shields.io/twitter/follow/code_report.svg?style=social&label=@code_report" /></a>
 </p>
 
-The GitHub repo that backes the [Programming Language Rankings Website](www.plrank.com).
+The GitHub repo that backes the [Programming Language Rankings Website](https://www.plrank.com).
 
 ![image](https://user-images.githubusercontent.com/36027403/212602165-956612e5-bb33-4cc1-85d7-82f6deca6797.png)
