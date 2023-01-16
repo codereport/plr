@@ -21,11 +21,18 @@
 ; https://www.tiobe.com/tiobe-index/ Jan 2023
 (def tiobe ["Python" "C" "C++" "Java" "C#" "Visual Basic" "JavaScript" "SQL" "Assembly" "PHP" "Swift" "Go" "R" "Classic Visual Basic" "MATLAB" "Ruby" "Delphi" "Rust" "Perl" "Scratch"])
 
-(def extras [; Languish
-             [29 "VBA"]
-             [32 "Objective-C"]
-             [39 "Assembly"]
-             [166 "Ada"]
-             [261 "Visual Basic"]])
+(def extras [[] ; StackOverflow
+             [] ; Octoverse
+             [] ; Redmonk
+             ; Languish
+             [[29 "VBA"]
+              [32 "Objective-C"]
+              [39 "Assembly"]
+              [166 "Ada"]
+              [261 "Visual Basic"]]
+             [] ; PYPL
+             [] ; IEEE Spectrum
+             [] ; TIOBE
+             ])
 
 (def odd ["Markdown" "CSS" "HTML" "SAS" "Jupyter Notebook" "Vue" "JSON" "Dockerfile" "SQL"])
