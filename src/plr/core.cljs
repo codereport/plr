@@ -14,7 +14,7 @@
 (defonce cb-redmonk        (r/atom true))
 (defonce cb-languish       (r/atom true))
 (defonce cb-pypl           (r/atom false))
-(defonce cb-iee-spectrum   (r/atom false))
+(defonce cb-ieee-spectrum  (r/atom false))
 (defonce cb-tiobe          (r/atom false))
 (defonce num-langs         (r/atom 10))
 
@@ -115,8 +115,8 @@
     [:label styles/cb-font " "]
 
     [:input {:type "checkbox"
-             :checked @cb-iee-spectrum
-             :on-change #(swap! cb-iee-spectrum not)}] [:label styles/cb-font " IEE Spectrum"]
+             :checked @cb-ieee-spectrum
+             :on-change #(swap! cb-ieee-spectrum not)}] [:label styles/cb-font " IEEE Spectrum"]
     [:a {:href "https://spectrum.ieee.org/top-programming-languages-2022"}
      [:img {:src (str/join [media "/icons/link.png"]) :width "16px" :height "16px"}]]
     [:label styles/cb-font " "]
@@ -138,7 +138,7 @@
                :on-change #(reset! num-langs (-> % .-target .-value js/Number))}
       [:option 10] [:option 20]]]]
 
-   (generate-table sites [@cb-stack-overflow  @cb-octoverse  @cb-redmonk  @cb-languish  @cb-pypl  @cb-iee-spectrum @cb-tiobe])
+   (generate-table sites [@cb-stack-overflow  @cb-octoverse  @cb-redmonk  @cb-languish  @cb-pypl  @cb-ieee-spectrum @cb-tiobe])
    (@state :results-table)
    [:br]
    [:label "1 - The number of (selected) ranking websites this language shows up in."] [:br] [:br]
