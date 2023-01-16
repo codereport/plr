@@ -27,7 +27,7 @@
 (defn generate-row [rank [avg n lang]]
   [:tr
    [:td styles/cell (str (+ rank 1))]
-   [:td [:img {:src (str/join ["/media/logos/" (get imgs/logo-map lang)]) :width "40px" :height "40px"}]]
+   [:td [:img {:src (str/join ["media/logos/" (get imgs/logo-map lang)]) :width "40px" :height "40px"}]]
    [:td styles/cell lang]
    [:td styles/cell (format avg)]
    [:td styles/cell n]])

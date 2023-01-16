@@ -1,4 +1,5 @@
-/target
+/target/public/dev/cljs-runtime
+/target/public/dev/manifest.edn
 /node_modules
 .shadow-cljs
 src/plr/TODO
