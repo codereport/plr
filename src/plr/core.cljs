@@ -18,8 +18,8 @@
 (defonce cb-tiobe          (r/atom false))
 (defonce num-langs         (r/atom 10))
 
-(def media "/public/media")
-;; (def media "/media")
+;; (def media "/public/media")
+(def media "/media")
 
 (def sites [data/stack-overflow data/octoverse data/redmonk data/languish data/pypl data/ieee data/tiobe])
 
@@ -63,6 +63,11 @@
         (take @num-langs)
         (map (partial apply generate-row)))])
 
+(defn check-box-label [lang]
+  [:div {:style {:display "inline"}} [:label styles/cb-font (str/join [" " (get data/names lang)])]
+   [:a {:href (get data/links lang)} [:img {:src (str/join [media "/icons/link.png"]) :width "16px" :height "16px"}]]
+   [:label styles/cb-font " "]])
+
 (defn app-view []
   [:div {:style {:search-text ""
                  :text-align "center"
@@ -79,54 +84,25 @@
    [:div
     [:input {:type "checkbox"
              :checked @cb-stack-overflow
-             :on-change #(swap! cb-stack-overflow not)}]
-    [:label styles/cb-font " StackOverflow"]
-    [:a {:href "https://survey.stackoverflow.co/2022/#most-popular-technologies-language"}
-     [:img {:src (str/join [media "/icons/link.png"]) :width "16px" :height "16px"}]]
-    [:label styles/cb-font " "]
-
+             :on-change #(swap! cb-stack-overflow not)}] (check-box-label :so)
     [:input {:type "checkbox"
              :checked @cb-octoverse
-             :on-change #(swap! cb-octoverse not)}] [:label styles/cb-font " Octoverse"]
-    [:a {:href "https://octoverse.github.com/2022/top-programming-languages"}
-     [:img {:src (str/join [media "/icons/link.png"]) :width "16px" :height "16px"}]]
-    [:label styles/cb-font " "]
-
+             :on-change #(swap! cb-octoverse not)}] (check-box-label :octo)
     [:input {:type "checkbox"
              :checked @cb-redmonk
-             :on-change #(swap! cb-redmonk not)}] [:label styles/cb-font " Redmonk"]
-    [:a {:href "https://redmonk.com/sogrady/2022/10/20/language-rankings-6-22/"}
-     [:img {:src (str/join [media "/icons/link.png"]) :width "16px" :height "16px"}]]
-    [:label styles/cb-font " "]
-
+             :on-change #(swap! cb-redmonk not)}] (check-box-label :rm)
     [:input {:type "checkbox"
              :checked @cb-languish
-             :on-change #(swap! cb-languish not)}] [:label styles/cb-font " Languish"]
-    [:a {:href "https://tjpalmer.github.io/languish/"}
-     [:img {:src (str/join [media "/icons/link.png"]) :width "16px" :height "16px"}]]
-    [:label styles/cb-font " "]
-    [:br]
-
+             :on-change #(swap! cb-languish not)}] (check-box-label :languish) [:br]
     [:input {:type "checkbox"
              :checked @cb-pypl
-             :on-change #(swap! cb-pypl not)}] [:label styles/cb-font " PYPL"]
-    [:a {:href "https://pypl.github.io/PYPL.html"}
-     [:img {:src (str/join [media "/icons/link.png"]) :width "16px" :height "16px"}]]
-    [:label styles/cb-font " "]
-
+             :on-change #(swap! cb-pypl not)}] (check-box-label :pypl)
     [:input {:type "checkbox"
              :checked @cb-iee-spectrum
-             :on-change #(swap! cb-iee-spectrum not)}] [:label styles/cb-font " IEE Spectrum"]
-    [:a {:href "https://spectrum.ieee.org/top-programming-languages-2022"}
-     [:img {:src (str/join [media "/icons/link.png"]) :width "16px" :height "16px"}]]
-    [:label styles/cb-font " "]
+             :on-change #(swap! cb-iee-spectrum not)}] (check-box-label :ieee)
     [:input {:type "checkbox"
              :checked @cb-tiobe
-             :on-change #(swap! cb-tiobe not)}] [:label styles/cb-font " TIOBE"]
-    [:a {:href "https://www.tiobe.com/tiobe-index/"}
-     [:img {:src (str/join [media "/icons/link.png"]) :width "16px" :height "16px"}]]
-    [:label styles/cb-font " "]
-    [:br] [:label "-"] [:br]
+             :on-change #(swap! cb-tiobe not)}] (check-box-label :tiobe) [:br] [:label "-"] [:br]
     [:input {:type "checkbox"
              :checked @cb-edge-langs
              :on-change #(swap! cb-edge-langs not)}]
