@@ -1,13 +1,13 @@
 (ns plr.styles)
 
-(def table
-  {:style {:font-family "Courier"
-           :padding "12px 12px"
-           :font-size "30"
-           :margin-left "auto"
-           :margin-right "auto"
-           :text-align "center"
-           :display "inline"}})
+(defn table [is-mobile?]
+  {:style (merge {:font-family "Courier"
+                  :padding "12px 12px"
+                  :font-size "30"
+                  :margin-left "auto"
+                  :margin-right "auto"
+                  :text-align "center"}
+                 (if is-mobile? {} {:display "inline"}))})
 
 (defn font [font-size]
   {:style {:font-family "Courier"
@@ -17,3 +17,6 @@
 (def cb-font (font 23))
 
 (def cell {:style {:padding "12px 30px"}})
+
+(defn footnote [is-mobile?]
+  {:style {:font-size (if is-mobile? 12 16)}})

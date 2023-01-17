@@ -9,7 +9,7 @@
    [plr.styles :as styles]
    [plr.info :as info]))
 
-(def is-mobile (some #(str/includes? js/navigator.userAgent %) ["Android" "iPhone"]))
+(def is-mobile? (some #(str/includes? js/navigator.userAgent %) ["Android" "iPhone"]))
 
 (defonce state             (r/atom {:results-table [:tr]}))
 (defonce cb-edge-langs     (r/atom true))
@@ -20,7 +20,7 @@
 (defonce cb-pypl           (r/atom false))
 (defonce cb-ieee-spectrum  (r/atom false))
 (defonce cb-tiobe          (r/atom false))
-(defonce num-langs         (r/atom (if is-mobile 10 20)))
+(defonce num-langs         (r/atom (if is-mobile? 10 20)))
 
 (def media "/public/media")
 ;; (def media "/media")
@@ -49,7 +49,7 @@
        (map last)))
 
 (defn make-table [rows]
-  [:table styles/table
+  [:table (styles/table is-mobile?)
    [:tr {:style {:font-weight "bold"}} [:td] [:td] [:td "Language"] [:td "Avg"] [:td "StDev"] [:td "n¹"]]
    (map (partial apply generate-row) rows)])
 
@@ -69,7 +69,7 @@
                       (sort)
                       (map-indexed vector)
                       (take @num-langs))]
-    (if (or (not= @num-langs 20) is-mobile)
+    (if (or (not= @num-langs 20) is-mobile?)
       (make-table row-data)
       [:div (make-table (take 10 row-data)) (make-table (drop 10 row-data))])))
 
@@ -127,10 +127,11 @@
    (generate-table sites [@cb-stack-overflow  @cb-octoverse  @cb-redmonk  @cb-languish  @cb-pypl  @cb-ieee-spectrum @cb-tiobe])
    (@state :results-table)
    [:br]
-   [:label "1 - The number of (selected) ranking websites this language shows up in."] [:br] [:br]
-   [:label "If you have suggestions or find a bug, you can open an "]
-   [:a {:href "https://github.com/codereport/plr/issues/new"} [:label "issue"]]
-   [:label " here."] [:br] [:br]])
+   [:div (styles/footnote is-mobile?)
+    [:label "1 - The number of (selected) ranking websites this language shows up in."] [:br] [:br]
+    [:label "If you have suggestions or find a bug, you can open an "]
+    [:a {:href "https://github.com/codereport/plr/issues/new"} [:label "issue"]]
+    [:label " here."]] [:br] [:br]])
   ;;  (info/table)])
 
 (defn render! []
