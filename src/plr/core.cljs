@@ -42,26 +42,31 @@
        (filter first)
        (map last)))
 
-(defn generate-table [rankings mask]
+(defn make-table [rows]
   [:table styles/table
    [:tr {:style {:font-weight "bold"}} [:td] [:td] [:td "Language"] [:td "Avg"] [:td "n¹"]]
-   (->> rankings
-        (filter-langs mask)
-        (map (partial remove #(and (in? % data/odd) @cb-edge-langs)))
-        (map (partial map-indexed-from 1 vector))
-        (apply concat)
-        (concat (->> data/extras
-                     (filter-langs mask)
-                     (map (partial remove #(and (in? (last %) data/odd) @cb-edge-langs)))
-                     (apply concat)))
-        (group-by last)
-        (map (fn [[k v]] [(avg (map first v))   ; avg
-                          (count (map first v)) ; n
-                          k]))                  ; lang
-        (sort)
-        (map-indexed vector)
-        (take @num-langs)
-        (map (partial apply generate-row)))])
+   (map (partial apply generate-row) rows)])
+
+(defn generate-table [rankings mask]
+  (let [row-data (->> rankings
+                      (filter-langs mask)
+                      (map (partial remove #(and (in? % data/odd) @cb-edge-langs)))
+                      (map (partial map-indexed-from 1 vector))
+                      (apply concat)
+                      (concat (->> data/extras
+                                   (filter-langs mask)
+                                   (map (partial remove #(and (in? (last %) data/odd) @cb-edge-langs)))
+                                   (apply concat)))
+                      (group-by last)
+                      (map (fn [[k v]] [(avg (map first v))   ; avg
+                                        (count (map first v)) ; n
+                                        k]))                  ; lang
+                      (sort)
+                      (map-indexed vector)
+                      (take @num-langs))]
+    (if (= @num-langs 10) (make-table row-data) [:div
+                                                 (make-table (take 10 row-data))
+                                                 (make-table (drop 10 row-data))])))
 
 (defn check-box-label [lang]
   [:div {:style {:display "inline"}} [:label styles/cb-font (str/join [" " (get data/names lang)])]

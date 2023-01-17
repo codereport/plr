@@ -31,7 +31,7 @@
    "JavaScript"           "javascript_logo.png"
    "Julia"                "julia_logo.svg"
    "Jupyter Notebook"     "jupyter_logo.png"
-   "Kotlin"               "kotlin_logo.png"
+   "Kotlin"               "kotlin-2.svg"
    "LISP"                 "LISP_logo.png"
    "Lua"                  "lua_logo.png"
    "Markdown"             "markdown_logo.png"

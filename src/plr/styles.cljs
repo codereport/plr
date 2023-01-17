@@ -6,7 +6,8 @@
            :font-size "30"
            :margin-left "auto"
            :margin-right "auto"
-           :text-align "center"}})
+           :text-align "center"
+           :display "inline"}})
 
 (defn font [font-size]
   {:style {:font-family "Courier"
