@@ -6,7 +6,10 @@
    [kixi.stats.core :as kixi]
    [plr.imgs :as imgs]
    [plr.data :as data]
-   [plr.styles :as styles]))
+   [plr.styles :as styles]
+   [plr.info :as info]))
+
+(def is-mobile (some #(str/includes? js/navigator.userAgent %) ["Android" "iPhone"]))
 
 (defonce state             (r/atom {:results-table [:tr]}))
 (defonce cb-edge-langs     (r/atom true))
@@ -17,7 +20,7 @@
 (defonce cb-pypl           (r/atom false))
 (defonce cb-ieee-spectrum  (r/atom false))
 (defonce cb-tiobe          (r/atom false))
-(defonce num-langs         (r/atom 20))
+(defonce num-langs         (r/atom (if is-mobile 10 20)))
 
 (def media "/public/media")
 ;; (def media "/media")
@@ -66,9 +69,9 @@
                       (sort)
                       (map-indexed vector)
                       (take @num-langs))]
-    (if (not= @num-langs 20) (make-table row-data) [:div
-                                                    (make-table (take 10 row-data))
-                                                    (make-table (drop 10 row-data))])))
+    (if (or (not= @num-langs 20) is-mobile)
+      (make-table row-data)
+      [:div (make-table (take 10 row-data)) (make-table (drop 10 row-data))])))
 
 (defn check-box-label [lang]
   [:div {:style {:display "inline"}} [:label styles/cb-font (str/join [" " (get data/names lang)])]
@@ -127,7 +130,8 @@
    [:label "1 - The number of (selected) ranking websites this language shows up in."] [:br] [:br]
    [:label "If you have suggestions or find a bug, you can open an "]
    [:a {:href "https://github.com/codereport/plr/issues/new"} [:label "issue"]]
-   [:label " here."]])
+   [:label " here."] [:br] [:br]])
+  ;;  (info/table)])
 
 (defn render! []
   (rdom/render
