@@ -18,8 +18,8 @@
 (defonce cb-tiobe          (r/atom false))
 (defonce num-langs         (r/atom 10))
 
-;; (def media "/public/media")
-(def media "/media")
+(def media "/public/media")
+;; (def media "/media")
 
 (def sites [data/stack-overflow data/octoverse data/redmonk data/languish data/pypl data/ieee data/tiobe])
 
