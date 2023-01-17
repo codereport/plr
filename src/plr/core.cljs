@@ -14,7 +14,7 @@
 (defonce cb-redmonk        (r/atom true))
 (defonce cb-languish       (r/atom true))
 (defonce cb-pypl           (r/atom false))
-(defonce cb-iee-spectrum   (r/atom false))
+(defonce cb-ieee-spectrum  (r/atom false))
 (defonce cb-tiobe          (r/atom false))
 (defonce num-langs         (r/atom 10))
 
@@ -98,8 +98,8 @@
              :checked @cb-pypl
              :on-change #(swap! cb-pypl not)}] (check-box-label :pypl)
     [:input {:type "checkbox"
-             :checked @cb-iee-spectrum
-             :on-change #(swap! cb-iee-spectrum not)}] (check-box-label :ieee)
+             :checked @cb-ieee-spectrum
+             :on-change #(swap! cb-ieee-spectrum not)}] (check-box-label :ieee)
     [:input {:type "checkbox"
              :checked @cb-tiobe
              :on-change #(swap! cb-tiobe not)}] (check-box-label :tiobe) [:br] [:label "-"] [:br]
@@ -114,7 +114,7 @@
                :on-change #(reset! num-langs (-> % .-target .-value js/Number))}
       [:option 10] [:option 20]]]]
 
-   (generate-table sites [@cb-stack-overflow  @cb-octoverse  @cb-redmonk  @cb-languish  @cb-pypl  @cb-iee-spectrum @cb-tiobe])
+   (generate-table sites [@cb-stack-overflow  @cb-octoverse  @cb-redmonk  @cb-languish  @cb-pypl  @cb-ieee-spectrum @cb-tiobe])
    (@state :results-table)
    [:br]
    [:label "1 - The number of (selected) ranking websites this language shows up in."] [:br] [:br]
