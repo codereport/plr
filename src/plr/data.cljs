@@ -26,10 +26,14 @@
              [] ; Redmonk
              ; Languish
              [[29 "VBA"]
+              [30 "Scala"]
               [32 "Objective-C"]
               [36 "Solidity"]
               [39 "Assembly"]
+              [51 "MATLAB"]
+              [54 "Groovy"]
               [66 "CUDA"]
+              [67 "Delphi"]
               [72 "Arduino"]
               [75 "Verilog"]
               [112 "Crystal"]

@@ -3,6 +3,7 @@
    [reagent.dom :as rdom]
    [reagent.core :as r]
    [clojure.string :as str]
+   [kixi.stats.core :as kixi]
    [plr.imgs :as imgs]
    [plr.data :as data]
    [plr.styles :as styles]))
@@ -16,7 +17,7 @@
 (defonce cb-pypl           (r/atom false))
 (defonce cb-ieee-spectrum  (r/atom false))
 (defonce cb-tiobe          (r/atom false))
-(defonce num-langs         (r/atom 10))
+(defonce num-langs         (r/atom 20))
 
 (def media "/public/media")
 ;; (def media "/media")
@@ -24,16 +25,18 @@
 (def sites [data/stack-overflow data/octoverse data/redmonk data/languish data/pypl data/ieee data/tiobe])
 
 (defn map-indexed-from [n f coll] (map f (range n 1000) coll))
-(defn avg [coll] (/ (reduce + coll) (count coll)))
+(defn avg [coll] (transduce identity kixi/mean coll))
+(defn stdev [coll] (transduce identity kixi/standard-deviation coll))
 (defn format [num] (/ (int (* num 100)) 100))
 (defn in? [e coll] (some #(= e %) coll))
 
-(defn generate-row [rank [avg n lang]]
+(defn generate-row [rank [avg stdev n lang]]
   [:tr
    [:td styles/cell (str (+ rank 1))]
    [:td [:img {:src (str/join [media "/logos/" (get imgs/logo-map lang)]) :width "40px" :height "40px"}]]
    [:td styles/cell lang]
    [:td styles/cell (format avg)]
+   [:td styles/cell (format stdev)]
    [:td styles/cell n]])
 
 (defn filter-langs [mask rankings]
@@ -44,7 +47,7 @@
 
 (defn make-table [rows]
   [:table styles/table
-   [:tr {:style {:font-weight "bold"}} [:td] [:td] [:td "Language"] [:td "Avg"] [:td "n¹"]]
+   [:tr {:style {:font-weight "bold"}} [:td] [:td] [:td "Language"] [:td "Avg"] [:td "StDev"] [:td "n¹"]]
    (map (partial apply generate-row) rows)])
 
 (defn generate-table [rankings mask]
@@ -58,15 +61,14 @@
                                    (map (partial remove #(and (in? (last %) data/odd) @cb-edge-langs)))
                                    (apply concat)))
                       (group-by last)
-                      (map (fn [[k v]] [(avg (map first v))   ; avg
-                                        (count (map first v)) ; n
-                                        k]))                  ; lang
+                      (map (fn [[k v]] (let [vals (map first v)]
+                                         [(avg vals) (stdev vals) (count vals) k])))
                       (sort)
                       (map-indexed vector)
                       (take @num-langs))]
-    (if (= @num-langs 10) (make-table row-data) [:div
-                                                 (make-table (take 10 row-data))
-                                                 (make-table (drop 10 row-data))])))
+    (if (not= @num-langs 20) (make-table row-data) [:div
+                                                    (make-table (take 10 row-data))
+                                                    (make-table (drop 10 row-data))])))
 
 (defn check-box-label [lang]
   [:div {:style {:display "inline"}} [:label styles/cb-font (str/join [" " (get data/names lang)])]
@@ -78,7 +80,7 @@
                  :text-align "center"
                  :padding "50px"
                  :font-family "Courier"}}
-   [:label (styles/font 50) "Programming Language Rankings"] [:br] [:br]
+   [:label (styles/font 50) "Programming Language Rankings (2023)"] [:br] [:br]
    [:label (styles/font 25) "by code_report"] [:br]
    [:a {:href "https://www.twitter.com/code_report"}  [:img {:src (str/join [media "/icons/twitter.png"]) :width "40px" :height "40px"}]]
    [:a {:href "https://www.youtube.com/c/codereport"} [:img {:src (str/join [media "/icons/youtube.png"]) :width "40px" :height "40px"}]]
@@ -117,7 +119,7 @@
      [:label styles/cb-font "Number of Languages: "]
      [:select {:value @num-langs
                :on-change #(reset! num-langs (-> % .-target .-value js/Number))}
-      [:option 10] [:option 20]]]]
+      [:option 10] [:option 20] [:option 50]]]]
 
    (generate-table sites [@cb-stack-overflow  @cb-octoverse  @cb-redmonk  @cb-languish  @cb-pypl  @cb-ieee-spectrum @cb-tiobe])
    (@state :results-table)
