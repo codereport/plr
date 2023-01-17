@@ -60,3 +60,12 @@
    "Visual Basic"         "vb.jpg"
    "Vue"                  "vue.png"
    "Zig"                  "zig_logo.svg"})
+
+(def site-logos
+  {:so "stackoverflow.png"
+   :rm "redmonk.png"
+   :tiobe "tiobe.jpg"
+   :pypl "pypl.png"
+   :ieee "ieee.jpeg"
+   :octo  "octoverse.png"
+   :languish "languish.svg"})

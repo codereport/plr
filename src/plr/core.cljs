@@ -21,6 +21,7 @@
 (defonce cb-ieee-spectrum  (r/atom false))
 (defonce cb-tiobe          (r/atom false))
 (defonce num-langs         (r/atom (if is-mobile? 10 20)))
+(defonce toggle-info       (r/atom false))
 
 (def media "/public/media")
 ;; (def media "/media")
@@ -79,8 +80,7 @@
    [:label styles/cb-font " "]])
 
 (defn app-view []
-  [:div {:style {:search-text ""
-                 :text-align "center"
+  [:div {:style {:text-align "center"
                  :padding "50px"
                  :font-family "Courier"}}
    [:label (styles/font 50) "Programming Language Rankings (2023)"] [:br] [:br]
@@ -91,48 +91,55 @@
    [:br] [:br]
 
    ; TODO clean up repetitive checkbox code.
-   [:div
-    [:input {:type "checkbox"
-             :checked @cb-stack-overflow
-             :on-change #(swap! cb-stack-overflow not)}] (check-box-label :so)
-    [:input {:type "checkbox"
-             :checked @cb-octoverse
-             :on-change #(swap! cb-octoverse not)}] (check-box-label :octo)
-    [:input {:type "checkbox"
-             :checked @cb-redmonk
-             :on-change #(swap! cb-redmonk not)}] (check-box-label :rm)
-    [:input {:type "checkbox"
-             :checked @cb-languish
-             :on-change #(swap! cb-languish not)}] (check-box-label :languish) [:br]
-    [:input {:type "checkbox"
-             :checked @cb-pypl
-             :on-change #(swap! cb-pypl not)}] (check-box-label :pypl)
-    [:input {:type "checkbox"
-             :checked @cb-ieee-spectrum
-             :on-change #(swap! cb-ieee-spectrum not)}] (check-box-label :ieee)
-    [:input {:type "checkbox"
-             :checked @cb-tiobe
-             :on-change #(swap! cb-tiobe not)}] (check-box-label :tiobe) [:br] [:label "-"] [:br]
-    [:input {:type "checkbox"
-             :checked @cb-edge-langs
-             :on-change #(swap! cb-edge-langs not)}]
-    [:label styles/cb-font " Exclude \"Edge Languages\""]
-    [:br] [:label "-"] [:br]
-    [:form
-     [:label styles/cb-font "Number of Languages: "]
-     [:select {:value @num-langs
-               :on-change #(reset! num-langs (-> % .-target .-value js/Number))}
-      [:option 10] [:option 20]]]]
+   (if @toggle-info
+     [:div
+      [:label {:style {:text-decoration "underline"}
+               :on-click #(swap! toggle-info not)}  "(back)"] [:br] [:br]
+      (info/table is-mobile?)]
+     [:div [:div
+            [:input {:type "checkbox"
+                     :checked @cb-stack-overflow
+                     :on-change #(swap! cb-stack-overflow not)}] (check-box-label :so)
+            [:input {:type "checkbox"
+                     :checked @cb-octoverse
+                     :on-change #(swap! cb-octoverse not)}] (check-box-label :octo)
+            [:input {:type "checkbox"
+                     :checked @cb-redmonk
+                     :on-change #(swap! cb-redmonk not)}] (check-box-label :rm)
+            [:input {:type "checkbox"
+                     :checked @cb-languish
+                     :on-change #(swap! cb-languish not)}] (check-box-label :languish) [:br]
+            [:input {:type "checkbox"
+                     :checked @cb-pypl
+                     :on-change #(swap! cb-pypl not)}] (check-box-label :pypl)
+            [:input {:type "checkbox"
+                     :checked @cb-ieee-spectrum
+                     :on-change #(swap! cb-ieee-spectrum not)}] (check-box-label :ieee)
+            [:input {:type "checkbox"
+                     :checked @cb-tiobe
+                     :on-change #(swap! cb-tiobe not)}] (check-box-label :tiobe)
+            [:label {:style {:text-decoration "underline"}
+                     :on-click #(swap! toggle-info not)}  "(rankings overview)"]
+            [:br] [:label "-"] [:br]
+            [:input {:type "checkbox"
+                     :checked @cb-edge-langs
+                     :on-change #(swap! cb-edge-langs not)}]
+            [:label styles/cb-font " Exclude \"Edge Languages\""]
+            [:br] [:label "-"] [:br]
+            [:form
+             [:label styles/cb-font "Number of Languages: "]
+             [:select {:value @num-langs
+                       :on-change #(reset! num-langs (-> % .-target .-value js/Number))}
+              [:option 10] [:option 20]]]]
 
-   (generate-table sites [@cb-stack-overflow  @cb-octoverse  @cb-redmonk  @cb-languish  @cb-pypl  @cb-ieee-spectrum @cb-tiobe])
-   (@state :results-table)
-   [:br]
-   [:div (styles/footnote is-mobile?)
-    [:label "1 - The number of (selected) ranking websites this language shows up in."] [:br] [:br]
-    [:label "If you have suggestions or find a bug, you can open an "]
-    [:a {:href "https://github.com/codereport/plr/issues/new"} [:label "issue"]]
-    [:label " here."]] [:br] [:br]])
-  ;;  (info/table)])
+      (generate-table sites [@cb-stack-overflow  @cb-octoverse  @cb-redmonk  @cb-languish  @cb-pypl  @cb-ieee-spectrum @cb-tiobe])
+      (@state :results-table)
+      [:br]
+      [:div (styles/footnote is-mobile?)
+       [:label "1 - The number of (selected) ranking websites this language shows up in."] [:br] [:br]
+       [:label "If you have suggestions or find a bug, you can open an "]
+       [:a {:href "https://github.com/codereport/plr/issues/new"} [:label "issue"]]
+       [:label " here."]]])])
 
 (defn render! []
   (rdom/render

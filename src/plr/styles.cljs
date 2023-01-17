@@ -16,7 +16,11 @@
 
 (def cb-font (font 23))
 
-(def cell {:style {:padding "12px 30px"}})
+(def cell {:style {:padding "12px 30px"
+                   :font-size "30"}})
+
+(def cell2 {:style {:padding "12px 30px"
+                    :font-size "24"}})
 
 (defn footnote [is-mobile?]
   {:style {:font-size (if is-mobile? 12 16)}})

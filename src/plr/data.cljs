@@ -30,6 +30,7 @@
               [32 "Objective-C"]
               [36 "Solidity"]
               [39 "Assembly"]
+              [44 "Julia"]
               [51 "MATLAB"]
               [54 "Groovy"]
               [66 "CUDA"]
