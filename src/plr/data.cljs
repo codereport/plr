@@ -19,7 +19,7 @@
 (def languish ["Python" "JavaScript" "TypeScript" "Java" "C++" "C#" "Go" "HTML" "Markdown" "C" "PHP" "Rust" "CSS" "Shell" "Kotlin" "Jupyter Notebook" "R" "Dart" "Swift" "Vue" "SQL" "Ruby" "JSON" "Lua" "Dockerfile" "PowerShell"])
 (def stack-overflow ["JavaScript" "HTML" "SQL" "Python" "TypeScript" "Java" "Shell" "C#" "C++" "PHP" "C" "PowerShell" "Go" "Rust" "Kotlin" "Dart" "Ruby" "Assembly" "Swift" "R" "VBA" "MATLAB" "Lua" "Groovy" "Delphi" "Scala" "Objective-C" "Perl" "Haskell" "Elixir" "Julia" "Clojure" "Solidity" "Lisp" "F#" "Fortran" "Erlang" "APL" "COBOL" "SAS" "OCaml" "Crystal"])
 (def pypl ["Python" "Java" "JavaScript" "C#" "C++" "PHP" "R" "TypeScript" "Swift" "Objective-C" "Go" "Rust" "Kotlin" "MATLAB" "Ruby" "VBA" "Ada" "Dart" "Scala" "Visual Basic" "Lua" "ABAP" "Haskell" "Julia" "Groovy" "COBOL" "Perl" "Delphi"])
-(def tiobe ["Python" "C" "C++" "Java" "C#" "Visual Basic" "JavaScript" "SQL" "Assembly" "PHP" "Swift" "Go" "R" "Classic Visual Basic" "MATLAB" "Ruby" "Delphi" "Rust" "Perl" "Scratch"])
+(def tiobe ["Python" "C" "C++" "Java" "C#" "Visual Basic" "JavaScript" "SQL" "Assembly" "PHP" "Swift" "Go" "R" "Classic Visual Basic" "MATLAB" "Ruby" "Delphi" "Rust" "Perl" "Scratch" "FoxPro" "SAS" "Objective-C" "Lua" "Kotlin" "Ada" "Fortran" "Lisp" "Julia" "Transact-SQL" "COBOL" "Scala" "F#" "Logo" "TypeScript" "Groovy" "Shell" "Dart" "RPG" "PL/SQL" "PowerShell" "Awk" "Prolog" "CFML" "Haskell" "D" "LabView" "Scheme" "ABAP" "OCaml"])
 
 (def extras [[[2 "CSS"]] ; StackOverflow
              [] ; Octoverse

@@ -119,7 +119,7 @@
      [:label styles/cb-font "Number of Languages: "]
      [:select {:value @num-langs
                :on-change #(reset! num-langs (-> % .-target .-value js/Number))}
-      [:option 10] [:option 20] [:option 50]]]]
+      [:option 10] [:option 20]]]]
 
    (generate-table sites [@cb-stack-overflow  @cb-octoverse  @cb-redmonk  @cb-languish  @cb-pypl  @cb-ieee-spectrum @cb-tiobe])
    (@state :results-table)

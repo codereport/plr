@@ -22,6 +22,7 @@
    "Erlang"               "erlang_logo.png"
    "F#"                   "fsharp_logo.png"
    "Fortran"              "fortran_logo.png"
+   "FoxPro"               "foxpro.png"
    "Go"                   "go_logo.png"
    "Groovy"               "groovy_logo.jpeg"
    "Haskell"              "haskell_logo.svg"
