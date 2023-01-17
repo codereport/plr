@@ -26,7 +26,7 @@
 
 (defn row [lang]
   [:tr
-   [:td {:style {:padding "16px 16px"}} [:img {:src (str/join ["media/site-logos/" (imgs/site-logos lang)]) :width "75x" :height "75px"}]]
+   [:td {:style {:padding "16px 16px"}} [:img {:src (str/join ["public/media/site-logos/" (imgs/site-logos lang)]) :width "75x" :height "75px"}]]
    [:td styles/cell2 [:a {:href (get data/links lang)} [:label (data/names lang)]]]
    [:td styles/cell2 [:label (num-langs lang)]]
    [:td styles/cell2 [:label (freq lang)]]
