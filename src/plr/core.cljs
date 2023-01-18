@@ -11,17 +11,12 @@
 
 (def is-mobile? (some #(str/includes? js/navigator.userAgent %) ["Android" "iPhone"]))
 
-(defonce state             (r/atom {:results-table [:tr]}))
-(defonce cb-edge-langs     (r/atom true))
-(defonce cb-stack-overflow (r/atom true))
-(defonce cb-octoverse      (r/atom true))
-(defonce cb-redmonk        (r/atom true))
-(defonce cb-languish       (r/atom true))
-(defonce cb-pypl           (r/atom false))
-(defonce cb-ieee-spectrum  (r/atom false))
-(defonce cb-tiobe          (r/atom false))
-(defonce num-langs         (r/atom (if is-mobile? 10 20)))
-(defonce toggle-info       (r/atom false))
+(defonce state (r/atom {:results-table   [:tr]
+                        :num-langs       (if is-mobile? 10 20)
+                        :toggle-info     false
+                        :omit-edge-langs true}))
+
+(defonce state-check-boxes (r/atom {:so true :octo true :rm true :languish true :pypl false :ieee false :tiobe false}))
 
 (def media "/public/media")
 ;; (def media "/media")
@@ -57,27 +52,31 @@
 (defn generate-table [rankings mask]
   (let [row-data (->> rankings
                       (filter-langs mask)
-                      (map (partial remove #(and (in? % data/odd) @cb-edge-langs)))
+                      (map (partial remove #(and (in? % data/odd) (@state :omit-edge-langs))))
                       (map (partial map-indexed-from 1 vector))
                       (apply concat)
                       (concat (->> data/extras
                                    (filter-langs mask)
-                                   (map (partial remove #(and (in? (last %) data/odd) @cb-edge-langs)))
+                                   (map (partial remove #(and (in? (last %) data/odd) (@state :omit-edge-langs))))
                                    (apply concat)))
                       (group-by last)
                       (map (fn [[k v]] (let [vals (map first v)]
                                          [(avg vals) (stdev vals) (count vals) k])))
                       (sort)
                       (map-indexed vector)
-                      (take @num-langs))]
-    (if (or (not= @num-langs 20) is-mobile?)
+                      (take (@state :num-langs)))]
+    (if (or (not= (@state :num-langs) 20) is-mobile?)
       (make-table row-data)
       [:div (make-table (take 10 row-data)) (make-table (drop 10 row-data))])))
 
-(defn check-box-label [lang]
-  [:div {:style {:display "inline"}} [:label styles/cb-font (str/join [" " (get data/names lang)])]
-   [:a {:href (get data/links lang)} [:img {:src (str/join [media "/icons/link.png"]) :width "16px" :height "16px"}]]
-   [:label styles/cb-font " "]])
+(defn language-check-box [lang]
+  [:div {:style {:display "inline"}}
+   [:input {:type "checkbox"
+            :checked (@state-check-boxes lang)
+            :on-change #(swap! state-check-boxes assoc lang (not (@state-check-boxes lang)))}]
+   [:div {:style {:display "inline"}} [:label styles/cb-font (str/join [" " (get data/names lang)])]
+    [:a {:href (get data/links lang)} [:img {:src (str/join [media "/icons/link.png"]) :width "16px" :height "16px"}]]
+    [:label styles/cb-font " "]]])
 
 (defn app-view []
   [:div {:style {:text-align "center"
@@ -90,51 +89,35 @@
    [:a {:href "https://www.github.com/codereport"}    [:img {:src (str/join [media "/icons/github.png"])  :width "40px" :height "40px"}]]
    [:br] [:br]
 
-   ; TODO clean up repetitive checkbox code.
-   (if @toggle-info
+   (if (@state :toggle-info)
      [:div
       [:label {:style {:text-decoration "underline"}
-               :on-click #(swap! toggle-info not)}  "(back)"] [:br] [:br]
+               :on-click #(swap! state assoc :toggle-info (not (@state :toggle-info)))}  "(back)"] [:br] [:br]
       (info/table is-mobile?)]
      [:div [:div
-            [:input {:type "checkbox"
-                     :checked @cb-stack-overflow
-                     :on-change #(swap! cb-stack-overflow not)}] (check-box-label :so)
-            [:input {:type "checkbox"
-                     :checked @cb-octoverse
-                     :on-change #(swap! cb-octoverse not)}] (check-box-label :octo)
-            [:input {:type "checkbox"
-                     :checked @cb-redmonk
-                     :on-change #(swap! cb-redmonk not)}] (check-box-label :rm)
-            [:input {:type "checkbox"
-                     :checked @cb-languish
-                     :on-change #(swap! cb-languish not)}] (check-box-label :languish) [:br]
-            [:input {:type "checkbox"
-                     :checked @cb-pypl
-                     :on-change #(swap! cb-pypl not)}] (check-box-label :pypl)
-            [:input {:type "checkbox"
-                     :checked @cb-ieee-spectrum
-                     :on-change #(swap! cb-ieee-spectrum not)}] (check-box-label :ieee)
-            [:input {:type "checkbox"
-                     :checked @cb-tiobe
-                     :on-change #(swap! cb-tiobe not)}] (check-box-label :tiobe)
+            (language-check-box :so)
+            (language-check-box :octo)
+            (language-check-box :rm)
+            (language-check-box :languish) [:br]
+            (language-check-box :pypl)
+            (language-check-box :ieee)
+            (language-check-box :tiobe)
             [:label {:style {:text-decoration "underline"}
-                     :on-click #(swap! toggle-info not)}  "(rankings overview)"]
+                     :on-click #(swap! state assoc :toggle-info (not (@state :toggle-info)))}  "(rankings overview)"]
             [:br] [:label "-"] [:br]
             [:input {:type "checkbox"
-                     :checked @cb-edge-langs
-                     :on-change #(swap! cb-edge-langs not)}]
+                     :checked (@state :omit-edge-langs)
+                     :on-change #(swap! state assoc :omit-edge-langs (not (@state :omit-edge-langs)))}]
             [:label styles/cb-font " Exclude \"Edge Languages\""]
             [:br] [:label "-"] [:br]
             [:form
              [:label styles/cb-font "Number of Languages: "]
-             [:select {:value @num-langs
-                       :on-change #(reset! num-langs (-> % .-target .-value js/Number))}
+             [:select {:value (@state :num-langs)
+                       :on-change #(swap! state assoc :num-langs (-> % .-target .-value js/Number))}
               [:option 10] [:option 20]]]]
 
-      (generate-table sites [@cb-stack-overflow  @cb-octoverse  @cb-redmonk  @cb-languish  @cb-pypl  @cb-ieee-spectrum @cb-tiobe])
-      (@state :results-table)
-      [:br]
+      (generate-table sites (map #(@state-check-boxes %) data/langs))
+      (@state :results-table) [:br]
       [:div (styles/footnote is-mobile?)
        [:label "1 - The number of (selected) ranking websites this language shows up in."] [:br] [:br]
        [:label "If you have suggestions or find a bug, you can open an "]
