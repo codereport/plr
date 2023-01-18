@@ -23,7 +23,7 @@
    "F#"                   "fsharp_logo.png"
    "Fortran"              "fortran_logo.png"
    "FoxPro"               "foxpro.png"
-   "Go"                   "go_logo.png"
+   "Go"                   "go_logo_thin.png"
    "Groovy"               "groovy_logo.jpeg"
    "Haskell"              "haskell_logo.svg"
    "HTML"                 "html_logo.svg"
