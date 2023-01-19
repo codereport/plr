@@ -15,24 +15,24 @@ jobs:
       with:
         persist-credentials: false
 
-    # - name: Get yarn cache directory path
-    #   id: yarn-cache-dir-path
-    #   run: echo "::set-output name=dir::$(yarn cache dir)"
-    # - name: Cache yarn
-    #   uses: actions/cache@v2
-    #   id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
-    #   with:
-    #     path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-    #     key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-yarn-
-    # - name: Cache local Maven repository
-    #   uses: actions/cache@v2
-    #   with:
-    #     path: ~/.m2/repository
-    #     key: ${{ runner.os }}-maven-${{ hashFiles('**/shadow-cljs.edn') }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-maven-
+    - name: Get yarn cache directory path
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+    - name: Cache yarn
+      uses: actions/cache@v3
+      id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+    - name: Cache local Maven repository
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/shadow-cljs.edn') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
 
     - name: Install yarn deps
       run: yarn install
