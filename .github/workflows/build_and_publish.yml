@@ -37,6 +37,9 @@ jobs:
     - name: Install yarn deps
       run: yarn install
 
+    - name: Instal shadow-cljs
+      run: yarn add --dev shadow-cljs
+
     - name: Start shadow-cljs server
       run: yarn shadow-cljs server &
 
