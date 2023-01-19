@@ -95,6 +95,8 @@
                :on-click #(swap! state assoc :toggle-info (not (@state :toggle-info)))}  "(back)"] [:br] [:br]
       (info/table is-mobile?)]
      [:div [:div
+            ;; TODO: figure out how to make this work
+            ;; (map-indexed (fn [i lang] (language-check-box lang (if (= i 3) {:style {:display "inline"}} {}))))
             (language-check-box :so)
             (language-check-box :octo)
             (language-check-box :rm)

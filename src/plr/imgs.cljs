@@ -42,7 +42,7 @@
    "OCaml"                "ocaml_logo.jpg"
    "Perl"                 "perl.png"
    "Pharo"                "pharo_logo.png"
-   "PHP"                  "php_logo.png"
+   "PHP"                  "php_circle.png"
    "PowerShell"           "powershell_logo.png"
    "Python"               "python_logo.png"
    "q"                    "kx-logo.png"
