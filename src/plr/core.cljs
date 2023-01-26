@@ -81,7 +81,7 @@
 (defn app-view []
   [:div {:style {:text-align "center"
                  :padding "50px"
-                 :font-family "Ubuntu Mono,Consolas,Roboto Mono,Courier"}}
+                 :font-family "Ubuntu Mono,Consolas,IBM Plex Mono,Roboto Mono,Courier"}}
    [:label (styles/font 50) "Programming Language Rankings (2023)"] [:br] [:br]
    [:label (styles/font 25) "by code_report"] [:br]
    [:a {:href "https://www.twitter.com/code_report"}  [:img {:src (str/join [media "/icons/twitter.png"]) :width "40px" :height "40px"}]]

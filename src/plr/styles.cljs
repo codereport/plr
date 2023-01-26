@@ -1,7 +1,7 @@
 (ns plr.styles)
 
 (defn table [is-mobile?]
-  {:style (merge {:font-family "Ubuntu Mono,Consolas,Roboto Mono,Courier"
+  {:style (merge {:font-family "Ubuntu Mono,Consolas,IBM Plex Mono,Roboto Mono,Courier"
                   :padding "12px 12px"
                   :font-size "30"
                   :margin-left "auto"
@@ -10,7 +10,7 @@
                  (if is-mobile? {} {:display "inline"}))})
 
 (defn font [font-size]
-  {:style {:font-family "Ubuntu Mono,Consolas,Roboto Mono,Courier"
+  {:style {:font-family "Ubuntu Mono,Consolas,IBM Plex Mono,Roboto Mono,Courier"
            :font-size (str font-size)
            :font-weight "bold"}})
 
