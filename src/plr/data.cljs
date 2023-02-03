@@ -1,6 +1,6 @@
 (ns plr.data)
 
-(def langs [:so :octo :rm :languish :pypl :ieee :tiobe])
+(def sites [:so :octo :rm :languish :pypl :ieee :tiobe])
 
 (def names {:so "StackOverflow" :octo "Octoverse" :rm "RedMonk" :languish "Languish"
             :pypl "PYPL" :ieee "IEEE Spectrum" :tiobe "TIOBE"})

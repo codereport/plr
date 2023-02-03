@@ -68,4 +68,6 @@
    :pypl "pypl.png"
    :ieee "ieee.jpeg"
    :octo  "octoverse.png"
-   :languish "languish.svg"})
+   :languish "languish.svg"
+   :twitter "twitter.png"
+   :google "google.png"})

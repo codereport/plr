@@ -21,7 +21,7 @@
 (def media "/public/media")
 ;; (def media "/media")
 
-(def sites [data/stack-overflow data/octoverse data/redmonk data/languish data/pypl data/ieee data/tiobe])
+(def site-langs [data/stack-overflow data/octoverse data/redmonk data/languish data/pypl data/ieee data/tiobe])
 
 (defn map-indexed-from [n f coll] (map f (range n 1000) coll))
 (defn avg [coll] (transduce identity kixi/mean coll))
@@ -118,7 +118,7 @@
                        :on-change #(swap! state assoc :num-langs (-> % .-target .-value js/Number))}
               [:option 10] [:option 20]]]]
 
-      (generate-table sites (map #(@state-check-boxes %) data/langs))
+      (generate-table site-langs (map #(@state-check-boxes %) data/sites))
       (@state :results-table) [:br]
       [:div (styles/footnote is-mobile?)
        [:label "1 - The number of (selected) ranking websites this language shows up in."] [:br] [:br]
