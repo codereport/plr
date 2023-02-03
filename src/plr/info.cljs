@@ -6,7 +6,7 @@
    [plr.imgs :as imgs]))
 
 (def num-langs {:so "43" :octo "10" :rm "20" :languish "300+" :pypl "28" :ieee "57" :tiobe "50"})
-(def freq {:so "Annual" :octo "Annual" :rm "Biannual" :languish "Monthly" :pypl "Monthly" :ieee "Annual" :tiobe "Monthly"})
+(def freq {:so "Annual" :octo "Annual" :rm "Biannual" :languish "Quarterly" :pypl "Monthly" :ieee "Annual" :tiobe "Monthly"})
 
 (def problems {:octo     "Limitation of only showing \"top 10\" languages since 2014 in graphic."
                :ieee     "JavaScript seems low."
