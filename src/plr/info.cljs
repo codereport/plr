@@ -5,8 +5,9 @@
    [plr.styles :as styles]
    [plr.imgs :as imgs]))
 
-(def num-langs {:so "43"     :octo "10"     :rm "20"       :languish "300+"      :pypl "28"      :ieee "57"     :tiobe "50"})
-(def freq      {:so "Annual" :octo "Annual" :rm "Biannual" :languish "Quarterly" :pypl "Monthly" :ieee "Annual" :tiobe "Monthly"})
+(def num-langs   {:so "43"      :octo "10"      :rm "20"       :languish "300+"      :pypl "28"      :ieee "57"     :tiobe "50"})
+(def freq        {:so "Annual"  :octo "Annual"  :rm "Biannual" :languish "Quarterly" :pypl "Monthly" :ieee "Annual" :tiobe "Monthly"})
+(def last-update {:so "2022/06" :octo "2022/11" :rm "2022/06"  :languish "2023/01"   :pypl "2023/01" :ieee "2022/08" :tiobe "2023/01"})
 
 (def problems {:octo     "Limitation of only showing \"top 10\" languages since 2014 in graphic."
                :ieee     "JavaScript seems low."
@@ -38,10 +39,11 @@
    [:td styles/cell2 [:a {:href (get data/links site)} [:label (data/names site)]]]
    [:td styles/cell2 [:label (num-langs site)]]
    [:td styles/cell2 [:label (freq site)]]
+   [:td styles/cell2 [:label (last-update site)]]
    [:td styles/cell2 [:label (source site)]]
    [:td styles/cell2 [:label (problems site)]]])
 
 (defn table [is-mobile?]
   [:table (styles/table is-mobile?)
-   [:tr {:style {:font-weight "bold"}} [:td] [:td "Website"] [:td "#"] [:td "Frequency"] [:td "Source"] [:td "Problem"]]
+   [:tr {:style {:font-weight "bold"}} [:td] [:td "Website"] [:td "#"] [:td "Frequency"] [:td "Last"] [:td "Source"] [:td "Problem"]]
    (map row data/sites)])
