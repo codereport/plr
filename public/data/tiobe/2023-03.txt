@@ -22,9 +22,9 @@
 22,FoxPro
 23,COBOL
 24,Perl
-24,F#
-25,Objective-C
-26,Transact-SQL
+25,F#
+26,Objective-C
+27,Transact-SQL
 28,Ada
 29,Lisp
 30,Lua
