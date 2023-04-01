@@ -7,7 +7,8 @@
    [plr.imgs :as imgs]
    [plr.data :as data]
    [plr.styles :as styles]
-   [plr.info :as info]))
+   [plr.info :as info])
+  (:require-macros [plr.helper :refer [read-octo read-so read-rm read-languish read-pypl read-ieee read-tiobe]]))
 
 (def is-mobile? (some #(str/includes? js/navigator.userAgent %) ["Android" "iPhone"]))
 
@@ -21,9 +22,8 @@
 (def media "/public/media")
 ;; (def media "/media")
 
-(def site-langs [data/stack-overflow data/octoverse data/redmonk data/languish data/pypl data/ieee data/tiobe])
+(def site-langs [(read-so) (read-octo) (read-rm) (read-languish) (read-pypl) (read-ieee) (read-tiobe)])
 
-(defn map-indexed-from [n f coll] (map f (range n 1000) coll))
 (defn avg [coll] (transduce identity kixi/mean coll))
 (defn stdev [coll] (transduce identity kixi/standard-deviation coll))
 (defn format [num] (/ (int (* num 100)) 100))
@@ -52,16 +52,13 @@
 (defn generate-table [rankings mask]
   (let [row-data (->> rankings
                       (filter-langs mask)
-                      (map (partial remove #(and (in? % data/odd) (@state :omit-edge-langs))))
-                      (map (partial map-indexed-from 1 vector))
-                      (apply concat)
-                      (concat (->> data/extras
-                                   (filter-langs mask)
-                                   (map (partial remove #(and (in? (last %) data/odd) (@state :omit-edge-langs))))
-                                   (apply concat)))
+                      (str/join "\n")
+                      (str/split-lines)
+                      (map #(str/split % #","))
+                      (map (fn [[i lang]] [(js/parseInt i) lang]))
+                      (remove #(and (in? (last %) data/odd) (@state :omit-edge-langs)))
                       (group-by last)
-                      (map (fn [[k v]] (let [vals (map first v)]
-                                         [(avg vals) (stdev vals) (count vals) k])))
+                      (map (fn [[k v]] (let [vals (map first v)] [(avg vals) (stdev vals) (count vals) k])))
                       (sort)
                       (map-indexed vector)
                       (take (@state :num-langs)))]
