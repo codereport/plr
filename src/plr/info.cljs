@@ -5,7 +5,7 @@
    [plr.styles :as styles]
    [plr.imgs :as imgs]))
 
-(def num-langs   {:so "43"      :octo "10"      :rm "20"       :languish "300+"      :pypl "28"      :ieee "57"      :tiobe "50"})
+(def num-langs   {:so "43"      :octo "10"      :rm "20"       :languish "480"       :pypl "29"      :ieee "57"      :tiobe "50"})
 (def freq        {:so "Annual"  :octo "Annual"  :rm "Biannual" :languish "Quarterly" :pypl "Monthly" :ieee "Annual"  :tiobe "Monthly"})
 (def last-update {:so "2022-06" :octo "2022-11" :rm "2022-06"  :languish "2023-01"   :pypl "2023-01" :ieee "2022-08" :tiobe "2023-01"})
 
