@@ -11,7 +11,7 @@
 (defmacro octo     [] (slurp "./public/data/octo/2022-11.txt"))
 (defmacro languish [] (slurp "./public/data/languish/2023-04.txt"))
 
-; previus 3 month
+; previous 3 month
 (defmacro prev-rm       [] (slurp "./public/data/rm/2022-06.txt"))
 (defmacro prev-so       [] (slurp "./public/data/so/2022-06.txt"))
 (defmacro prev-pypl     [] (slurp "./public/data/pypl/2023-01.txt"))

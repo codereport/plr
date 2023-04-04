@@ -126,19 +126,18 @@
             [:label {:style {:text-decoration "underline"}
                      :on-click #(swap! state assoc :toggle-info (not (@state :toggle-info)))}  "(rankings overview)"]
             [:br] [:label "-"] [:br]
+            [:div
             [:input {:type "checkbox"
                      :checked (@state :omit-edge-langs)
                      :on-change #(swap! state assoc :omit-edge-langs (not (@state :omit-edge-langs)))}]
-            [:label styles/cb-font " Exclude \"Edge Languages\""]
-            [:br] [:label "-"] [:br]
-            [:div ;{:style {:display "inline"}}
+            [:label styles/cb-font " Exclude \"Edge Languages\" | "]
             [:form {:style {:display "inline"}}
              [:label styles/cb-font "Number of Languages: "]
              [:select {:value (@state :num-langs)
                        :on-change #(swap! state assoc :num-langs (-> % .-target .-value js/Number))}
-              [:option 10] [:option 20]]]
+              [:option 10] [:option 20] [:option 50]]]
             [:form {:style {:display "inline"}}
-             [:label styles/cb-font " Months for Delta (Δ): "]
+             [:label styles/cb-font " | Months for Delta (Δ): "]
              [:select {:value (@state :delta)
                        :on-change #(swap! state assoc :delta (-> % .-target .-value js/Number))}
               [:option 3]]]]
