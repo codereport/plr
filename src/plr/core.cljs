@@ -135,7 +135,7 @@
              [:label styles/cb-font "Number of Languages: "]
              [:select {:value (@state :num-langs)
                        :on-change #(swap! state assoc :num-langs (-> % .-target .-value js/Number))}
-              [:option 10] [:option 20] [:option 50]]]
+              [:option 10] [:option 20]]]
             [:form {:style {:display "inline"}}
              [:label styles/cb-font " | Months for Delta (Δ): "]
              [:select {:value (@state :delta)
