@@ -53,6 +53,7 @@
    "Ruby"                 "ruby_logo.png"
    "Rust"                 "rust_logo.png"
    "SAS"                  "sas_logo.png"
+   "Sass/SCSS"            "sass.png"
    "Scala"                "scala_logo2.png"
    "Scratch"              "scratch.png"
    "SQL"                  "sql_logo.png"
