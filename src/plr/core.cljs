@@ -19,8 +19,8 @@
 
 (defonce state-check-boxes (r/atom {:so true :octo true :rm true :languish true :pypl false :ieee false :tiobe false}))
 
-(def media "/public/media")
-;; (def media "/media")
+;; (def media "/public/media")
+(def media "/media")
 
 (def site-langs [(read-so) (read-octo) (read-rm) (read-languish) (read-pypl) (read-ieee) (read-tiobe)])
 
