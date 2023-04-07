@@ -1,0 +1,50 @@
+1,Python
+2,C
+3,Java
+4,C++
+5,C#
+6,Visual Basic
+7,JavaScript
+8,SQL
+9,PHP
+10,Go
+11,Delphi
+12,Assembly
+13,Classic Visual Basic
+14,MATLAB
+15,Scratch
+16,R
+17,Swift
+18,Ruby
+19,Rust
+20,Fortran
+21,SAS
+22,Ada
+23,Objective-C
+24,FoxPro
+25,Perl
+26,F#
+27,COBOL
+28,Dart
+29,Lisp
+30,Lua
+31,Julia
+32,Scala
+33,Transact-SQL
+34,Haskell
+35,TypeScript
+36,D
+37,OpenEdge ABL
+38,Kotlin
+39,Logo
+40,PowerShell
+41,Awk
+42,Bourne shell
+43,PL/SQL
+44,Groovy
+45,CFML
+46,Zig
+47,Scheme
+48,Prolog
+49,ABAP
+50,Shell
