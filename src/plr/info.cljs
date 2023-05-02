@@ -7,7 +7,7 @@
 
 (def num-langs   {:so "43"      :octo "10"      :rm "20"       :languish "489"       :pypl "29"      :ieee "57"      :tiobe "50"})
 (def freq        {:so "Annual"  :octo "Annual"  :rm "Biannual" :languish "Quarterly" :pypl "Monthly" :ieee "Annual"  :tiobe "Monthly"})
-(def last-update {:so "2022-06" :octo "2022-11" :rm "2022-06"  :languish "2023-04"   :pypl "2023-04" :ieee "2022-08" :tiobe "2023-04"})
+(def last-update {:so "2022-06" :octo "2022-11" :rm "2022-06"  :languish "2023-04"   :pypl "2023-05" :ieee "2022-08" :tiobe "2023-04"})
 
 (def problems {:octo     "Limitation of only showing \"top 10\" languages since 2014 in graphic."
                :ieee     "JavaScript seems low."
