@@ -8,7 +8,7 @@ sudo apt install npm
 npm install -g shadow-cljs
 npm install react-dom
 
-# clone (a fork of) this repo)
+# clone this repo
 
 # launch the website locally
 shadow-cljs watch dev
