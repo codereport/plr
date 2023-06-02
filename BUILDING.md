@@ -1,9 +1,19 @@
 ## Building
 
-- install node
-- `npm install -g shadow-cljs`
-- clone this repo
-- in terminal, from within this repo:
-    `shadow-cljs watch dev`
-- open http://localhost:8080
-- edit `./src/demo/core.cljs`
+```bash
+# install npm
+sudo apt install npm
+
+# install npm packages (might need sudo)
+npm install -g shadow-cljs
+npm install react-dom
+
+# clone (a fork of) this repo)
+
+# launch the website locally
+shadow-cljs watch dev
+
+# open http://localhost:8080
+
+# then edit `./src/demo/core.cljs`
+```
