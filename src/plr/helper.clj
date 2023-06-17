@@ -4,7 +4,7 @@
 
 ; current
 (defmacro rm       [] (slurp "./public/data/rm/2022-06.txt"))
-(defmacro so       [] (slurp "./public/data/so/2022-06.txt"))
+(defmacro so       [] (slurp "./public/data/so/2023-06.txt"))
 (defmacro pypl     [] (slurp "./public/data/pypl/2023-06.txt"))
 (defmacro tiobe    [] (slurp "./public/data/tiobe/2023-06.txt"))
 (defmacro ieee     [] (slurp "./public/data/ieee/2022-08.txt"))
