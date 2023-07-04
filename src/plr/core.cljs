@@ -8,7 +8,7 @@
    [plr.data :as data]
    [plr.styles :as styles]
    [plr.info :as info])
-  (:require-macros 
+  (:require-macros
    [plr.helper :as read]))
 
 (def is-mobile? (some #(str/includes? js/navigator.userAgent %) ["Android" "iPhone"]))
@@ -55,7 +55,7 @@
 (defn simplify-row-data [row-data]
   (->> row-data
        (map (fn [[rank [avg stdev n lang]]] [lang rank]))
-       (flatten) 
+       (flatten)
        (apply hash-map)))
 
 (defn format-delta [delta]
@@ -79,8 +79,8 @@
   (let [mask          (map #(@state-check-boxes %) data/sites)
         prev-rankings (simplify-row-data (generate-row-data prev-site-langs mask true))]
     [:table (styles/table is-mobile?)
-      [:tr {:style {:font-weight "bold"}} [:td] [:td] [:td "Language"] [:td "Avg"] [:td "StDev"] [:td "n¹"] [:td "Δ"]]
-        (map (partial apply generate-row) (map #(conj % prev-rankings) rows))]))
+     [:tr {:style {:font-weight "bold"}} [:td] [:td] [:td "Language"] [:td "Avg"] [:td "StDev"] [:td "n¹"] [:td "Δ"]]
+     (map (partial apply generate-row) (map #(conj % prev-rankings) rows))]))
 
 (defn generate-table [rankings mask]
   (let [row-data (generate-row-data rankings mask false)]
@@ -101,7 +101,7 @@
   [:div {:style {:text-align "center"
                  :padding "50px"
                  :font-family "Ubuntu Mono,Consolas,IBM Plex Mono,Roboto Mono,Courier"}}
-   [:label (styles/font 50) "Programming Language Rankings (2023 June)"] [:br] [:br]
+   [:label (styles/font 50) "Programming Language Rankings (2023 July)"] [:br] [:br]
    [:label (styles/font 25) "by code_report"] [:br]
    [:a {:href "https://www.twitter.com/code_report"}  [:img {:src (str/join [media "/icons/twitter.png"]) :width "40px" :height "40px"}]]
    [:a {:href "https://www.youtube.com/c/codereport"} [:img {:src (str/join [media "/icons/youtube.png"]) :width "40px" :height "40px"}]]
@@ -127,24 +127,23 @@
                      :on-click #(swap! state assoc :toggle-info (not (@state :toggle-info)))}  "(rankings overview)"]
             [:br] [:label "-"] [:br]
             [:div
-            [:input {:type "checkbox"
-                     :checked (@state :omit-edge-langs)
-                     :on-change #(swap! state assoc :omit-edge-langs (not (@state :omit-edge-langs)))}]
-            [:label styles/cb-font " Exclude \"Edge Languages\" | "]
-            [:form {:style {:display "inline"}}
-             [:label styles/cb-font "Number of Languages: "]
-             [:select {:value (@state :num-langs)
-                       :on-change #(swap! state assoc :num-langs (-> % .-target .-value js/Number))}
-              [:option 10] [:option 20]]]
-            [:form {:style {:display "inline"}}
-             [:label styles/cb-font " | Months for Delta (Δ): "]
-             [:select {:value (@state :delta)
-                       :on-change #(swap! state assoc :delta (-> % .-target .-value js/Number))}
-              [:option 3]]]]
-              ] [:br]
+             [:input {:type "checkbox"
+                      :checked (@state :omit-edge-langs)
+                      :on-change #(swap! state assoc :omit-edge-langs (not (@state :omit-edge-langs)))}]
+             [:label styles/cb-font " Exclude \"Edge Languages\" | "]
+             [:form {:style {:display "inline"}}
+              [:label styles/cb-font "Number of Languages: "]
+              [:select {:value (@state :num-langs)
+                        :on-change #(swap! state assoc :num-langs (-> % .-target .-value js/Number))}
+               [:option 10] [:option 20]]]
+             [:form {:style {:display "inline"}}
+              [:label styles/cb-font " | Months for Delta (Δ): "]
+              [:select {:value (@state :delta)
+                        :on-change #(swap! state assoc :delta (-> % .-target .-value js/Number))}
+               [:option 3]]]]] [:br]
 
       (generate-table site-langs (map #(@state-check-boxes %) data/sites))
-      (@state :results-table) [:br] 
+      (@state :results-table) [:br]
       [:div (styles/footnote is-mobile?)
        [:label "1 - The number of (selected) ranking websites this language shows up in."] [:br] [:br]
        [:label "If you have suggestions or find a bug, you can open an "]
