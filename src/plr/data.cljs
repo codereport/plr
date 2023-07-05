@@ -9,7 +9,7 @@
             :ieee     "https://spectrum.ieee.org/top-programming-languages-2022"
             :rm       "https://redmonk.com/sogrady/2022/10/20/language-rankings-6-22/"
             :languish "https://tjpalmer.github.io/languish/"
-            :so       "https://survey.stackoverflow.co/2022/#most-popular-technologies-language"
+            :so       "https://survey.stackoverflow.co/2023/#most-popular-technologies-language"
             :pypl     "https://pypl.github.io/PYPL.html"
             :tiobe    "https://www.tiobe.com/tiobe-index/"})
 
