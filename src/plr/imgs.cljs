@@ -12,6 +12,7 @@
    "C#"                   "csharp_logo.png"
    "Classic Visual Basic" "vb.jpg"
    "Clojure"              "clojure_logo.png"
+   "COBOL"                "cobol.png"
    "Crystal"              "crystal_logo.svg"
    "CSS"                  "css_logo.png"
    "Cuda"                 "cuda.jpg"
