@@ -25,7 +25,8 @@
 ;; (def media "/media")
 
 (def site-langs      [(read/so) (read/octo) (read/rm) (read/languish) (read/pypl) (read/ieee) (read/tiobe)])
-(def prev-site-langs [(read/prev-so) (read/prev-octo) (read/prev-rm) (read/prev-languish) (read/prev-pypl) (read/prev-ieee) (read/prev-tiobe)])
+(def prev3-site-langs [(read/prev3-so) (read/prev3-octo) (read/prev3-rm) (read/prev3-languish) (read/prev3-pypl) (read/prev3-ieee) (read/prev3-tiobe)])
+(def prev6-site-langs [(read/prev6-so) (read/prev6-octo) (read/prev6-rm) (read/prev6-languish) (read/prev6-pypl) (read/prev6-ieee) (read/prev6-tiobe)])
 
 (defn avg [coll] (transduce identity kixi/mean coll))
 (defn stdev [coll] (transduce identity kixi/standard-deviation coll))
@@ -76,8 +77,9 @@
    [:td styles/cell (format-delta (- rank (prev-rankings lang)))]])
 
 (defn make-table [rows]
-  (let [mask          (map #(@state-check-boxes %) data/sites)
-        prev-rankings (simplify-row-data (generate-row-data prev-site-langs mask true))]
+  (let [mask            (map #(@state-check-boxes %) data/sites)
+        prev-site-langs (if (not= (@state :delta) 6) prev3-site-langs prev6-site-langs)
+        prev-rankings   (simplify-row-data (generate-row-data prev-site-langs mask true))]
     [:table (styles/table is-mobile?)
      [:tr {:style {:font-weight "bold"}} [:td] [:td] [:td "Language"] [:td "Avg"] [:td "StDev"] [:td "n¹"] [:td "Δ"]]
      (map (partial apply generate-row) (map #(conj % prev-rankings) rows))]))
@@ -140,7 +142,7 @@
               [:label styles/cb-font " | Months for Delta (Δ): "]
               [:select {:value (@state :delta)
                         :on-change #(swap! state assoc :delta (-> % .-target .-value js/Number))}
-               [:option 3]]]]] [:br]
+               [:option 3] [:option 6]]]]] [:br]
 
       (generate-table site-langs (map #(@state-check-boxes %) data/sites))
       (@state :results-table) [:br]
