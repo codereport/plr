@@ -17,7 +17,8 @@
                         :num-langs       (if is-mobile? 10 20)
                         :delta           3
                         :toggle-info     false
-                        :omit-edge-langs true}))
+                        :omit-edge-langs true
+                        :which-langs     "All"}))
 
 (defonce state-check-boxes (r/atom {:so true :octo true :rm true :languish true :pypl false :ieee false :tiobe false}))
 
@@ -47,11 +48,13 @@
        (map #(str/split % #","))
        (map (fn [[i lang]] [(js/parseInt i) lang]))
        (remove #(and (in? (last %) data/odd) (@state :omit-edge-langs)))
+       (remove #(and (not (in? (last %) data/functional)) (= (@state :which-langs) "Functional")))
+       (remove #(and (not (in? (last %) data/arrays)) (= (@state :which-langs) "Array")))
        (group-by last)
        (map (fn [[k v]] (let [vals (map first v)] [(avg vals) (stdev vals) (count vals) k])))
        (sort)
        (map-indexed vector)
-       (take (+ (@state :num-langs) (if extra 10 0)))))
+       (take (+ (if (= (@state :which-langs) "Functional") 10 (@state :num-langs)) (if extra 10 0)))))
 
 (defn simplify-row-data [row-data]
   (->> row-data
@@ -84,11 +87,15 @@
      [:tr {:style {:font-weight "bold"}} [:td] [:td] [:td "Language"] [:td "Avg"] [:td "StDev"] [:td "n¹"] [:td "Δ"]]
      (map (partial apply generate-row) (map #(conj % prev-rankings) rows))]))
 
+; Pretty sure the fix for https://github.com/codereport/plr/issues/11 is making sure no "empty rows" get displayed
+; Can replicate bug consistently by generating lang list not divisible by 10 and then going to something else
 (defn generate-table [rankings mask]
   (let [row-data (generate-row-data rankings mask false)]
-    (if (or (not= (@state :num-langs) 20) is-mobile?)
-      (make-table row-data)
-      [:div (make-table (take 10 row-data)) (make-table (drop 10 row-data))])))
+    (if (empty? row-data)
+      [:div [:label "No languages."]]
+      (if (or (or (not= (@state :num-langs) 20) (<= (count row-data) 10)) is-mobile?)
+        (make-table row-data)
+        [:div (make-table (take 10 row-data)) (make-table (drop 10 row-data))]))))
 
 (defn language-check-box [lang]
   [:div {:style {:display "inline"}}
@@ -137,12 +144,18 @@
               [:label styles/cb-font "Number of Languages: "]
               [:select {:value (@state :num-langs)
                         :on-change #(swap! state assoc :num-langs (-> % .-target .-value js/Number))}
-               [:option 10] [:option 20]]]
+               [:option 10] [:option 20]]] [:br]
              [:form {:style {:display "inline"}}
-              [:label styles/cb-font " | Months for Delta (Δ): "]
+              [:label styles/cb-font "Months for Delta (Δ): "]
               [:select {:value (@state :delta)
                         :on-change #(swap! state assoc :delta (-> % .-target .-value js/Number))}
-               [:option 3] [:option 6]]]]] [:br]
+               [:option 3] [:option 6]]]
+             [:label styles/cb-font " | "]
+             [:form {:style {:display "inline"}}
+              [:select {:value (@state :which-langs)
+                        :on-change #(swap! state assoc :which-langs  (-> % .-target .-value))}
+               [:option "All"] [:option "Functional"] [:option "Array"]]]
+             [:label styles/cb-font " Languages"]]] [:br]
 
       (generate-table site-langs (map #(@state-check-boxes %) data/sites))
       (@state :results-table) [:br]
