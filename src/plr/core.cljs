@@ -54,7 +54,7 @@
        (map (fn [[k v]] (let [vals (map first v)] [(avg vals) (stdev vals) (count vals) k])))
        (sort)
        (map-indexed vector)
-       (take (+ (if (= (@state :which-langs) "Functional") 10 (@state :num-langs)) (if extra 10 0)))))
+       (take (+ (@state :num-langs) (if extra 10 0)))))
 
 (defn simplify-row-data [row-data]
   (->> row-data
@@ -91,11 +91,13 @@
 ; Can replicate bug consistently by generating lang list not divisible by 10 and then going to something else
 (defn generate-table [rankings mask]
   (let [row-data (generate-row-data rankings mask false)]
-    (if (empty? row-data)
-      [:div [:label "No languages."]]
-      (if (or (or (not= (@state :num-langs) 20) (<= (count row-data) 10)) is-mobile?)
-        (make-table row-data)
-        [:div (make-table (take 10 row-data)) (make-table (drop 10 row-data))]))))
+    (cond
+      (empty? row-data) [:div [:label "No languages."]]
+      (= (@state :which-langs) "Array")  (make-table row-data)
+      (not= (@state :num-langs) 20)      (make-table row-data)
+      (<= (count row-data) 10)           (make-table row-data)
+      is-mobile?                         (make-table row-data)
+      :else [:div (make-table (take 10 row-data)) (make-table (drop 10 row-data))])))
 
 (defn language-check-box [lang]
   [:div {:style {:display "inline"}}

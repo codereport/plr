@@ -13,9 +13,11 @@
             :pypl     "https://pypl.github.io/PYPL.html"
             :tiobe    "https://www.tiobe.com/tiobe-index/"})
 
+; Lisp is included here because SO groups every Lisp into one which collides with Languish having all the Lisp dialects
 (def odd ["Markdown" "CSS" "HTML" "SAS" "Jupyter Notebook" "Vue" "JSON" "Dockerfile" "SQL" "PLpgSQL" "ASP.NET" "Sass/SCSS"
           "XML" "TeX" "Batchfile" "Nginx" "Makefile" "CSV" "CMake" "Adblock Filter List" "Jinja" "YAML" "ApacheConf"
-          "Svelte"])
+          "Svelte" "Lisp"])
 
-(def functional ["Haskell" "Scala" "F#" "Lisp" "Scheme" "Racket" "Erlang" "Elixir" "ML" "OCaml" "Elm" "Clojure" "Standard ML" "Reason"])
-(def arrays ["APL" "J" "q" "BQN" "Julia" "Fortran" "MATLAB" "R" "Futhark"])
+(def functional ["Haskell" "Scala" "F#" "Lisp" "Scheme" "Racket" "Erlang" "Elixir" "ML" "OCaml" "Elm" "Clojure" "Standard ML"
+                 "Reason" "Emacs Lisp" "Common Lisp" "NewLisp" "PicoLisp" "PureScript" "Futhark" "LFE" "jq"])
+(def arrays ["APL" "J" "q" "BQN" "Julia" "Fortran" "MATLAB" "R" "Futhark" "Mathematica" "Chapel"])
