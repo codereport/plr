@@ -84,7 +84,7 @@
         prev-site-langs (if (not= (@state :delta) 6) prev3-site-langs prev6-site-langs)
         prev-rankings   (simplify-row-data (generate-row-data prev-site-langs mask true))]
     [:table (styles/table is-mobile?)
-     [:tr {:style {:font-weight "bold"}} [:td] [:td] [:td "Language"] [:td "Avg"] [:td "StDev"] [:td "n¹"] [:td "Δ"]]
+     [:tr {:style {:font-weight "bold"}} [:td] [:td] [:td "Language"] [:td "Avg"] [:td "StDev"] [:td "n¹"] [:td (str/join [(str (@state :delta)) "mΔ"])]]
      (map (partial apply generate-row) (map #(conj % prev-rankings) rows))]))
 
 ; Pretty sure the fix for https://github.com/codereport/plr/issues/11 is making sure no "empty rows" get displayed
