@@ -50,6 +50,7 @@
        (remove #(and (in? (last %) data/odd) (@state :omit-edge-langs)))
        (remove #(and (not (in? (last %) data/functional)) (= (@state :which-langs) "Functional")))
        (remove #(and (not (in? (last %) data/arrays)) (= (@state :which-langs) "Array")))
+       (remove #(and (not (in? (last %) data/system)) (= (@state :which-langs) "System")))
        (group-by last)
        (map (fn [[k v]] (let [vals (map first v)] [(avg vals) (stdev vals) (count vals) k])))
        (sort)
@@ -159,7 +160,7 @@
              [:form {:style {:display "inline"}}
               [:select {:value (@state :which-langs)
                         :on-change #(swap! state assoc :which-langs  (-> % .-target .-value))}
-               [:option "All"] [:option "Functional"] [:option "Array"]]]
+               [:option "All"] [:option "Functional"] [:option "Array"] [:option "System"]]]
              [:label styles/cb-font " Languages"]]] [:br]
 
       (generate-table site-langs (map #(@state-check-boxes %) data/sites))
