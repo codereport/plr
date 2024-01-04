@@ -28,3 +28,11 @@
 (defmacro prev6-ieee     [] (slurp "./public/data/ieee/2022-08.txt"))
 (defmacro prev6-octo     [] (slurp "./public/data/octo/2022-11.txt"))
 (defmacro prev6-languish [] (slurp "./public/data/languish/2023-07.txt"))
+
+(defmacro prev12-rm       [] (slurp "./public/data/rm/2022-06.txt")) ; released on 2022-10
+(defmacro prev12-so       [] (slurp "./public/data/so/2022-06.txt"))
+(defmacro prev12-pypl     [] (slurp "./public/data/pypl/2023-01.txt"))
+(defmacro prev12-tiobe    [] (slurp "./public/data/tiobe/2023-01.txt"))
+(defmacro prev12-ieee     [] (slurp "./public/data/ieee/2022-08.txt"))
+(defmacro prev12-octo     [] (slurp "./public/data/octo/2022-11.txt"))
+(defmacro prev12-languish [] (slurp "./public/data/languish/2023-01.txt"))

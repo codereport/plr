@@ -25,9 +25,10 @@
 (def media "/public/media")
 ;; (def media "/media")
 
-(def site-langs      [(read/so) (read/octo) (read/rm) (read/languish) (read/pypl) (read/ieee) (read/tiobe)])
-(def prev3-site-langs [(read/prev3-so) (read/prev3-octo) (read/prev3-rm) (read/prev3-languish) (read/prev3-pypl) (read/prev3-ieee) (read/prev3-tiobe)])
-(def prev6-site-langs [(read/prev6-so) (read/prev6-octo) (read/prev6-rm) (read/prev6-languish) (read/prev6-pypl) (read/prev6-ieee) (read/prev6-tiobe)])
+(def site-langs        [(read/so) (read/octo) (read/rm) (read/languish) (read/pypl) (read/ieee) (read/tiobe)])
+(def prev3-site-langs  [(read/prev3-so)  (read/prev3-octo)  (read/prev3-rm)  (read/prev3-languish)  (read/prev3-pypl)  (read/prev3-ieee)  (read/prev3-tiobe)])
+(def prev6-site-langs  [(read/prev6-so)  (read/prev6-octo)  (read/prev6-rm)  (read/prev6-languish)  (read/prev6-pypl)  (read/prev6-ieee)  (read/prev6-tiobe)])
+(def prev12-site-langs [(read/prev12-so) (read/prev12-octo) (read/prev12-rm) (read/prev12-languish) (read/prev12-pypl) (read/prev12-ieee) (read/prev12-tiobe)])
 
 (defn avg [coll] (transduce identity kixi/mean coll))
 (defn stdev [coll] (transduce identity kixi/standard-deviation coll))
@@ -82,7 +83,9 @@
 
 (defn make-table [rows]
   (let [mask            (map #(@state-check-boxes %) data/sites)
-        prev-site-langs (if (not= (@state :delta) 6) prev3-site-langs prev6-site-langs)
+        prev-site-langs (cond (= (@state :delta) 3) prev3-site-langs
+                              (= (@state :delta) 6) prev6-site-langs
+                              :else                 prev12-site-langs)
         prev-rankings   (simplify-row-data (generate-row-data prev-site-langs mask true))]
     [:table (styles/table is-mobile?)
      [:tr {:style {:font-weight "bold"}} [:td] [:td] [:td "Language"] [:td "Avg"] [:td "StDev"] [:td "n¹"] [:td (str/join [(str (@state :delta)) "mΔ"])]]
@@ -155,7 +158,7 @@
               [:label styles/cb-font "Months for Delta (Δ): "]
               [:select {:value (@state :delta)
                         :on-change #(swap! state assoc :delta (-> % .-target .-value js/Number))}
-               [:option 3] [:option 6]]]
+               [:option 3] [:option 6] [:option 12]]]
              [:label styles/cb-font " | "]
              [:form {:style {:display "inline"}}
               [:select {:value (@state :which-langs)
