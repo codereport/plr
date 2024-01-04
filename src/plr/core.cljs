@@ -13,8 +13,8 @@
 
 (def is-mobile? (some #(str/includes? js/navigator.userAgent %) ["Android" "iPhone"]))
 
-(defonce state (r/atom {:results-table   [:tr]
-                        :num-langs       (if is-mobile? 10 20)
+(defonce state (r/atom {:num-langs       (if is-mobile? 10 20)
+                        :actual-langs    (if is-mobile? 10 20)
                         :delta           3
                         :toggle-info     false
                         :omit-edge-langs true
@@ -67,6 +67,7 @@
 (defn format-delta [delta]
   (let [val (abs delta)]
     (cond
+      (= (- (@state :actual-langs) 1) delta) (str/join ["⭐"])
       (> 0 delta) (str/join ["🟢 (" (str val) ")"])
       (< 0 delta) (str/join ["🔴 (" (str val) ")"])
       :else "-")))
@@ -95,11 +96,12 @@
 ; Can replicate bug consistently by generating lang list not divisible by 10 and then going to something else
 (defn generate-table [rankings mask]
   (let [row-data (generate-row-data rankings mask false)]
+    (swap! state assoc :actual-langs (count row-data))
     (cond
       (empty? row-data) [:div [:label "No languages."]]
       (= (@state :which-langs) "Array")  (make-table row-data)
       (not= (@state :num-langs) 20)      (make-table row-data)
-      (<= (count row-data) 10)           (make-table row-data)
+      (<= (@state :actual-langs) 10)     (make-table row-data)
       is-mobile?                         (make-table row-data)
       :else [:div (make-table (take 10 row-data)) (make-table (drop 10 row-data))])))
 
@@ -167,8 +169,8 @@
              [:label styles/cb-font " Languages"]]] [:br]
 
       (generate-table site-langs (map #(@state-check-boxes %) data/sites))
-      (@state :results-table) [:br]
       [:div (styles/footnote is-mobile?)
+       [:br]
        [:label "1 - The number of (selected) ranking websites this language shows up in."] [:br] [:br]
        [:label "If you have suggestions or find a bug, you can open an "]
        [:a {:href "https://github.com/codereport/plr/issues/new"} [:label "issue"]]
