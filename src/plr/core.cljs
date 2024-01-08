@@ -105,10 +105,11 @@
       is-mobile?                         (make-table row-data)
       :else [:div (make-table (take 10 row-data)) (make-table (drop 10 row-data))])))
 
-(defn language-check-box [lang]
+(defn language-check-box [lang disable]
   [:div {:style {:display "inline"}}
    [:input {:type "checkbox"
             :checked (@state-check-boxes lang)
+            :disabled (if disable true false)
             :on-change #(swap! state-check-boxes assoc lang (not (@state-check-boxes lang)))}]
    [:div {:style {:display "inline"}} [:label styles/cb-font (str/join [" " (get data/names lang)])]
     [:a {:href (get data/links lang)} [:img {:src (str/join [media "/icons/link.png"]) :width "16px" :height "16px"}]]
@@ -136,13 +137,13 @@
      [:div [:div
             ;; TODO: figure out how to make this work
             ;; (map-indexed (fn [i lang] (language-check-box lang (if (= i 3) {:style {:display "inline"}} {}))))
-            (language-check-box :so)
-            (language-check-box :octo)
-            (language-check-box :rm)
-            (language-check-box :languish) [:br]
-            (language-check-box :pypl)
-            (language-check-box :ieee)
-            (language-check-box :tiobe)
+            (language-check-box :so       false)
+            (language-check-box :octo     false)
+            (language-check-box :rm       false)
+            (language-check-box :languish false) [:br]
+            (language-check-box :pypl     false)
+            (language-check-box :ieee     false)
+            (language-check-box :tiobe    true)
             [:label {:style {:text-decoration "underline"}
                      :on-click #(swap! state assoc :toggle-info (not (@state :toggle-info)))}  "(rankings overview)"]
             [:br] [:label "-"] [:br]
