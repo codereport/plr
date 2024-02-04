@@ -122,7 +122,7 @@
   [:div {:style {:text-align "center"
                  :padding "50px"
                  :font-family "Ubuntu Mono,Consolas,IBM Plex Mono,Roboto Mono,Courier"}}
-   [:label (styles/font 50) (str/join [(title-prefix (@state :which-langs)) " Programming Language Rankings (2024 Jan)"])] [:br] [:br]
+   [:label (styles/font 50) (str/join [(title-prefix (@state :which-langs)) " Programming Language Rankings (2024 Feb)"])] [:br] [:br]
    [:label (styles/font 25) "by code_report"] [:br]
    [:a {:href "https://www.twitter.com/code_report"}  [:img {:src (str/join [media "/icons/twitter.png"]) :width "40px" :height "40px"}]]
    [:a {:href "https://www.youtube.com/c/codereport"} [:img {:src (str/join [media "/icons/youtube.png"]) :width "40px" :height "40px"}]]
