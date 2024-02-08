@@ -16,7 +16,9 @@
 ; Lisp is included here because SO groups every Lisp into one which collides with Languish having all the Lisp dialects
 (def odd ["Markdown" "CSS" "HTML" "SAS" "Jupyter Notebook" "Vue" "JSON" "Dockerfile" "SQL" "PLpgSQL" "ASP.NET" "Sass/SCSS"
           "XML" "TeX" "Batchfile" "Nginx" "Makefile" "CSV" "CMake" "Adblock Filter List" "Jinja" "YAML" "ApacheConf"
-          "Svelte" "Lisp"])
+          "Svelte" "Lisp" "Vim Script" "Flow" "HCL" "GDScript" "QML" "XSLT" "PLSQL" "RMarkdown" "HiveQL" "EJS" "Apex" "Verilog"
+          "DM" "Mustache" "Cucumber" "Protocol Buffer" "Smarty" "MDX" "ShaderLab" "AutoHotkey" "LLVM" "GDB" "Bicep"
+          "SystemVerilog" "LabView" "ABAP" "VHDL" "Ladder Logic"])
 
 (def functional ["Haskell" "Scala" "F#" "Lisp" "Scheme" "Racket" "Erlang" "Elixir" "ML" "OCaml" "Elm" "Clojure" "Standard ML"
                  "Reason" "Emacs Lisp" "Common Lisp" "NewLisp" "PicoLisp" "PureScript" "Futhark" "LFE" "jq"])
