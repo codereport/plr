@@ -1,4 +1,4 @@
-## Building
+# Building
 
 ```bash
 # install npm
@@ -17,3 +17,4 @@ shadow-cljs watch dev
 
 # then edit `./src/demo/core.cljs`
 ```
+
