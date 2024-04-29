@@ -30,6 +30,7 @@
    "Fortran"              "fortran_logo.png"
    "FoxPro"               "foxpro.png"
    "Futhark"              "futhark.png"
+   "Gleam"                "gleam.png"
    "Go"                   "go_logo_thin.png"
    "Groovy"               "groovy_logo.jpeg"
    "Haskell"              "haskell_logo.svg"
