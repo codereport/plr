@@ -22,8 +22,8 @@
 
 (defonce state-check-boxes (r/atom {:so true :octo true :rm true :languish true :pypl false :ieee false :tiobe false}))
 
-(def media "/public/media")
-;; (def media "/media")
+;; (def media "/public/media")
+(def media "/media")
 
 (def site-langs        [(read/so) (read/octo) (read/rm) (read/languish) (read/pypl) (read/ieee) (read/tiobe)])
 (def prev3-site-langs  [(read/prev3-so)  (read/prev3-octo)  (read/prev3-rm)  (read/prev3-languish)  (read/prev3-pypl)  (read/prev3-ieee)  (read/prev3-tiobe)])
@@ -122,7 +122,7 @@
   [:div {:style {:text-align "center"
                  :padding "50px"
                  :font-family "Ubuntu Mono,Consolas,IBM Plex Mono,Roboto Mono,Courier"}}
-   [:label (styles/font 50) (str/join [(title-prefix (@state :which-langs)) " Programming Language Rankings (2024 June)"])] [:br] [:br]
+   [:label (styles/font 50) (str/join [(title-prefix (@state :which-langs)) " Programming Language Rankings (2024 July)"])] [:br] [:br]
    [:label (styles/font 25) "by code_report"] [:br]
    [:a {:href "https://www.twitter.com/code_report"}  [:img {:src (str/join [media "/icons/twitter.png"]) :width "40px" :height "40px"}]]
    [:a {:href "https://www.youtube.com/c/codereport"} [:img {:src (str/join [media "/icons/youtube.png"]) :width "40px" :height "40px"}]]
