@@ -4,7 +4,7 @@
 3,Python
 4,SQL
 5,TypeScript
-6,Bash
+6,Shell
 7,Java
 8,C#
 9,C++
