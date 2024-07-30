@@ -13,18 +13,18 @@
 12,Go
 13,Kotlin
 14,MATLAB
-15,Ruby
-16,PowerShell
-17,Ada
-18,Dart
-19,VBA
-20,Lua
-21,Scala
-22,Visual Basic
-23,ABAP
+15,Dart
+16,Ruby
+17,VBA
+18,PowerShell
+19,Ada
+20,Scala
+21,Lua
+22,ABAP
+23,Visual Basic
 24,Julia
-25,COBOL
-26,Groovy
-27,Perl
-28,Delphi
-29,Haskell
+25,Perl
+26,Haskell
+27,Groovy
+28,COBOL
+29,Delphi
