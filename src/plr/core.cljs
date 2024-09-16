@@ -141,7 +141,7 @@
             (language-check-box :octo     false)
             (language-check-box :rm       false)
             (language-check-box :languish false) [:br]
-            (language-check-box :pypl     false)
+            (language-check-box :pypl     true)
             (language-check-box :ieee     false)
             (language-check-box :tiobe    true)
             [:label {:style {:text-decoration "underline"}
