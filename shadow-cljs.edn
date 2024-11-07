@@ -1,11 +1,11 @@
 {:source-paths ["src"]
- :dependencies [[reagent "0.10.0"]
-                [stylefy "1.14.1"]
+ :dependencies [[reagent "1.2.0"]
+                [stylefy "3.2.0"]
                 [kixi/stats "0.5.5"]]
  :dev-http {8080 ["public/"
                   "target/public/"]}
  :builds {:dev {:target :browser
                 :output-dir "target/public/dev"
-                :asset-path "/dev"
+                ;; :asset-path "/dev"
                 :modules {:main {:init-fn plr.core/render!}}
                 :devtools {:after-load plr.core/render!}}}}
