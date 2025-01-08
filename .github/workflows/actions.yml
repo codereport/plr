@@ -1,5 +1,8 @@
 name: 'Auto Assign'
-on: [pull_request_target, issues]
+on:
+  pull_request_target:
+  issues:
+    types: [opened]
 
 jobs:
   add-reviews:
