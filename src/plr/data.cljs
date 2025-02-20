@@ -23,4 +23,4 @@
 
 (def arrays ["APL" "J" "q" "BQN" "Julia" "Fortran" "MATLAB" "R" "Futhark" "Mathematica" "Chapel"])
 
-(def system ["C" "C++" "Rust" "Swift" "Nim" "Zig" "Go" "D" "Ada"])
+(def system ["C" "C++" "Rust" "Swift" "Nim" "Zig" "Go" "D" "Ada", "Pascal"])

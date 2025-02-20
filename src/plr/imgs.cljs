@@ -52,6 +52,7 @@
    "Nim"                  "nim_logo.png"
    "Objective-C"          "objc_logo.png"
    "OCaml"                "ocaml_logo.jpg"
+   "Pascal"               "pascal.png"
    "Perl"                 "perl.png"
    "PicoLisp"             "pico_lisp.png"
    "PLgpSQL"              "plgpsql.png"
