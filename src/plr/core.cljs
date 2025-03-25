@@ -150,9 +150,10 @@
             [:br] [:label "-"] [:br]
             [:div
              [:input {:type "checkbox"
+                      :id "exclude_edge_languages"
                       :checked (@state :omit-edge-langs)
                       :on-change #(swap! state assoc :omit-edge-langs (not (@state :omit-edge-langs)))}]
-             [:label styles/cb-font " Exclude \"Edge Languages\" | "]
+             [:label styles/cb-font :for "exclude_edge_languages" " Exclude \"Edge Languages\" | "]
              [:form {:style {:display "inline"}}
               [:label styles/cb-font "Number of Languages: "]
               [:select {:value (@state :num-langs)
