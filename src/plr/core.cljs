@@ -7,7 +7,8 @@
    [plr.imgs :as imgs]
    [plr.data :as data]
    [plr.styles :as styles]
-   [plr.info :as info])
+   [plr.info :as info]
+   ["react-social-icons" :refer [SocialIcon]])
   (:require-macros
    [plr.helper :as read]))
 
@@ -127,16 +128,19 @@
 (defn title-prefix [which-langs]
   (when (not= which-langs "All") which-langs))
 
-(defn social-link [url icon]
-  [:a {:href url} 
-   [:img {:src (str media "/icons/" icon) :width "40px" :height "40px"}]])
+(defn social-icon [props]
+  [:> SocialIcon (merge {:style {:height 40 :width 40}} props)])
 
 (defn social-links []
-  [:div
-   [social-link "https://www.twitter.com/code_report"  "twitter.png"]
-   [social-link "https://mastodon.social/@code_report" "twitter.png"]
-   [social-link "https://www.youtube.com/c/codereport" "youtube.png"]
-   [social-link "https://www.github.com/codereport"    "github.png"]])
+  [:div {:style {:display "flex" 
+                 :gap "10px" 
+                 :justify-content "center"
+                 :margin-top "10px"}}
+   [social-icon {:url "https://bsky.app/profile/codereport.bsky.social"}]
+   [social-icon {:url "https://mastodon.social/@code_report" :network "mastodon"}]
+   [social-icon {:url "https://www.twitter.com/code_report"}]
+   [social-icon {:url "https://www.youtube.com/c/codereport"}]
+   [social-icon {:url "https://www.github.com/codereport"}]])
 
 (defn language-filters []
   (let [langs (keys @state-check-boxes)
