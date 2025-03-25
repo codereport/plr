@@ -37,17 +37,20 @@
        (filter first)
        (map last)))
 
+(defn should-include-lang? [lang]
+  (not (or (= "" lang)
+           (and (in? lang data/odd) (@state :omit-edge-langs))
+           (and (= (@state :which-langs) "Functional") (not (in? lang data/functional)))
+           (and (= (@state :which-langs) "Array") (not (in? lang data/arrays)))
+           (and (= (@state :which-langs) "System") (not (in? lang data/system))))))
+
 (defn generate-row-data [rankings mask extra]
   (->> rankings
        (filter-langs mask)
        (str/join "\n")
        (str/split-lines)
        (map #(let [[i lang] (str/split % #",")] [(js/parseInt i) lang]))
-       (remove #(or (= "" %)
-                    (and (in? (last %) data/odd) (@state :omit-edge-langs))
-                    (and (= (@state :which-langs) "Functional") (not (in? (last %) data/functional)))
-                    (and (= (@state :which-langs) "Array") (not (in? (last %) data/arrays)))
-                    (and (= (@state :which-langs) "System") (not (in? (last %) data/system)))))
+       (remove #(not (should-include-lang? (last %))))
        (group-by last)
        (map (fn [[k v]] [(avg (map first v)) (stdev (map first v)) (count v) k]))
        (sort)
@@ -64,9 +67,15 @@
   (let [val (abs delta)]
     (cond
       (= (- (@state :actual-langs) 1) delta) "⭐"
+      (zero? delta) "-"
       (neg? delta) (str "🟢 (" val ")")
-      (pos? delta) (str "🔴 (" val ")")
-      :else "-")))
+      :else (str "🔴 (" val ")"))))
+
+(defn get-prev-site-langs [delta]
+  (case delta
+    3 (read/get-all-sites 3)
+    6 (read/get-all-sites 6)
+    12 (read/get-all-sites 12)))
 
 (defn generate-row [rank [avg stdev n lang] prev-rankings]
   [:tr
@@ -80,14 +89,17 @@
 
 (defn make-table [rows]
   (let [mask            (map #(@state-check-boxes %) data/sites)
-        prev-site-langs (case (@state :delta)
-                          3 (read/get-all-sites 3)
-                          6 (read/get-all-sites 6)
-                          12 (read/get-all-sites 12))
+        prev-site-langs (get-prev-site-langs (@state :delta))
         prev-rankings   (simplify-row-data (generate-row-data prev-site-langs mask true))]
     [:table (styles/table is-mobile?)
-     [:tr {:style {:font-weight "bold"}} [:td] [:td] [:td "Language"] [:td "Avg"] [:td "StDev"] [:td "n¹"] [:td (str/join [(str (@state :delta)) "mΔ"])]]
+     [:tr {:style {:font-weight "bold"}} [:td] [:td] [:td "Language"] [:td "Avg"] [:td "StDev"] [:td "n¹"] [:td (str (@state :delta) "mΔ")]]
      (map (partial apply generate-row) (map #(conj % prev-rankings) rows))]))
+
+(defn should-use-single-column? []
+  (or (= (@state :which-langs) "Array")
+      (not= (@state :num-langs) 20)
+      (<= (@state :actual-langs) 10)
+      is-mobile?))
 
 (defn generate-table [rankings mask]
   (let [row-data (generate-row-data rankings mask false)]
@@ -95,10 +107,7 @@
     (cond
       (empty? row-data) [:div [:label "No languages."]]
       (every? false? mask) [:div [:label "Please select at least one language ranking source."]] 
-      :else (let [display-rows (if (or (= (@state :which-langs) "Array")
-                                       (not= (@state :num-langs) 20)
-                                       (<= (@state :actual-langs) 10)
-                                       is-mobile?)
+      :else (let [display-rows (if (should-use-single-column?)
                                [row-data]
                                [(take 10 row-data) (drop 10 row-data)])]
               [:div (map make-table display-rows)]))))
@@ -118,11 +127,16 @@
 (defn title-prefix [which-langs]
   (when (not= which-langs "All") which-langs))
 
+(defn social-link [url icon]
+  [:a {:href url} 
+   [:img {:src (str media "/icons/" icon) :width "40px" :height "40px"}]])
+
 (defn social-links []
   [:div
-   [:a {:href "https://www.twitter.com/code_report"}  [:img {:src (str media "/icons/twitter.png") :width "40px" :height "40px"}]]
-   [:a {:href "https://www.youtube.com/c/codereport"} [:img {:src (str media "/icons/youtube.png") :width "40px" :height "40px"}]]
-   [:a {:href "https://www.github.com/codereport"}    [:img {:src (str media "/icons/github.png") :width "40px" :height "40px"}]]])
+   [social-link "https://www.twitter.com/code_report"  "twitter.png"]
+   [social-link "https://mastodon.social/@code_report" "twitter.png"]
+   [social-link "https://www.youtube.com/c/codereport" "youtube.png"]
+   [social-link "https://www.github.com/codereport"    "github.png"]])
 
 (defn language-filters []
   (let [langs (keys @state-check-boxes)
