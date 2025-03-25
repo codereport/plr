@@ -19,7 +19,7 @@
 
 (defn site-logo [site padding size]
   [:div {:style {:padding (str/join [(str padding) "px " (str padding) "px"]) :display "inline"}}
-   [:img {:src (str/join ["public/media/site-logos/" (imgs/site-logos site)])
+   [:img {:src (str/join ["/media/site-logos/" (imgs/site-logos site)])
           :width  (str/join [(str size) "px"])
           :height (str/join [(str size) "px"])}]])
 
