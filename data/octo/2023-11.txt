@@ -1,0 +1,10 @@
+1,JavaScript
+2,Python
+3,TypeScript
+4,Java
+5,C#
+6,C++
+7,PHP
+8,C
+9,Shell
+10,Go
