@@ -92,13 +92,12 @@
      [:tr {:style {:font-weight "bold"}} [:td] [:td] [:td "Language"] [:td "Avg"] [:td "StDev"] [:td "n¹"] [:td (str/join [(str (@state :delta)) "mΔ"])]]
      (map (partial apply generate-row) (map #(conj % prev-rankings) rows))]))
 
-; Pretty sure the fix for https://github.com/codereport/plr/issues/11 is making sure no "empty rows" get displayed
-; Can replicate bug consistently by generating lang list not divisible by 10 and then going to something else
 (defn generate-table [rankings mask]
   (let [row-data (generate-row-data rankings mask false)]
     (swap! state assoc :actual-langs (count row-data))
     (cond
       (empty? row-data) [:div [:label "No languages."]]
+      (every? false? mask) [:div [:label "Please select at least one language ranking source."]] 
       (= (@state :which-langs) "Array")  (make-table row-data)
       (not= (@state :num-langs) 20)      (make-table row-data)
       (<= (@state :actual-langs) 10)     (make-table row-data)
