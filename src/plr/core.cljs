@@ -24,10 +24,11 @@
 
 (def media "/media")
 
-(def site-langs        [(read/so) (read/octo) (read/rm) (read/languish) (read/pypl) (read/ieee) (read/tiobe)])
-(def prev3-site-langs  [(read/prev3-so)  (read/prev3-octo)  (read/prev3-rm)  (read/prev3-languish)  (read/prev3-pypl)  (read/prev3-ieee)  (read/prev3-tiobe)])
-(def prev6-site-langs  [(read/prev6-so)  (read/prev6-octo)  (read/prev6-rm)  (read/prev6-languish)  (read/prev6-pypl)  (read/prev6-ieee)  (read/prev6-tiobe)])
-(def prev12-site-langs [(read/prev12-so) (read/prev12-octo) (read/prev12-rm) (read/prev12-languish) (read/prev12-pypl) (read/prev12-ieee) (read/prev12-tiobe)])
+(def sites [:so :octo :rm :languish :ieee])
+(def site-langs        (read/get-all-sites 0))
+(def prev3-site-langs  (read/get-all-sites 3))
+(def prev6-site-langs  (read/get-all-sites 6))
+(def prev12-site-langs (read/get-all-sites 12))
 
 (defn avg [coll] (transduce identity kixi/mean coll))
 (defn stdev [coll] (transduce identity kixi/standard-deviation coll))
