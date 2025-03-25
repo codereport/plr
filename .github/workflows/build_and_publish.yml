@@ -47,9 +47,14 @@ jobs:
     - name: Build
       run: yarn shadow-cljs release dev
 
-    - name: Copy assets to deployment folder
+    - name: Create .nojekyll file
+      run: touch public/.nojekyll
+
+    - name: Ensure js directory exists
+      run: mkdir -p public/js
+
+    - name: Copy compiled JS to public
       run: |
-        mkdir -p public/js
         cp target/public/dev/main.js public/js/
         cp -r target/public/dev/cljs-runtime public/js/ || true
 
