@@ -108,10 +108,11 @@
 (defn language-check-box [lang disable]
   [:div {:style {:display "inline"}}
    [:input {:type "checkbox"
+            :id (str/join [" " (get data/names lang)])
             :checked (@state-check-boxes lang)
             :disabled (if disable true false)
             :on-change #(swap! state-check-boxes assoc lang (not (@state-check-boxes lang)))}]
-   [:div {:style {:display "inline"}} [:label styles/cb-font (str/join [" " (get data/names lang)])]
+   [:div {:style {:display "inline"}} [:label styles/cb-font :for (str/join [" " (get data/names lang)]) (str/join [" " (get data/names lang)])]
     [:a {:href (get data/links lang)} [:img {:src (str/join [media "/icons/link.png"]) :width "16px" :height "16px"}]]
     [:label styles/cb-font " "]]])
 
