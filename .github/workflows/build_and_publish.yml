@@ -3,6 +3,10 @@ name: Build with ClojureScript (shadow-cljs) and Publish
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'src/plr/**/*.clj'
+      - 'src/plr/**/*.cljs'
+      - 'shadow-cljs.edn'
 
 jobs:
   build-and-deploy:
@@ -37,17 +41,17 @@ jobs:
     - name: Install yarn deps
       run: yarn install
 
-    - name: Instal shadow-cljs
+    - name: Install shadow-cljs
       run: yarn add --dev shadow-cljs
-
-    - name: Start shadow-cljs server
-      run: yarn shadow-cljs server &
-
-    # - name: Run tests
-    #   run: yarn shadow-cljs compile :test
 
     - name: Build
       run: yarn shadow-cljs release dev
+
+    - name: Copy assets to deployment folder
+      run: |
+        mkdir -p public/js
+        cp target/public/dev/main.js public/js/
+        cp -r target/public/dev/cljs-runtime public/js/ || true
 
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@3.7.1
