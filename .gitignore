@@ -7,3 +7,4 @@ src/plr/TODO
 .lsp/
 package-lock.json
 package.json
+public/js
