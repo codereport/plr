@@ -1,0 +1,8 @@
+# Create a simple script to check file paths
+- name: Examine directory structure
+  run: |
+    echo "Directory structure of public:"
+    find public -type f | sort
+    
+    echo "Content of public/index.html (script tags):"
+    grep -A 2 "<script" public/index.html || echo "No script tags found" 
