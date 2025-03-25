@@ -25,10 +25,6 @@
 (def media "/media")
 
 (def sites [:so :octo :rm :languish :ieee])
-(def site-langs        (read/get-all-sites 0))
-(def prev3-site-langs  (read/get-all-sites 3))
-(def prev6-site-langs  (read/get-all-sites 6))
-(def prev12-site-langs (read/get-all-sites 12))
 
 (defn avg [coll] (transduce identity kixi/mean coll))
 (defn stdev [coll] (transduce identity kixi/standard-deviation coll))
@@ -85,9 +81,10 @@
 
 (defn make-table [rows]
   (let [mask            (map #(@state-check-boxes %) data/sites)
-        prev-site-langs (cond (= (@state :delta) 3) prev3-site-langs
-                              (= (@state :delta) 6) prev6-site-langs
-                              :else                 prev12-site-langs)
+        prev-site-langs (case (@state :delta)
+                          3 (read/get-all-sites 3)
+                          6 (read/get-all-sites 6)
+                          12 (read/get-all-sites 12))
         prev-rankings   (simplify-row-data (generate-row-data prev-site-langs mask true))]
     [:table (styles/table is-mobile?)
      [:tr {:style {:font-weight "bold"}} [:td] [:td] [:td "Language"] [:td "Avg"] [:td "StDev"] [:td "n¹"] [:td (str/join [(str (@state :delta)) "mΔ"])]]
@@ -169,7 +166,7 @@
                [:option "All"] [:option "Functional"] [:option "Array"] [:option "System"]]]
              [:label styles/cb-font " Languages"]]] [:br]
 
-      (generate-table site-langs (map #(@state-check-boxes %) data/sites))
+      (generate-table (read/get-all-sites 0) (map #(@state-check-boxes %) data/sites))
       [:div (styles/footnote is-mobile?)
        [:br]
        [:label "1 - The number of (selected) ranking websites this language shows up in."] [:br] [:br]
