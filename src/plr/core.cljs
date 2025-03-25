@@ -22,9 +22,6 @@
                         :which-langs     "All"}))
 
 (defonce state-check-boxes (r/atom {:so true :octo true :rm true :languish true :pypl false :ieee false :tiobe false}))
-
-(def media "/media")
-
 (def sites [:so :octo :rm :languish :ieee])
 
 (def avg (partial transduce identity kixi/mean))
@@ -81,7 +78,7 @@
 (defn generate-row [rank [avg stdev n lang] prev-rankings]
   [:tr
    [:td styles/cell (str (+ rank 1))]
-   [:td [:img {:src (str/join [media "/logos/" (get imgs/logo-map lang)]) :width "40px" :height "40px"}]]
+   [:td [:img {:src (str/join ["/media/logos/" (get imgs/logo-map lang)]) :width "40px" :height "40px"}]]
    [:td styles/cell lang]
    [:td styles/cell (format avg)]
    [:td styles/cell (format stdev)]
@@ -122,7 +119,7 @@
    [:div {:style {:display "inline"}} 
     [:label styles/cb-font (str " " (get data/names lang))]
     [:a {:href (get data/links lang)} 
-     [:img {:src (str media "/icons/link.png") :width "16px" :height "16px"}]]
+     [:img {:src (str "/media/icons/link.png") :width "16px" :height "16px"}]]
     [:label styles/cb-font " "]]])
 
 (defn title-prefix [which-langs]
@@ -132,10 +129,7 @@
   [:> SocialIcon (merge {:style {:height 40 :width 40}} props)])
 
 (defn social-links []
-  [:div {:style {:display "flex" 
-                 :gap "10px" 
-                 :justify-content "center"
-                 :margin-top "10px"}}
+  [:div {:style {:display "flex" :gap "10px" :justify-content "center" :margin-top "10px"}}
    [social-icon {:url "https://bsky.app/profile/codereport.bsky.social"}]
    [social-icon {:url "https://mastodon.social/@code_report" :network "mastodon"}]
    [social-icon {:url "https://www.twitter.com/code_report"}]
