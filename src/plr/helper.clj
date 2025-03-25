@@ -1,39 +1,43 @@
-(ns plr.helper)
+(ns plr.helper
+  (:require [clojure.java.io :as io]
+            [clojure.string :as str]))
 
-; figure out how to parameterize on data/sites and info/last-update
+;; Current month references for each site
+(def current-dates
+  {:rm       "2024-06"
+   :so       "2024-07"
+   :ieee     "2024-08"
+   :octo     "2024-11"
+   :languish "2025-01"})
 
-; current
-(defmacro rm       [] (slurp "./public/data/rm/2024-06.txt"))
-(defmacro so       [] (slurp "./public/data/so/2024-07.txt"))
-(defmacro pypl     [] (slurp "./public/data/pypl/2024-07.txt"))
-(defmacro tiobe    [] (slurp "./public/data/tiobe/2023-12.txt"))
-(defmacro ieee     [] (slurp "./public/data/ieee/2024-08.txt"))
-(defmacro octo     [] (slurp "./public/data/octo/2024-11.txt"))
-(defmacro languish [] (slurp "./public/data/languish/2025-01.txt"))
+(defn date-months-ago [date-str n]
+  (let [[year month] (map #(Integer/parseInt %) (str/split date-str #"-"))
+        total-months (- (+ (* year 12) month) n)
+        new-year (quot total-months 12)
+        new-month (inc (rem (dec total-months) 12))]
+    (format "%04d-%02d" new-year new-month)))
 
-; previous 3 month
-(defmacro prev3-rm       [] (slurp "./public/data/rm/2024-01.txt"))
-(defmacro prev3-so       [] (slurp "./public/data/so/2023-06.txt"))
-(defmacro prev3-pypl     [] (slurp "./public/data/pypl/2024-04.txt"))
-(defmacro prev3-tiobe    [] (slurp "./public/data/tiobe/2023-09.txt"))
-(defmacro prev3-ieee     [] (slurp "./public/data/ieee/2023-08.txt"))
-(defmacro prev3-octo     [] (slurp "./public/data/octo/2023-11.txt"))
-(defmacro prev3-languish [] (slurp "./public/data/languish/2024-10.txt"))
+(defn find-closest-date [site date-str]
+  (let [site-name (name site)
+        path-template #(format "./public/data/%s/%s.txt" site-name %)]
+    (loop [check-date date-str attempts 24]
+      (let [path (path-template check-date)]
+        (cond
+          (.exists (io/file path)) check-date
+          (zero? attempts) nil
+          :else (recur (date-months-ago check-date 1) (dec attempts)))))))
 
-; previous 6 month
-(defmacro prev6-rm       [] (slurp "./public/data/rm/2024-01.txt"))
-(defmacro prev6-so       [] (slurp "./public/data/so/2023-06.txt"))
-(defmacro prev6-pypl     [] (slurp "./public/data/pypl/2024-01.txt"))
-(defmacro prev6-tiobe    [] (slurp "./public/data/tiobe/2023-07.txt"))
-(defmacro prev6-ieee     [] (slurp "./public/data/ieee/2023-08.txt"))
-(defmacro prev6-octo     [] (slurp "./public/data/octo/2023-11.txt"))
-(defmacro prev6-languish [] (slurp "./public/data/languish/2024-07.txt"))
+(defn get-data-content [site-kw months-ago]
+  (let [current (get current-dates site-kw)
+        target-date (date-months-ago current months-ago)
+        closest-date (find-closest-date site-kw target-date)]
+    (if closest-date
+      (slurp (format "./public/data/%s/%s.txt" (name site-kw) closest-date))
+      (throw (ex-info (str "No data file found for " site-kw " around " target-date)
+                    {:site site-kw :target-date target-date})))))
 
-; previous 12 month
-(defmacro prev12-rm       [] (slurp "./public/data/rm/2023-01.txt"))
-(defmacro prev12-so       [] (slurp "./public/data/so/2022-06.txt"))
-(defmacro prev12-pypl     [] (slurp "./public/data/pypl/2023-09.txt"))
-(defmacro prev12-tiobe    [] (slurp "./public/data/tiobe/2023-01.txt"))
-(defmacro prev12-ieee     [] (slurp "./public/data/ieee/2023-08.txt"))
-(defmacro prev12-octo     [] (slurp "./public/data/octo/2023-11.txt"))
-(defmacro prev12-languish [] (slurp "./public/data/languish/2024-01.txt"))
+(defmacro get-data [site-kw months-ago] (get-data-content site-kw months-ago))
+
+(defmacro get-all-sites [months-ago]
+  (let [sites [:so :octo :rm :languish :ieee]]
+    (vec (map #(get-data-content % months-ago) sites))))

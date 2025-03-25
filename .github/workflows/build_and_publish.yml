@@ -44,7 +44,7 @@ jobs:
     - name: Install shadow-cljs
       run: yarn add --dev shadow-cljs
 
-    - name: Build
+    - name: Build for production
       run: yarn shadow-cljs release dev
 
     - name: Create .nojekyll file
@@ -52,11 +52,6 @@ jobs:
 
     - name: Ensure js directory exists
       run: mkdir -p public/js
-
-    - name: Copy compiled JS to public
-      run: |
-        cp target/public/dev/main.js public/js/
-        cp -r target/public/dev/cljs-runtime public/js/ || true
 
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@3.7.1

@@ -24,15 +24,12 @@
 
 (def media "/media")
 
-(def site-langs        [(read/so) (read/octo) (read/rm) (read/languish) (read/pypl) (read/ieee) (read/tiobe)])
-(def prev3-site-langs  [(read/prev3-so)  (read/prev3-octo)  (read/prev3-rm)  (read/prev3-languish)  (read/prev3-pypl)  (read/prev3-ieee)  (read/prev3-tiobe)])
-(def prev6-site-langs  [(read/prev6-so)  (read/prev6-octo)  (read/prev6-rm)  (read/prev6-languish)  (read/prev6-pypl)  (read/prev6-ieee)  (read/prev6-tiobe)])
-(def prev12-site-langs [(read/prev12-so) (read/prev12-octo) (read/prev12-rm) (read/prev12-languish) (read/prev12-pypl) (read/prev12-ieee) (read/prev12-tiobe)])
+(def sites [:so :octo :rm :languish :ieee])
 
-(defn avg [coll] (transduce identity kixi/mean coll))
-(defn stdev [coll] (transduce identity kixi/standard-deviation coll))
+(def avg (partial transduce identity kixi/mean))
+(def stdev (partial transduce identity kixi/standard-deviation))
 (defn format [num] (/ (int (* num 100)) 100))
-(defn in? [e coll] (some #(= e %) coll))
+(defn in? [e coll] (some #{e} coll))
 
 (defn filter-langs [mask rankings]
   (->> rankings
@@ -45,15 +42,14 @@
        (filter-langs mask)
        (str/join "\n")
        (str/split-lines)
-       (map #(str/split % #","))
-       (map (fn [[i lang]] [(js/parseInt i) lang]))
-       (remove #(and (in? (last %) data/odd) (@state :omit-edge-langs)))
-       (remove #(= "" %))
-       (remove #(and (not (in? (last %) data/functional)) (= (@state :which-langs) "Functional")))
-       (remove #(and (not (in? (last %) data/arrays)) (= (@state :which-langs) "Array")))
-       (remove #(and (not (in? (last %) data/system)) (= (@state :which-langs) "System")))
+       (map #(let [[i lang] (str/split % #",")] [(js/parseInt i) lang]))
+       (remove #(or (= "" %)
+                    (and (in? (last %) data/odd) (@state :omit-edge-langs))
+                    (and (= (@state :which-langs) "Functional") (not (in? (last %) data/functional)))
+                    (and (= (@state :which-langs) "Array") (not (in? (last %) data/arrays)))
+                    (and (= (@state :which-langs) "System") (not (in? (last %) data/system)))))
        (group-by last)
-       (map (fn [[k v]] (let [vals (map first v)] [(avg vals) (stdev vals) (count vals) k])))
+       (map (fn [[k v]] [(avg (map first v)) (stdev (map first v)) (count v) k]))
        (sort)
        (map-indexed vector)
        (take (+ (@state :num-langs) (if extra 10 0)))))
@@ -67,9 +63,9 @@
 (defn format-delta [delta]
   (let [val (abs delta)]
     (cond
-      (= (- (@state :actual-langs) 1) delta) (str/join ["⭐"])
-      (> 0 delta) (str/join ["🟢 (" (str val) ")"])
-      (< 0 delta) (str/join ["🔴 (" (str val) ")"])
+      (= (- (@state :actual-langs) 1) delta) "⭐"
+      (neg? delta) (str "🟢 (" val ")")
+      (pos? delta) (str "🔴 (" val ")")
       :else "-")))
 
 (defn generate-row [rank [avg stdev n lang] prev-rankings]
@@ -84,100 +80,113 @@
 
 (defn make-table [rows]
   (let [mask            (map #(@state-check-boxes %) data/sites)
-        prev-site-langs (cond (= (@state :delta) 3) prev3-site-langs
-                              (= (@state :delta) 6) prev6-site-langs
-                              :else                 prev12-site-langs)
+        prev-site-langs (case (@state :delta)
+                          3 (read/get-all-sites 3)
+                          6 (read/get-all-sites 6)
+                          12 (read/get-all-sites 12))
         prev-rankings   (simplify-row-data (generate-row-data prev-site-langs mask true))]
     [:table (styles/table is-mobile?)
      [:tr {:style {:font-weight "bold"}} [:td] [:td] [:td "Language"] [:td "Avg"] [:td "StDev"] [:td "n¹"] [:td (str/join [(str (@state :delta)) "mΔ"])]]
      (map (partial apply generate-row) (map #(conj % prev-rankings) rows))]))
 
-; Pretty sure the fix for https://github.com/codereport/plr/issues/11 is making sure no "empty rows" get displayed
-; Can replicate bug consistently by generating lang list not divisible by 10 and then going to something else
 (defn generate-table [rankings mask]
   (let [row-data (generate-row-data rankings mask false)]
     (swap! state assoc :actual-langs (count row-data))
     (cond
       (empty? row-data) [:div [:label "No languages."]]
-      (= (@state :which-langs) "Array")  (make-table row-data)
-      (not= (@state :num-langs) 20)      (make-table row-data)
-      (<= (@state :actual-langs) 10)     (make-table row-data)
-      is-mobile?                         (make-table row-data)
-      :else [:div (make-table (take 10 row-data)) (make-table (drop 10 row-data))])))
+      (every? false? mask) [:div [:label "Please select at least one language ranking source."]] 
+      :else (let [display-rows (if (or (= (@state :which-langs) "Array")
+                                       (not= (@state :num-langs) 20)
+                                       (<= (@state :actual-langs) 10)
+                                       is-mobile?)
+                               [row-data]
+                               [(take 10 row-data) (drop 10 row-data)])]
+              [:div (map make-table display-rows)]))))
 
 (defn language-check-box [lang disable]
   [:div {:style {:display "inline"}}
    [:input {:type "checkbox"
             :id (str/join [" " (get data/names lang)])
             :checked (@state-check-boxes lang)
-            :disabled (if disable true false)
-            :on-change #(swap! state-check-boxes assoc lang (not (@state-check-boxes lang)))}]
-   [:div {:style {:display "inline"}} [:label styles/cb-font :for (str/join [" " (get data/names lang)]) (str/join [" " (get data/names lang)])]
-    [:a {:href (get data/links lang)} [:img {:src (str/join [media "/icons/link.png"]) :width "16px" :height "16px"}]]
+            :disabled disable
+            :on-change #(swap! state-check-boxes update lang not)}]
+   [:div {:style {:display "inline"}} 
+    [:label styles/cb-font :for (str/join [" " (get data/names lang)]) (str " " (get data/names lang))]
+    [:a {:href (get data/links lang)} 
+     [:img {:src (str media "/icons/link.png") :width "16px" :height "16px"}]
     [:label styles/cb-font " "]]])
 
 (defn title-prefix [which-langs]
-  (if (= which-langs "All") "" which-langs))
+  (when (not= which-langs "All") which-langs))
+
+(defn social-links []
+  [:div
+   [:a {:href "https://www.twitter.com/code_report"}  [:img {:src (str media "/icons/twitter.png") :width "40px" :height "40px"}]]
+   [:a {:href "https://www.youtube.com/c/codereport"} [:img {:src (str media "/icons/youtube.png") :width "40px" :height "40px"}]]
+   [:a {:href "https://www.github.com/codereport"}    [:img {:src (str media "/icons/github.png") :width "40px" :height "40px"}]]])
+
+(defn language-filters []
+  (let [langs (keys @state-check-boxes)
+        disabled-langs #{:pypl :tiobe}]
+    [:div (map-indexed (fn [idx lang] [:span
+         (language-check-box lang (contains? disabled-langs lang))
+         (when (and (= idx 3) (< idx (dec (count langs)))) [:br])])
+      langs)
+     [:label {:style {:text-decoration "underline"}
+              :on-click #(swap! state update :toggle-info not)}
+      "(rankings overview)"]]))
+
+(defn filter-controls []
+  [:div
+   [:input {:type "checkbox"
+            :id "exclude_edge_languages"
+            :checked (@state :omit-edge-langs)
+            :on-change #(swap! state update :omit-edge-langs not)}]
+   [:label styles/cb-font :for "exclude_edge_languages" " Exclude \"Edge Languages\" | "]
+   [:form {:style {:display "inline"}}
+    [:label styles/cb-font "Number of Languages: "]
+    [:select {:value (@state :num-langs)
+              :on-change #(swap! state assoc :num-langs (-> % .-target .-value js/Number))}
+     [:option 10] [:option 20]]] [:br]
+   [:form {:style {:display "inline"}}
+    [:label styles/cb-font "Months for Delta (Δ): "]
+    [:select {:value (@state :delta)
+              :on-change #(swap! state assoc :delta (-> % .-target .-value js/Number))}
+     [:option 3] [:option 6] [:option 12]]]
+   [:label styles/cb-font " | "]
+   [:form {:style {:display "inline"}}
+    [:select {:value (@state :which-langs)
+              :on-change #(swap! state assoc :which-langs (-> % .-target .-value))}
+     [:option "All"] [:option "Functional"] [:option "Array"] [:option "System"]]]
+   [:label styles/cb-font " Languages"]])
+
+(defn footnotes []
+  [:div (styles/footnote is-mobile?)
+   [:br]
+   [:label "1 - The number of (selected) ranking websites this language shows up in."] [:br] [:br]
+   [:label "If you have suggestions or find a bug, you can open an "]
+   [:a {:href "https://github.com/codereport/plr/issues/new"} [:label "issue"]]
+   [:label " here."]])
 
 (defn app-view []
   [:div {:style {:text-align "center"
                  :padding "50px"
                  :font-family "Ubuntu Mono,Consolas,IBM Plex Mono,Roboto Mono,Courier"}}
-   [:label (styles/font 50) (str/join [(title-prefix (@state :which-langs)) " Programming Language Rankings (2025 Mar)"])] [:br] [:br]
+   [:label (styles/font 50) 
+    (str (title-prefix (@state :which-langs)) 
+         " Programming Language Rankings (2025 Mar)")] [:br] [:br]
    [:label (styles/font 25) "by code_report"] [:br]
-   [:a {:href "https://www.twitter.com/code_report"}  [:img {:src (str/join [media "/icons/twitter.png"]) :width "40px" :height "40px"}]]
-   [:a {:href "https://www.youtube.com/c/codereport"} [:img {:src (str/join [media "/icons/youtube.png"]) :width "40px" :height "40px"}]]
-   [:a {:href "https://www.github.com/codereport"}    [:img {:src (str/join [media "/icons/github.png"])  :width "40px" :height "40px"}]]
+   [social-links]
    [:br] [:br]
 
    (if (@state :toggle-info)
      [:div
       [:label {:style {:text-decoration "underline"}
-               :on-click #(swap! state assoc :toggle-info (not (@state :toggle-info)))}  "(back)"] [:br] [:br]
+               :on-click #(swap! state update :toggle-info not)} "(back)"] [:br] [:br]
       (info/table is-mobile?)]
-     [:div [:div
-            ;; TODO: figure out how to make this work
-            ;; (map-indexed (fn [i lang] (language-check-box lang (if (= i 3) {:style {:display "inline"}} {}))))
-            (language-check-box :so       false)
-            (language-check-box :octo     false)
-            (language-check-box :rm       false)
-            (language-check-box :languish false) [:br]
-            (language-check-box :pypl     true)
-            (language-check-box :ieee     false)
-            (language-check-box :tiobe    true)
-            [:label {:style {:text-decoration "underline"}
-                     :on-click #(swap! state assoc :toggle-info (not (@state :toggle-info)))}  "(rankings overview)"]
-            [:br] [:label "-"] [:br]
-            [:div
-             [:input {:type "checkbox"
-                      :id "exclude_edge_languages"
-                      :checked (@state :omit-edge-langs)
-                      :on-change #(swap! state assoc :omit-edge-langs (not (@state :omit-edge-langs)))}]
-             [:label styles/cb-font :for "exclude_edge_languages" " Exclude \"Edge Languages\" | "]
-             [:form {:style {:display "inline"}}
-              [:label styles/cb-font "Number of Languages: "]
-              [:select {:value (@state :num-langs)
-                        :on-change #(swap! state assoc :num-langs (-> % .-target .-value js/Number))}
-               [:option 10] [:option 20]]] [:br]
-             [:form {:style {:display "inline"}}
-              [:label styles/cb-font "Months for Delta (Δ): "]
-              [:select {:value (@state :delta)
-                        :on-change #(swap! state assoc :delta (-> % .-target .-value js/Number))}
-               [:option 3] [:option 6] [:option 12]]]
-             [:label styles/cb-font " | "]
-             [:form {:style {:display "inline"}}
-              [:select {:value (@state :which-langs)
-                        :on-change #(swap! state assoc :which-langs  (-> % .-target .-value))}
-               [:option "All"] [:option "Functional"] [:option "Array"] [:option "System"]]]
-             [:label styles/cb-font " Languages"]]] [:br]
-
-      (generate-table site-langs (map #(@state-check-boxes %) data/sites))
-      [:div (styles/footnote is-mobile?)
-       [:br]
-       [:label "1 - The number of (selected) ranking websites this language shows up in."] [:br] [:br]
-       [:label "If you have suggestions or find a bug, you can open an "]
-       [:a {:href "https://github.com/codereport/plr/issues/new"} [:label "issue"]]
-       [:label " here."]]])])
+     [:div [language-filters] [:br] [:label "-"] [:br] [filter-controls] [:br]
+      (generate-table (read/get-all-sites 0) (map #(@state-check-boxes %) data/sites))
+      [footnotes]])])
 
 (defn render! []
   (rdom/render
