@@ -120,7 +120,7 @@
    [:div {:style {:display "inline"}} 
     [:label styles/cb-font (str " " (get data/names lang))]
     [:a {:href (get data/links lang)} 
-     [:img {:src (str "/media/icons/link.png") :width "16px" :height "16px"}]]
+     [:img {:src (str "/media/link.png") :width "16px" :height "16px"}]]
     [:label styles/cb-font " "]]])
 
 (defn title-prefix [which-langs]
