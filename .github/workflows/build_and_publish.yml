@@ -1,4 +1,4 @@
-name: Build with ClojureScript (shadow-cljs) and Publish
+name: ClojureScript Build and Deploy
 
 on:
   push:
@@ -7,12 +7,12 @@ on:
       - 'src/plr/**/*.clj'
       - 'src/plr/**/*.cljs'
       - 'shadow-cljs.edn'
+  # Add manual trigger option
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
-
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout
       uses: actions/checkout@v3

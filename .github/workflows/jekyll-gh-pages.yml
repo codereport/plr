@@ -1,0 +1,13 @@
+# Empty workflow file to disable the default GitHub Pages build process
+name: No Jekyll
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: No Jekyll build
+        run: echo "Preventing default Jekyll build" 
