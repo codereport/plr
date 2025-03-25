@@ -19,7 +19,8 @@
                         :delta           3
                         :toggle-info     false
                         :omit-edge-langs true
-                        :which-langs     "All"}))
+                        :which-langs     "All"
+                        :show-info-modal false}))
 
 (defonce state-check-boxes (r/atom {:so true :octo true :rm true :languish true :pypl false :ieee false :tiobe false}))
 (def sites [:so :octo :rm :languish :ieee])
@@ -126,7 +127,15 @@
   (when (not= which-langs "All") which-langs))
 
 (defn social-icon [props]
-  [:> SocialIcon (merge {:style {:height 40 :width 40}} props)])
+  [:> SocialIcon (merge {:style {:height 40 
+                                :width 40
+                                :transition "all 0.2s ease-in-out"
+                                :transform "scale(1)"}
+                        :onMouseOver (fn [e] 
+                                      (-> e .-currentTarget .-style .-transform (set! "scale(1.1)")))
+                        :onMouseOut (fn [e] 
+                                     (-> e .-currentTarget .-style .-transform (set! "scale(1)")))}
+                       props)])
 
 (defn social-links []
   [:div {:style {:display "flex" :gap "10px" :justify-content "center" :margin-top "10px"}}
@@ -136,6 +145,37 @@
    [social-icon {:url "https://www.youtube.com/c/codereport"}]
    [social-icon {:url "https://www.github.com/codereport"}]])
 
+(defn info-modal []
+  (when (@state :show-info-modal)
+    [:div {:style {:position "fixed"
+                  :top 0
+                  :left 0
+                  :width "100%"
+                  :height "100%"
+                  :display "flex"
+                  :justify-content "center"
+                  :align-items "center"
+                  :background-color "rgba(0, 0, 0, 0.5)"
+                  :z-index 1000}}
+     [:div {:style {:background-color "white"
+                   :padding "20px"
+                   :border-radius "8px"
+                   :max-width "80%"
+                   :max-height "80%"
+                   :overflow "auto"
+                   :position "relative"}}
+      [:button {:style {:position "absolute"
+                       :top "10px"
+                       :right "10px"
+                       :border "none"
+                       :background "none"
+                       :font-size "20px"
+                       :cursor "pointer"}
+               :on-click #(swap! state assoc :show-info-modal false)}
+       "×"]
+      [:h2 "Rankings Overview"]
+      (info/table is-mobile?)]]))
+
 (defn language-filters []
   (let [langs (keys @state-check-boxes)
         disabled-langs #{:pypl :tiobe}]
@@ -143,9 +183,27 @@
          (language-check-box lang (contains? disabled-langs lang))
          (when (and (= idx 3) (< idx (dec (count langs)))) [:br])])
       langs)
-     [:label {:style {:text-decoration "underline"}
-              :on-click #(swap! state update :toggle-info not)}
-      "(rankings overview)"]]))
+     [:button {:style {:text-decoration "none"
+                      :background-color "#f0f0f0"
+                      :border "1px solid #ccc"
+                      :border-radius "4px"
+                      :padding "5px 10px"
+                      :margin-left "10px"
+                      :font-family "inherit"
+                      :font-size "0.9em"
+                      :cursor "pointer"
+                      :transition "all 0.2s ease-in-out"
+                      :box-shadow "0 1px 2px rgba(0,0,0,0.1)"}
+              :on-mouse-over (fn [e] 
+                              (-> e .-target .-style .-backgroundColor (set! "#e0e0e0"))
+                              (-> e .-target .-style .-transform (set! "scale(1.05)"))
+                              (-> e .-target .-style .-boxShadow (set! "0 2px 5px rgba(0,0,0,0.15)")))
+              :on-mouse-out (fn [e] 
+                             (-> e .-target .-style .-backgroundColor (set! "#f0f0f0"))
+                             (-> e .-target .-style .-transform (set! "scale(1)"))
+                             (-> e .-target .-style .-boxShadow (set! "0 1px 2px rgba(0,0,0,0.1)")))
+              :on-click #(swap! state assoc :show-info-modal true)}
+      "Rankings Overview"]]))
 
 (defn filter-controls []
   [:div
@@ -188,15 +246,10 @@
    [:label (styles/font 25) "by code_report"] [:br]
    [social-links]
    [:br] [:br]
-
-   (if (@state :toggle-info)
-     [:div
-      [:label {:style {:text-decoration "underline"}
-               :on-click #(swap! state update :toggle-info not)} "(back)"] [:br] [:br]
-      (info/table is-mobile?)]
-     [:div [language-filters] [:br] [:label "-"] [:br] [filter-controls] [:br]
-      (generate-table (read/get-all-sites 0) (map #(@state-check-boxes %) data/sites))
-      [footnotes]])])
+   [info-modal]
+   [:div [language-filters] [:br] [filter-controls] [:br]
+    (generate-table (read/get-all-sites 0) (map #(@state-check-boxes %) data/sites))
+    [footnotes]]])
 
 (defn render! []
   (rdom/render
