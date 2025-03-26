@@ -15,12 +15,6 @@
            :font-weight "bold"}})
 
 (def cb-font (font 18))
-
-(def cell {:style {:padding "12px 30px"
-                   :font-size "24"}})
-
-(def cell2 {:style {:padding "12px 30px"
-                    :font-size "16"}})
-
-(defn footnote [is-mobile?]
-  {:style {:font-size (if is-mobile? 12 10)}})
+(def cell  {:style {:padding "12px 30px" :font-size "24"}}) ; main cells
+(def cell2 {:style {:padding "12px 30px" :font-size "16"}}) ; column headers
+(defn footnote [is-mobile?] {:style {:font-size (if is-mobile? 12 10)}})

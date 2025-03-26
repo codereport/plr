@@ -62,13 +62,15 @@
        (flatten)
        (apply hash-map)))
 
+(def emoji-style {:width "32px" :height "32px" :vertical-align "middle"})
+
 (defn format-delta [delta]
   (let [val (abs delta)]
     (cond
-      (= (- (@state :actual-langs) 1) delta) "⭐"
+      (= (- (@state :actual-langs) 1) delta) [:img {:src "/media/emojis/star.png" :alt "Star" :style emoji-style}]
       (zero? delta) "-"
-      (neg? delta) (str "🟢 (" val ")")
-      :else (str "🔴 (" val ")"))))
+      (neg? delta) [:span [:img {:src "/media/emojis/green_circle.png" :alt "Green Up" :style emoji-style}] (str " (" val ")")]
+      :else [:span [:img {:src "/media/emojis/red_circle.png" :alt "Red Down" :style emoji-style}] (str " (" val ")")])))
 
 (defn get-prev-site-langs [delta]
   (case delta
