@@ -183,10 +183,15 @@
 (defn language-filters []
   (let [sites-order [:so :octo :rm :languish :jb :ieee :pypl :tiobe :githut]
         disabled-langs #{:pypl :tiobe :githut}]
-    [:div (map-indexed (fn [idx lang] [:span
-         (language-check-box lang (contains? disabled-langs lang))
-         (when (and (= idx 4) (< idx (dec (count sites-order)))) [:br])])
-      sites-order)
+    [:div 
+     (doall
+       (map-indexed 
+         (fn [idx lang] 
+           ^{:key (str "lang-" lang)}
+           [:span
+             (language-check-box lang (contains? disabled-langs lang))
+             (when (and (= idx 4) (< idx (dec (count sites-order)))) [:br])])
+         sites-order))
      [:button {:style {:text-decoration "none"
                       :background-color "#f0f0f0"
                       :border "1px solid #ccc"
