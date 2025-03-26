@@ -239,7 +239,22 @@
 (defn app-view []
   [:div {:style {:text-align "center"
                  :padding "50px"
-                 :font-family "Ubuntu Mono,Consolas,IBM Plex Mono,Roboto Mono,Courier"}}
+                 :font-family "Ubuntu Mono,Consolas,IBM Plex Mono,Roboto Mono,Courier"
+                 :position "relative"}}
+   [:a {:href "https://www.youtube.com/c/codereport"
+        :style {:position "absolute"
+                :right "30px"
+                :top "30px"
+                :cursor "pointer"}}
+    [:img {:src "/media/code_report_circle.png"
+           :style {:height "60px"
+                   :width "60px"
+                   :transition "all 0.2s ease-in-out"
+                   :transform "scale(1)"}
+           :on-mouse-over (fn [e] 
+                           (-> e .-target .-style .-transform (set! "scale(1.25)")))
+           :on-mouse-out (fn [e] 
+                          (-> e .-target .-style .-transform (set! "scale(1)")))}]]
    [:label (styles/font 50) 
     (str (title-prefix (@state :which-langs)) 
          " Programming Language Rankings (2025 Mar)")] [:br] [:br]
