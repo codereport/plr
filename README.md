@@ -17,4 +17,4 @@
 
 The GitHub repo that backs the [Programming Language Rankings Website](https://www.plrank.com).
 
-![image](https://user-images.githubusercontent.com/36027403/212812234-58c8cb81-aa53-4ca2-a912-a6622c5a6d43.png)
+![image](https://github.com/user-attachments/assets/e75566ba-0319-4b58-a9dd-80e24cd864b9)
