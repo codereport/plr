@@ -115,11 +115,12 @@
 (defn language-check-box [lang disable]
   [:div {:style {:display "inline"}}
    [:input {:type "checkbox"
+            :id (str/join [" " (get data/names lang)])
             :checked (@state-check-boxes lang)
             :disabled disable
             :on-change #(swap! state-check-boxes update lang not)}]
    [:div {:style {:display "inline"}} 
-    [:label styles/cb-font (str " " (get data/names lang))]
+    [:label styles/cb-font :for (str/join [" " (get data/names lang)]) (str " " (get data/names lang))]
     [:a {:href (get data/links lang)} 
      [:img {:src (str "/media/link.png") :width "16px" :height "16px"}]]
     [:label styles/cb-font " "]]])
@@ -209,9 +210,10 @@
 (defn filter-controls []
   [:div
    [:input {:type "checkbox"
+            :id "exclude_edge_languages"
             :checked (@state :omit-edge-langs)
             :on-change #(swap! state update :omit-edge-langs not)}]
-   [:label styles/cb-font " Exclude \"Edge Languages\" | "]
+   [:label styles/cb-font :for "exclude_edge_languages" " Exclude \"Edge Languages\" | "]
    [:form {:style {:display "inline"}}
     [:label styles/cb-font "Number of Languages: "]
     [:select {:value (@state :num-langs)
