@@ -113,17 +113,19 @@
               [:div (map make-table display-rows)]))))
 
 (defn language-check-box [lang disable]
-  [:div {:style {:display "inline"}}
-   [:input {:type "checkbox"
-            :id (str/join [" " (get data/names lang)])
-            :checked (@state-check-boxes lang)
-            :disabled disable
-            :on-change #(swap! state-check-boxes update lang not)}]
-   [:div {:style {:display "inline"}} 
-    [:label styles/cb-font :for (str/join [" " (get data/names lang)]) (str " " (get data/names lang))]
-    [:a {:href (get data/links lang)} 
-     [:img {:src (str "/media/link.png") :width "16px" :height "16px"}]]
-    [:label styles/cb-font " "]]])
+  (let [id-str (name lang)]
+    [:div {:style {:display "inline"}}
+     [:input {:type "checkbox"
+              :id id-str
+              :checked (@state-check-boxes lang)
+              :disabled disable
+              :on-change #(swap! state-check-boxes update lang not)}]
+     [:div {:style {:display "inline"}} 
+      [:label (merge {:for id-str} styles/cb-font) 
+       (str " " (get data/names lang))]
+      [:a {:href (get data/links lang)} 
+       [:img {:src (str "/media/link.png") :width "16px" :height "16px"}]]
+      [:label styles/cb-font " "]]]))
 
 (defn title-prefix [which-langs]
   (when (not= which-langs "All") which-langs))
