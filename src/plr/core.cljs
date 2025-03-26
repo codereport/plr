@@ -74,7 +74,8 @@
   (case delta
     3 (read/get-all-sites 3)
     6 (read/get-all-sites 6)
-    12 (read/get-all-sites 12)))
+    12 (read/get-all-sites 12)
+    24 (read/get-all-sites 24)))
 
 (defn generate-row [rank [avg stdev n lang] prev-rankings]
   [:tr
@@ -220,7 +221,7 @@
     [:label styles/cb-font "Months for Delta (Δ): "]
     [:select {:value (@state :delta)
               :on-change #(swap! state assoc :delta (-> % .-target .-value js/Number))}
-     [:option 3] [:option 6] [:option 12]]]
+     [:option 3] [:option 6] [:option 12] [:option 24]]]
    [:label styles/cb-font " | "]
    [:form {:style {:display "inline"}}
     [:select {:value (@state :which-langs)
