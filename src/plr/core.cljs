@@ -250,7 +250,7 @@
 
 (defn app-view []
   [:div {:style {:text-align "center"
-                 :padding "50px"
+                 :padding "30px"
                  :font-family "JetBrains Mono, monospace"
                  :position "relative"}}
    [:a {:href "https://www.youtube.com/c/codereport"
