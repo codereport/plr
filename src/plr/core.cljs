@@ -215,7 +215,7 @@
             :id "exclude_edge_languages"
             :checked (@state :omit-edge-langs)
             :on-change #(swap! state update :omit-edge-langs not)}]
-   [:label styles/cb-font :for "exclude_edge_languages" " Exclude \"Edge Languages\" | "]
+   [:label (merge styles/cb-font {:for "exclude_edge_languages"}) " Exclude \"Edge Languages\" | "]
    [:form {:style {:display "inline"}}
     [:label styles/cb-font "Number of Languages: "]
     [:select {:value (@state :num-langs)
