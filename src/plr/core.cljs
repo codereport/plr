@@ -7,7 +7,8 @@
    [plr.imgs :as imgs]
    [plr.data :as data]
    [plr.styles :as styles]
-   [plr.info :as info])
+   [plr.info :as info]
+   ["react-social-icons" :refer [SocialIcon]])
   (:require-macros
    [plr.helper :as read]))
 
@@ -18,12 +19,10 @@
                         :delta           3
                         :toggle-info     false
                         :omit-edge-langs true
-                        :which-langs     "All"}))
+                        :which-langs     "All"
+                        :show-info-modal false}))
 
 (defonce state-check-boxes (r/atom {:so true :octo true :rm true :languish true :pypl false :ieee false :tiobe false}))
-
-(def media "/media")
-
 (def sites [:so :octo :rm :languish :ieee])
 
 (def avg (partial transduce identity kixi/mean))
@@ -37,17 +36,20 @@
        (filter first)
        (map last)))
 
+(defn should-include-lang? [lang]
+  (not (or (= "" lang)
+           (and (in? lang data/odd) (@state :omit-edge-langs))
+           (and (= (@state :which-langs) "Functional") (not (in? lang data/functional)))
+           (and (= (@state :which-langs) "Array") (not (in? lang data/arrays)))
+           (and (= (@state :which-langs) "System") (not (in? lang data/system))))))
+
 (defn generate-row-data [rankings mask extra]
   (->> rankings
        (filter-langs mask)
        (str/join "\n")
        (str/split-lines)
        (map #(let [[i lang] (str/split % #",")] [(js/parseInt i) lang]))
-       (remove #(or (= "" %)
-                    (and (in? (last %) data/odd) (@state :omit-edge-langs))
-                    (and (= (@state :which-langs) "Functional") (not (in? (last %) data/functional)))
-                    (and (= (@state :which-langs) "Array") (not (in? (last %) data/arrays)))
-                    (and (= (@state :which-langs) "System") (not (in? (last %) data/system)))))
+       (remove #(not (should-include-lang? (last %))))
        (group-by last)
        (map (fn [[k v]] [(avg (map first v)) (stdev (map first v)) (count v) k]))
        (sort)
@@ -64,14 +66,20 @@
   (let [val (abs delta)]
     (cond
       (= (- (@state :actual-langs) 1) delta) "⭐"
+      (zero? delta) "-"
       (neg? delta) (str "🟢 (" val ")")
-      (pos? delta) (str "🔴 (" val ")")
-      :else "-")))
+      :else (str "🔴 (" val ")"))))
+
+(defn get-prev-site-langs [delta]
+  (case delta
+    3 (read/get-all-sites 3)
+    6 (read/get-all-sites 6)
+    12 (read/get-all-sites 12)))
 
 (defn generate-row [rank [avg stdev n lang] prev-rankings]
   [:tr
    [:td styles/cell (str (+ rank 1))]
-   [:td [:img {:src (str/join [media "/logos/" (get imgs/logo-map lang)]) :width "40px" :height "40px"}]]
+   [:td [:img {:src (str/join ["/media/logos/" (get imgs/logo-map lang)]) :width "40px" :height "40px"}]]
    [:td styles/cell lang]
    [:td styles/cell (format avg)]
    [:td styles/cell (format stdev)]
@@ -80,14 +88,17 @@
 
 (defn make-table [rows]
   (let [mask            (map #(@state-check-boxes %) data/sites)
-        prev-site-langs (case (@state :delta)
-                          3 (read/get-all-sites 3)
-                          6 (read/get-all-sites 6)
-                          12 (read/get-all-sites 12))
+        prev-site-langs (get-prev-site-langs (@state :delta))
         prev-rankings   (simplify-row-data (generate-row-data prev-site-langs mask true))]
     [:table (styles/table is-mobile?)
-     [:tr {:style {:font-weight "bold"}} [:td] [:td] [:td "Language"] [:td "Avg"] [:td "StDev"] [:td "n¹"] [:td (str/join [(str (@state :delta)) "mΔ"])]]
+     [:tr {:style {:font-weight "bold"}} [:td] [:td] [:td "Language"] [:td "Avg"] [:td "StDev"] [:td "n¹"] [:td (str (@state :delta) "mΔ")]]
      (map (partial apply generate-row) (map #(conj % prev-rankings) rows))]))
+
+(defn should-use-single-column? []
+  (or (= (@state :which-langs) "Array")
+      (not= (@state :num-langs) 20)
+      (<= (@state :actual-langs) 10)
+      is-mobile?))
 
 (defn generate-table [rankings mask]
   (let [row-data (generate-row-data rankings mask false)]
@@ -95,10 +106,7 @@
     (cond
       (empty? row-data) [:div [:label "No languages."]]
       (every? false? mask) [:div [:label "Please select at least one language ranking source."]] 
-      :else (let [display-rows (if (or (= (@state :which-langs) "Array")
-                                       (not= (@state :num-langs) 20)
-                                       (<= (@state :actual-langs) 10)
-                                       is-mobile?)
+      :else (let [display-rows (if (should-use-single-column?)
                                [row-data]
                                [(take 10 row-data) (drop 10 row-data)])]
               [:div (map make-table display-rows)]))))
@@ -113,17 +121,61 @@
    [:div {:style {:display "inline"}} 
     [:label styles/cb-font :for (str/join [" " (get data/names lang)]) (str " " (get data/names lang))]
     [:a {:href (get data/links lang)} 
-     [:img {:src (str media "/icons/link.png") :width "16px" :height "16px"}]
+     [:img {:src (str "/media/link.png") :width "16px" :height "16px"}]]
     [:label styles/cb-font " "]]])
 
 (defn title-prefix [which-langs]
   (when (not= which-langs "All") which-langs))
 
+(defn social-icon [props]
+  [:> SocialIcon (merge {:style {:height 40 
+                                :width 40
+                                :transition "all 0.2s ease-in-out"
+                                :transform "scale(1)"}
+                        :onMouseOver (fn [e] 
+                                      (-> e .-currentTarget .-style .-transform (set! "scale(1.25)")))
+                        :onMouseOut (fn [e] 
+                                     (-> e .-currentTarget .-style .-transform (set! "scale(1)")))}
+                       props)])
+
 (defn social-links []
-  [:div
-   [:a {:href "https://www.twitter.com/code_report"}  [:img {:src (str media "/icons/twitter.png") :width "40px" :height "40px"}]]
-   [:a {:href "https://www.youtube.com/c/codereport"} [:img {:src (str media "/icons/youtube.png") :width "40px" :height "40px"}]]
-   [:a {:href "https://www.github.com/codereport"}    [:img {:src (str media "/icons/github.png") :width "40px" :height "40px"}]]])
+  [:div {:style {:display "flex" :gap "10px" :justify-content "center" :margin-top "10px"}}
+   [social-icon {:url "https://bsky.app/profile/codereport.bsky.social"}]
+   [social-icon {:url "https://mastodon.social/@code_report" :network "mastodon"}]
+   [social-icon {:url "https://www.twitter.com/code_report"}]
+   [social-icon {:url "https://www.youtube.com/c/codereport"}]
+   [social-icon {:url "https://www.github.com/codereport"}]])
+
+(defn info-modal []
+  (when (@state :show-info-modal)
+    [:div {:style {:position "fixed"
+                  :top 0
+                  :left 0
+                  :width "100%"
+                  :height "100%"
+                  :display "flex"
+                  :justify-content "center"
+                  :align-items "center"
+                  :background-color "rgba(0, 0, 0, 0.5)"
+                  :z-index 1000}}
+     [:div {:style {:background-color "white"
+                   :padding "20px"
+                   :border-radius "8px"
+                   :max-width "80%"
+                   :max-height "80%"
+                   :overflow "auto"
+                   :position "relative"}}
+      [:button {:style {:position "absolute"
+                       :top "10px"
+                       :right "10px"
+                       :border "none"
+                       :background "none"
+                       :font-size "20px"
+                       :cursor "pointer"}
+               :on-click #(swap! state assoc :show-info-modal false)}
+       "×"]
+      [:h2 "Rankings Overview"]
+      (info/table is-mobile?)]]))
 
 (defn language-filters []
   (let [langs (keys @state-check-boxes)
@@ -132,9 +184,27 @@
          (language-check-box lang (contains? disabled-langs lang))
          (when (and (= idx 3) (< idx (dec (count langs)))) [:br])])
       langs)
-     [:label {:style {:text-decoration "underline"}
-              :on-click #(swap! state update :toggle-info not)}
-      "(rankings overview)"]]))
+     [:button {:style {:text-decoration "none"
+                      :background-color "#f0f0f0"
+                      :border "1px solid #ccc"
+                      :border-radius "4px"
+                      :padding "5px 10px"
+                      :margin-left "10px"
+                      :font-family "inherit"
+                      :font-size "0.9em"
+                      :cursor "pointer"
+                      :transition "all 0.2s ease-in-out"
+                      :box-shadow "0 1px 2px rgba(0,0,0,0.1)"}
+              :on-mouse-over (fn [e] 
+                              (-> e .-target .-style .-backgroundColor (set! "#e0e0e0"))
+                              (-> e .-target .-style .-transform (set! "scale(1.05)"))
+                              (-> e .-target .-style .-boxShadow (set! "0 2px 5px rgba(0,0,0,0.15)")))
+              :on-mouse-out (fn [e] 
+                             (-> e .-target .-style .-backgroundColor (set! "#f0f0f0"))
+                             (-> e .-target .-style .-transform (set! "scale(1)"))
+                             (-> e .-target .-style .-boxShadow (set! "0 1px 2px rgba(0,0,0,0.1)")))
+              :on-click #(swap! state assoc :show-info-modal true)}
+      "Rankings Overview"]]))
 
 (defn filter-controls []
   [:div
@@ -178,15 +248,10 @@
    [:label (styles/font 25) "by code_report"] [:br]
    [social-links]
    [:br] [:br]
-
-   (if (@state :toggle-info)
-     [:div
-      [:label {:style {:text-decoration "underline"}
-               :on-click #(swap! state update :toggle-info not)} "(back)"] [:br] [:br]
-      (info/table is-mobile?)]
-     [:div [language-filters] [:br] [:label "-"] [:br] [filter-controls] [:br]
-      (generate-table (read/get-all-sites 0) (map #(@state-check-boxes %) data/sites))
-      [footnotes]])])
+   [info-modal]
+   [:div [language-filters] [:br] [filter-controls] [:br]
+    (generate-table (read/get-all-sites 0) (map #(@state-check-boxes %) data/sites))
+    [footnotes]]])
 
 (defn render! []
   (rdom/render
