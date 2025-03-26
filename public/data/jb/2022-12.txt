@@ -1,0 +1,24 @@
+1,JavaScript
+2,Python
+3,Java
+4,HTML
+4,CSS
+5,TypeScript
+6,SQL
+7,C#
+8,C++
+9,PHP
+10,Go
+11,Kotlin
+12,Shell
+13,C
+14,Dart
+15,Rust
+16,Swift
+17,Ruby
+18,Scala
+19,GraphQL
+20,Visual Basic
+21,R
+22,Lua
+23,Groovy

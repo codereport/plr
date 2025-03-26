@@ -8,14 +8,17 @@
    :so       "2024-07"
    :ieee     "2024-08"
    :octo     "2024-11"
-   :languish "2025-01"})
+   :languish "2025-01"
+   :jb       "2024-12"})
 
 (defn date-months-ago [date-str n]
   (let [[year month] (map #(Integer/parseInt %) (str/split date-str #"-"))
-        total-months (- (+ (* year 12) month) n)
-        new-year (quot total-months 12)
-        new-month (inc (rem (dec total-months) 12))]
-    (format "%04d-%02d" new-year new-month)))
+        total-months (+ (* year 12) (dec month))
+        result-months (- total-months n)
+        new-year (quot result-months 12)
+        new-month (inc (rem result-months 12))
+        result (format "%04d-%02d" new-year new-month)]
+    result))
 
 (defn find-closest-date [site date-str]
   (let [site-name (name site)
@@ -39,5 +42,5 @@
 (defmacro get-data [site-kw months-ago] (get-data-content site-kw months-ago))
 
 (defmacro get-all-sites [months-ago]
-  (let [sites [:so :octo :rm :languish :ieee]]
+  (let [sites [:so :octo :rm :languish :jb :ieee]]
     (vec (map #(get-data-content % months-ago) sites))))
