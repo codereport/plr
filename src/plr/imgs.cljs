@@ -85,12 +85,14 @@
    "Zig"                  "zig_logo.svg"})
 
 (def site-logos
-  {:so "stackoverflow.png"
-   :rm "redmonk.png"
-   :tiobe "tiobe.jpg"
-   :pypl "pypl.png"
-   :ieee "ieee.jpeg"
-   :octo  "octoverse.png"
+  {:so       "stackoverflow.png"
+   :rm       "redmonk.png"
+   :tiobe    "tiobe.jpg"
+   :pypl     "pypl.png"
+   :ieee     "ieee.jpeg"
+   :octo     "octoverse.png"
    :languish "languish.svg"
-   :twitter "twitter.png"
-   :google "google.png"})
+   :githut   "githut.png"
+   :jb       "jetbrains.png"
+   :twitter  "twitter.png"
+   :google   "google.png"})

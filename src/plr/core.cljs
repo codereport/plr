@@ -22,8 +22,8 @@
                         :which-langs     "All"
                         :show-info-modal false}))
 
-(defonce state-check-boxes (r/atom {:so true :octo true :rm true :languish true :pypl false :ieee false :tiobe false}))
-(def sites [:so :octo :rm :languish :ieee])
+(defonce state-check-boxes (r/atom {:so true :octo true :rm true :languish true :jb false :pypl false :ieee false :tiobe false :githut false}))
+(def sites [:so :octo :rm :languish :jb :ieee])
 
 (def avg (partial transduce identity kixi/mean))
 (def stdev (partial transduce identity kixi/standard-deviation))
@@ -62,13 +62,15 @@
        (flatten)
        (apply hash-map)))
 
+(def emoji-style {:width "32px" :height "32px" :vertical-align "middle"})
+
 (defn format-delta [delta]
   (let [val (abs delta)]
     (cond
-      (= (- (@state :actual-langs) 1) delta) "⭐"
+      (= (- (@state :actual-langs) 1) delta) [:img {:src "/media/emojis/star.png" :alt "Star" :style emoji-style}]
       (zero? delta) "-"
-      (neg? delta) (str "🟢 (" val ")")
-      :else (str "🔴 (" val ")"))))
+      (neg? delta) [:span [:img {:src "/media/emojis/green_circle.png" :alt "Green Up" :style emoji-style}] (str " (" val ")")]
+      :else [:span [:img {:src "/media/emojis/red_circle.png" :alt "Red Down" :style emoji-style}] (str " (" val ")")])))
 
 (defn get-prev-site-langs [delta]
   (case delta
@@ -181,12 +183,17 @@
       (info/table is-mobile?)]]))
 
 (defn language-filters []
-  (let [langs (keys @state-check-boxes)
-        disabled-langs #{:pypl :tiobe}]
-    [:div (map-indexed (fn [idx lang] [:span {:style {:margin "auto 5px"}}
-         (language-check-box lang (contains? disabled-langs lang))
-         (when (and (= idx 3) (< idx (dec (count langs)))) [:br])])
-      langs)
+  (let [sites-order [:so :octo :rm :languish :jb :ieee :pypl :tiobe :githut]
+        disabled-langs #{:pypl :tiobe :githut}]
+    [:div 
+     (doall
+       (map-indexed 
+         (fn [idx lang] 
+           ^{:key (str "lang-" lang)}
+           [:span {:style {:margin "auto 5px"}}
+             (language-check-box lang (contains? disabled-langs lang))
+             (when (and (= idx 4) (< idx (dec (count sites-order)))) [:br])])
+         sites-order))
      [:button {:style {:text-decoration "none"
                       :background-color "#f0f0f0"
                       :border "1px solid #ccc"
@@ -215,7 +222,7 @@
             :id "exclude_edge_languages"
             :checked (@state :omit-edge-langs)
             :on-change #(swap! state update :omit-edge-langs not)}]
-   [:label styles/cb-font :for "exclude_edge_languages" " Exclude \"Edge Languages\" | "]
+   [:label (merge styles/cb-font {:for "exclude_edge_languages"}) " Exclude \"Edge Languages\" | "]
    [:form {:style {:display "inline"}}
     [:label styles/cb-font "Number of Languages: "]
     [:select {:value (@state :num-langs)
@@ -243,7 +250,7 @@
 
 (defn app-view []
   [:div {:style {:text-align "center"
-                 :padding "50px"
+                 :padding "30px"
                  :font-family "JetBrains Mono, monospace"
                  :position "relative"}}
    [:a {:href "https://www.youtube.com/c/codereport"
@@ -260,12 +267,12 @@
                            (-> e .-target .-style .-transform (set! "scale(1.25)")))
            :on-mouse-out (fn [e] 
                           (-> e .-target .-style .-transform (set! "scale(1)")))}]]
-   [:label (styles/font 50) 
+   [:label (styles/font 40) 
     (str (title-prefix (@state :which-langs)) 
-         " Programming Language Rankings (2025 Mar)")] [:br] [:br]
-   [:label (styles/font 25) "by code_report"] [:br]
+         " Programming Language Rankings (2025 Mar)")] [:br] 
+   [:label (styles/font 25) "by code_report"]
    [social-links]
-   [:br] [:br]
+   [:br]
    [info-modal]
    [:div [language-filters] [:br] [filter-controls] [:br]
     (generate-table (read/get-all-sites 0) (map #(@state-check-boxes %) data/sites))
