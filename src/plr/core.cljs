@@ -125,7 +125,7 @@
        (str " " (get data/names lang))]
       [:a {:href (get data/links lang)} 
        [:img {:src (str "/media/link.png") :width "16px" :height "16px"}]]
-      [:label styles/cb-font " "]]]))
+      ]]))
 
 (defn title-prefix [which-langs]
   (when (not= which-langs "All") which-langs))
@@ -183,7 +183,7 @@
 (defn language-filters []
   (let [langs (keys @state-check-boxes)
         disabled-langs #{:pypl :tiobe}]
-    [:div (map-indexed (fn [idx lang] [:span
+    [:div (map-indexed (fn [idx lang] [:span {:style {:margin "auto 5px"}}
          (language-check-box lang (contains? disabled-langs lang))
          (when (and (= idx 3) (< idx (dec (count langs)))) [:br])])
       langs)
