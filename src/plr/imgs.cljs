@@ -92,6 +92,7 @@
    :ieee     "ieee.jpeg"
    :octo     "octoverse.png"
    :languish "languish.svg"
+   :githut   "githut.png"
    :jb       "jetbrains.png"
    :twitter  "twitter.png"
    :google   "google.png"})

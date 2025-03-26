@@ -1,9 +1,9 @@
 (ns plr.data)
 
-(def sites [:so :octo :rm :languish :jb :pypl :ieee :tiobe])
+(def sites [:so :octo :rm :languish :jb :pypl :ieee :tiobe :githut])
 
 (def names {:so "StackOverflow" :octo "Octoverse" :rm "RedMonk" :languish "Languish" :jb "JetBrains"
-            :pypl "PYPL" :ieee "IEEE Spectrum" :tiobe "TIOBE"})
+            :pypl "PYPL" :ieee "IEEE Spectrum" :tiobe "TIOBE" :githut "GitHut 2.0"})
 
 (def links {:octo     "https://github.blog/news-insights/octoverse/octoverse-2024/#the-most-popular-programming-languages"
             :ieee     "https://spectrum.ieee.org/top-programming-languages-2024"
@@ -12,7 +12,8 @@
             :jb       "https://www.jetbrains.com/lp/devecosystem-2024/"
             :so       "https://survey.stackoverflow.co/2024/technology/"
             :pypl     "https://pypl.github.io/PYPL.html"
-            :tiobe    "https://www.tiobe.com/tiobe-index/"})
+            :tiobe    "https://www.tiobe.com/tiobe-index/"
+            :githut   "https://madnight.github.io/githut/"})
 
 ; Lisp is included here because SO groups every Lisp into one which collides with Languish having all the Lisp dialects
 (def odd ["Markdown" "CSS" "HTML" "SAS" "Jupyter Notebook" "Vue" "JSON" "Dockerfile" "SQL" "PLpgSQL" "ASP.NET" "Sass/SCSS"

@@ -22,7 +22,7 @@
                         :which-langs     "All"
                         :show-info-modal false}))
 
-(defonce state-check-boxes (r/atom {:so true :octo true :rm true :languish true :jb false :pypl false :ieee false :tiobe false}))
+(defonce state-check-boxes (r/atom {:so true :octo true :rm true :languish true :jb false :pypl false :ieee false :tiobe false :githut false}))
 (def sites [:so :octo :rm :languish :jb :ieee])
 
 (def avg (partial transduce identity kixi/mean))
@@ -181,12 +181,12 @@
       (info/table is-mobile?)]]))
 
 (defn language-filters []
-  (let [langs (keys @state-check-boxes)
-        disabled-langs #{:pypl :tiobe}]
+  (let [sites-order [:so :octo :rm :languish :jb :ieee :pypl :tiobe :githut]
+        disabled-langs #{:pypl :tiobe :githut}]
     [:div (map-indexed (fn [idx lang] [:span
          (language-check-box lang (contains? disabled-langs lang))
-         (when (and (= idx 4) (< idx (dec (count langs)))) [:br])])
-      langs)
+         (when (and (= idx 4) (< idx (dec (count sites-order)))) [:br])])
+      sites-order)
      [:button {:style {:text-decoration "none"
                       :background-color "#f0f0f0"
                       :border "1px solid #ccc"
