@@ -2,8 +2,8 @@
 
 (defn table [is-mobile?]
   {:style (merge {:font-family "JetBrains Mono, monospace"
-                  :padding "12px 12px"
-                  :font-size "30"
+                  :padding "10px 10px"
+                  :font-size "20"
                   :margin-left "auto"
                   :margin-right "auto"
                   :text-align "center"}
@@ -14,13 +14,13 @@
            :font-size (str font-size)
            :font-weight "bold"}})
 
-(def cb-font (font 23))
+(def cb-font (font 18))
 
 (def cell {:style {:padding "12px 30px"
-                   :font-size "30"}})
+                   :font-size "24"}})
 
 (def cell2 {:style {:padding "12px 30px"
-                    :font-size "24"}})
+                    :font-size "16"}})
 
 (defn footnote [is-mobile?]
-  {:style {:font-size (if is-mobile? 12 16)}})
+  {:style {:font-size (if is-mobile? 12 10)}})

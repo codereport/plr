@@ -260,12 +260,12 @@
                            (-> e .-target .-style .-transform (set! "scale(1.25)")))
            :on-mouse-out (fn [e] 
                           (-> e .-target .-style .-transform (set! "scale(1)")))}]]
-   [:label (styles/font 50) 
+   [:label (styles/font 40) 
     (str (title-prefix (@state :which-langs)) 
-         " Programming Language Rankings (2025 Mar)")] [:br] [:br]
-   [:label (styles/font 25) "by code_report"] [:br]
+         " Programming Language Rankings (2025 Mar)")] [:br] 
+   [:label (styles/font 25) "by code_report"]
    [social-links]
-   [:br] [:br]
+   [:br]
    [info-modal]
    [:div [language-filters] [:br] [filter-controls] [:br]
     (generate-table (read/get-all-sites 0) (map #(@state-check-boxes %) data/sites))
