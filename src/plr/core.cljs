@@ -132,7 +132,7 @@
                                 :transition "all 0.2s ease-in-out"
                                 :transform "scale(1)"}
                         :onMouseOver (fn [e] 
-                                      (-> e .-currentTarget .-style .-transform (set! "scale(1.1)")))
+                                      (-> e .-currentTarget .-style .-transform (set! "scale(1.25)")))
                         :onMouseOut (fn [e] 
                                      (-> e .-currentTarget .-style .-transform (set! "scale(1)")))}
                        props)])
