@@ -240,7 +240,7 @@
 (defn app-view []
   [:div {:style {:text-align "center"
                  :padding "50px"
-                 :font-family "Ubuntu Mono,Consolas,IBM Plex Mono,Roboto Mono,Courier"
+                 :font-family "JetBrains Mono, monospace"
                  :position "relative"}}
    [:a {:href "https://www.youtube.com/c/codereport"
         :style {:position "absolute"
