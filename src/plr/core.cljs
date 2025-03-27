@@ -62,15 +62,13 @@
        (flatten)
        (apply hash-map)))
 
-(def emoji-style {:width "32px" :height "32px" :vertical-align "middle"})
-
 (defn format-delta [delta]
   (let [val (abs delta)]
     (cond
-      (= (- (@state :actual-langs) 1) delta) [:img {:src "/media/emojis/star.png" :alt "Star" :style emoji-style}]
+      (= (- (@state :actual-langs) 1) delta) [:img {:src "/media/emojis/star.png" :alt "Star" :style styles/emoji-style}]
       (zero? delta) "-"
-      (neg? delta) [:span [:img {:src "/media/emojis/green_circle.png" :alt "Green Up" :style emoji-style}] (str " (" val ")")]
-      :else [:span [:img {:src "/media/emojis/red_circle.png" :alt "Red Down" :style emoji-style}] (str " (" val ")")])))
+      (neg? delta) [:span [:img {:src "/media/emojis/green_circle.png" :alt "Green Up" :style styles/emoji-style}] (str " (" val ")")]
+      :else [:span [:img {:src "/media/emojis/red_circle.png" :alt "Red Down" :style styles/emoji-style}] (str " (" val ")")])))
 
 (defn get-prev-site-langs [delta]
   (case delta
@@ -116,35 +114,31 @@
 
 (defn language-check-box [lang disable]
   (let [id-str (name lang)]
-    [:div {:style {:display "inline"}}
+    [:div (styles/inline-display)
      [:input {:type "checkbox"
               :id id-str
               :checked (@state-check-boxes lang)
               :disabled disable
               :on-change #(swap! state-check-boxes update lang not)}]
-     [:div {:style {:display "inline"}} 
+     [:div (styles/inline-display) 
       [:label (merge {:for id-str} styles/cb-font) 
        (str " " (get data/names lang))]
       [:a {:href (get data/links lang)} 
-       [:img {:src (str "/media/link.png") :width "16px" :height "16px"}]]
-      ]]))
+       [:img {:src (str "/media/link.png") :width "16px" :height "16px"}]]]]))
 
 (defn title-prefix [which-langs]
   (when (not= which-langs "All") which-langs))
 
 (defn social-icon [props]
-  [:> SocialIcon (merge {:style {:height 40 
-                                :width 40
-                                :transition "all 0.2s ease-in-out"
-                                :transform "scale(1)"}
-                        :onMouseOver (fn [e] 
+  [:> SocialIcon (merge {:style (styles/social-icon-style)}
+                       {:onMouseOver (fn [e] 
                                       (-> e .-currentTarget .-style .-transform (set! "scale(1.25)")))
                         :onMouseOut (fn [e] 
                                      (-> e .-currentTarget .-style .-transform (set! "scale(1)")))}
                        props)])
 
 (defn social-links []
-  [:div {:style {:display "flex" :gap "10px" :justify-content "center" :margin-top "10px"}}
+  [:div (styles/social-links-container)
    [social-icon {:url "https://bsky.app/profile/codereport.bsky.social"}]
    [social-icon {:url "https://mastodon.social/@code_report" :network "mastodon"}]
    [social-icon {:url "https://www.twitter.com/code_report"}]
@@ -153,31 +147,10 @@
 
 (defn info-modal []
   (when (@state :show-info-modal)
-    [:div {:style {:position "fixed"
-                  :top 0
-                  :left 0
-                  :width "100%"
-                  :height "100%"
-                  :display "flex"
-                  :justify-content "center"
-                  :align-items "center"
-                  :background-color "rgba(0, 0, 0, 0.5)"
-                  :z-index 1000}}
-     [:div {:style {:background-color "white"
-                   :padding "20px"
-                   :border-radius "8px"
-                   :max-width "80%"
-                   :max-height "80%"
-                   :overflow "auto"
-                   :position "relative"}}
-      [:button {:style {:position "absolute"
-                       :top "10px"
-                       :right "10px"
-                       :border "none"
-                       :background "none"
-                       :font-size "20px"
-                       :cursor "pointer"}
-               :on-click #(swap! state assoc :show-info-modal false)}
+    [:div (styles/modal-overlay)
+     [:div (styles/modal-content)
+      [:button (merge (styles/modal-close-button)
+                     {:on-click #(swap! state assoc :show-info-modal false)})
        "×"]
       [:h2 "Rankings Overview"]
       (info/table is-mobile?)]]))
@@ -190,30 +163,20 @@
        (map-indexed 
          (fn [idx lang] 
            ^{:key (str "lang-" lang)}
-           [:span {:style {:margin "auto 5px"}}
+           [:span (styles/language-item)
              (language-check-box lang (contains? disabled-langs lang))
              (when (and (= idx 4) (< idx (dec (count sites-order)))) [:br])])
          sites-order))
-     [:button {:style {:text-decoration "none"
-                      :background-color "#f0f0f0"
-                      :border "1px solid #ccc"
-                      :border-radius "4px"
-                      :padding "5px 10px"
-                      :margin-left "10px"
-                      :font-family "inherit"
-                      :font-size "0.9em"
-                      :cursor "pointer"
-                      :transition "all 0.2s ease-in-out"
-                      :box-shadow "0 1px 2px rgba(0,0,0,0.1)"}
-              :on-mouse-over (fn [e] 
-                              (-> e .-target .-style .-backgroundColor (set! "#e0e0e0"))
-                              (-> e .-target .-style .-transform (set! "scale(1.05)"))
-                              (-> e .-target .-style .-boxShadow (set! "0 2px 5px rgba(0,0,0,0.15)")))
-              :on-mouse-out (fn [e] 
-                             (-> e .-target .-style .-backgroundColor (set! "#f0f0f0"))
-                             (-> e .-target .-style .-transform (set! "scale(1)"))
-                             (-> e .-target .-style .-boxShadow (set! "0 1px 2px rgba(0,0,0,0.1)")))
-              :on-click #(swap! state assoc :show-info-modal true)}
+     [:button (merge (styles/button)
+                    {:on-mouse-over (fn [e] 
+                                     (-> e .-target .-style .-backgroundColor (set! "#e0e0e0"))
+                                     (-> e .-target .-style .-transform (set! "scale(1.05)"))
+                                     (-> e .-target .-style .-boxShadow (set! "0 2px 5px rgba(0,0,0,0.15)")))
+                     :on-mouse-out (fn [e] 
+                                    (-> e .-target .-style .-backgroundColor (set! "#f0f0f0"))
+                                    (-> e .-target .-style .-transform (set! "scale(1)"))
+                                    (-> e .-target .-style .-boxShadow (set! "0 1px 2px rgba(0,0,0,0.1)")))
+                     :on-click #(swap! state assoc :show-info-modal true)})
       "Rankings Overview"]]))
 
 (defn filter-controls []
@@ -249,20 +212,11 @@
    [:label " here."]])
 
 (defn app-view []
-  [:div {:style {:text-align "center"
-                 :padding "30px"
-                 :font-family "JetBrains Mono, monospace"
-                 :position "relative"}}
+  [:div (styles/app-container)
    [:a {:href "https://www.youtube.com/c/codereport"
-        :style {:position "absolute"
-                :right "30px"
-                :top "30px"
-                :cursor "pointer"}}
+        :style (styles/youtube-link)}
     [:img {:src "/media/code_report_circle.png"
-           :style {:height "60px"
-                   :width "60px"
-                   :transition "all 0.2s ease-in-out"
-                   :transform "scale(1)"}
+           :style (styles/youtube-image)
            :on-mouse-over (fn [e] 
                            (-> e .-target .-style .-transform (set! "scale(1.25)")))
            :on-mouse-out (fn [e] 
