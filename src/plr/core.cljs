@@ -127,7 +127,7 @@
        (str " " (get data/names lang))]
       [:a {:href (get data/links lang)} 
        [:img {:src (str "/media/link.png") :width "16px" :height "16px"}]]
-      [:label styles/cb-font " "]]]))
+      ]]))
 
 (defn title-prefix [which-langs]
   (when (not= which-langs "All") which-langs))
@@ -190,7 +190,7 @@
        (map-indexed 
          (fn [idx lang] 
            ^{:key (str "lang-" lang)}
-           [:span
+           [:span {:style {:margin "auto 5px"}}
              (language-check-box lang (contains? disabled-langs lang))
              (when (and (= idx 4) (< idx (dec (count sites-order)))) [:br])])
          sites-order))
