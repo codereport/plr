@@ -1,0 +1,544 @@
+1,Python
+2,JavaScript
+3,TypeScript
+4,Java
+5,C++
+6,C#
+7,Go
+8,PHP
+9,HTML
+10,Rust
+11,C
+12,CSS
+13,Shell
+14,Jupyter Notebook
+15,Swift
+16,Kotlin
+17,R
+18,Dockerfile
+19,ASP.NET
+20,SQL
+21,Dart
+22,Vue
+23,PLpgSQL
+24,JSON
+25,PowerShell
+26,VBA
+27,Lua
+28,Ruby
+29,Svelte
+30,Markdown
+31,Batchfile
+32,XML
+33,CMake
+34,Nginx
+35,Assembly
+36,Haskell
+37,Objective-C
+38,MDX
+39,Cuda
+40,Scala
+41,Delphi
+42,Zig
+43,CSV
+44,Sass/SCSS
+45,Visual Basic .NET
+46,TeX
+47,ApacheConf
+48,Vim Script
+49,Makefile
+50,MATLAB
+51,YAML
+52,GDScript
+53,Perl
+54,Elixir
+55,OCaml
+56,Solidity
+57,Inno Setup
+58,Groovy
+59,Nix
+60,Clojure
+61,Arduino
+62,QML
+63,Jinja
+64,Verilog
+65,Julia
+66,PLSQL
+67,Awk
+68,RobotFramework
+69,Emacs Lisp
+70,GDB
+71,HiveQL
+72,Protocol Buffer
+73,SQLPL
+74,SystemVerilog
+75,WebAssembly
+76,GLSL
+77,XSLT
+78,Cucumber
+78,RMarkdown
+78,sed
+79,Astro
+80,HCL
+81,AutoHotkey
+82,Starlark
+83,SAS
+84,Fortran
+85,LLVM
+86,VBScript
+87,jq
+88,Blade
+89,F#
+90,Bicep
+91,Gnuplot
+92,Pascal
+93,Common Lisp
+94,EJS
+95,AppleScript
+96,mcfunction
+97,HLSL
+98,Tcl
+99,Roff
+100,Kusto
+101,Typst
+102,DOT
+103,Cython
+104,Erlang
+105,Nim
+106,Less
+107,ANTLR
+108,Liquid
+109,Scheme
+110,Twig
+111,Visual Basic 6.0
+112,BitBake
+113,ColdFusion
+114,ABAP
+115,Rich Text Format
+116,CoffeeScript
+117,Lean
+118,Apex
+119,ActionScript
+120,Mustache
+121,Modelica
+122,Handlebars
+123,ASP
+124,Smarty
+125,ShaderLab
+126,Prolog
+127,Mathematica
+128,Metal
+129,Stata
+130,MQL5
+131,VHDL
+132,OpenSCAD
+133,Vala
+134,PostScript
+135,Logos
+136,LookML
+137,reStructuredText
+138,Coq
+139,DataWeave
+140,Haxe
+141,AspectJ
+141,XQuery
+142,D
+143,COBOL
+144,KiCad Layout
+145,Objective-C++
+146,Odin
+147,YARA
+148,Org
+149,Processing
+150,Gherkin
+151,QMake
+152,Racket
+153,Ada
+154,Nextflow
+155,AutoIt
+156,Pug
+157,CUE
+158,Meson
+159,OpenEdge ABL
+160,NetLogo
+160,Singularity
+161,FreeMarker
+162,SWIG
+163,Nunjucks
+164,Raku
+165,INI
+165,MQL4
+166,Crystal
+167,Sage
+168,Wavefront Object
+169,Jsonnet
+170,Smali
+171,Stylus
+172,AL
+173,Ballerina
+174,AsciiDoc
+175,AIDL
+176,Gleam
+177,CodeQL
+178,Agda
+179,TSQL
+180,Puppet
+181,BASIC
+182,Standard ML
+183,Bison
+183,Web Ontology Language
+184,ReScript
+185,Fluent
+186,NSIS
+187,Gosu
+187,Pep8
+188,Brightscript
+189,SVG
+190,Hack
+191,Nushell
+192,Self
+192,VCL
+193,V
+194,AMPL
+195,Elm
+196,Lex
+197,APL
+198,Thrift
+199,Yacc
+200,1C Enterprise
+201,AngelScript
+202,Open Policy Agent
+203,Dafny
+204,SMT
+205,Smalltalk
+206,Interface Description Language
+207,Chapel
+208,Ren'Py
+209,Game Maker Language
+210,PowerBuilder
+211,Isabelle
+212,templ
+213,MAXScript
+214,Just
+215,CIL
+215,Gettext Catalog
+215,ImageJ Macro
+216,Fennel
+217,Brainfuck
+218,Max
+219,Wikitext
+220,Luau
+221,PureScript
+222,Mojo
+223,FLUX
+223,LilyPond
+223,Opa
+223,Stan
+224,Move
+225,DM
+226,Bikeshed
+227,Idris
+228,Reason
+229,Haml
+230,LabVIEW
+231,Scilab
+232,Forth
+233,ASL
+234,Eiffel
+235,HolyC
+236,Pony
+237,G-code
+238,GAMS
+238,Hy
+238,Slim
+239,Mako
+240,GAP
+241,Visual Basic
+242,Circom
+243,DTrace
+244,Adblock Filter List
+245,FreeBasic
+246,Rascal
+247,Zeek
+248,NASL
+249,CLIPS
+250,SuperCollider
+251,Text
+252,Asymptote
+252,J
+252,Oz
+252,Rebol
+252,TI Program
+252,XPages
+253,MLIR
+254,Monkey C
+255,Riot
+256,Squirrel
+257,PlantUML
+258,M4
+259,Motoko
+260,NWScript
+261,Beef
+262,Grammatical Framework
+263,XS
+264,Vim Snippet
+265,Wren
+266,AGS Script
+267,PureBasic
+268,Common Workflow Language
+269,Mercury
+270,Ragel
+271,BlitzMax
+272,Parrot
+273,Q#
+274,Cairo
+275,4D
+275,ABNF
+275,Alloy
+275,ECL
+275,Latte
+275,Moocode
+275,NCL
+275,Nearley
+275,PigLatin
+275,RAML
+275,RenderScript
+275,SmPL
+275,StringTemplate
+275,Turtle
+275,UnrealScript
+275,Xojo
+275,Xtend
+276,MoonBit
+276,Pawn
+277,nesC
+278,PDDL
+279,Marko
+280,Euphoria
+280,Janet
+281,F*
+282,Ring
+283,RPM Spec
+283,ZenScript
+284,SourcePawn
+285,RouterOS Script
+286,Nu
+287,P4
+288,DIGITAL Command Language
+289,Vyper
+290,OpenQASM
+291,WGSL
+292,M
+293,Diff
+294,Red
+294,RPC
+295,JetBrains MPS
+296,Component Pascal
+296,MoonScript
+297,Dhall
+297,hoon
+298,REXX
+299,SRecode Template
+299,TLA
+299,ZAP
+300,CartoCSS
+301,Boo
+301,GSC
+302,Bluespec
+303,Factor
+303,Turing
+304,BrighterScript
+305,Io
+306,PEG.js
+307,Valve Data Format
+308,LiveScript
+309,Propeller Spin
+310,Inform 7
+311,SQF
+312,KakouneScript
+313,D2
+314,Kit
+315,Lasso
+315,xBase
+316,Earthly
+317,Jai
+317,Procfile
+318,Mermaid
+319,Boogie
+319,Edge
+319,Modula-3
+319,YASnippet
+319,ZIL
+320,CAP CDS
+320,Noir
+320,Objective-J
+321,BibTeX Style
+321,E
+321,Hosts File
+321,q
+321,QuickBASIC
+322,Eagle
+322,Fantom
+322,Papyrus
+322,POV-Ray SDL
+322,Slint
+322,Tree-sitter Query
+322,wdl
+323,GCC Machine Description
+323,Groff
+323,Kaitai Struct
+323,Opal
+324,ABAP CDS
+324,Altium Designer
+324,Answer Set Programming
+324,Antlers
+324,API Blueprint
+324,Arc
+324,ATS
+324,Augeas
+324,B4X
+324,Berry
+324,BQN
+324,Bro
+324,Cadence
+324,Cap'n Proto
+324,Carbon
+324,Ceylon
+324,Charity
+324,ChucK
+324,Cirru
+324,Clarion
+324,Clarity
+324,Clean
+324,Click
+324,Cool
+324,CSON
+324,Csound
+324,Curry
+324,CWeb
+324,Cycript
+324,Cypher
+324,DCPU-16 ASM
+324,DenizenScript
+324,Dogescript
+324,Dune
+324,Dylan
+324,eC
+324,EdgeQL
+324,EmberScript
+324,EQ
+324,Fancy
+324,Faust
+324,FIRRTL
+324,FreeBASIC
+324,Frege
+324,Futhark
+324,GAML
+324,Genero 4gl
+324,Genie
+324,Genshi
+324,Git Attributes
+324,Glyph
+324,Golo
+324,Grace
+324,Harbour
+324,HyPhy
+324,IDL
+324,IGOR Pro
+324,Imba
+324,Ink
+324,Jasmin
+324,Java Properties
+324,JCL
+324,Jolie
+324,JSONiq
+324,just
+324,KerboScript
+324,KiCad Schematic
+324,KRL
+324,kvlang
+324,LFE
+324,LigoLANG
+324,Limbo
+324,Linear Programming
+324,Linker Script
+324,Logo Language
+324,Logtalk
+324,LOLCODE
+324,LoomScript
+324,LSL
+324,Macaulay2
+324,Mask
+324,mdsvex
+324,Mint
+324,Mirah
+324,mIRC Script
+324,Modula-2
+324,Module Management System
+324,Monkey
+324,MTML
+324,mupad
+324,Nasal
+324,Nemerle
+324,NetLinx
+324,NewLisp
+324,Nit
+324,NMODL
+324,Oberon
+324,ObjectScript
+324,ooc
+324,OpenAPI Specification v3
+324,Ox
+324,Pact
+324,Pan
+324,PicoLisp
+324,Pike
+324,Pkl
+324,PogoScript
+324,Portugol
+324,Promela
+324,Pure Data
+324,Pyret
+324,Qt Script
+324,Quake
+324,Ragel in Ruby Host
+324,Redcode
+324,Rez
+324,Roc
+324,Rouge
+324,RPGLE
+324,RUNOFF
+324,SaltStack
+324,Shen
+324,Sieve
+324,Slash
+324,Slice
+324,Smithy
+324,STL
+324,SugarSS
+324,Sway
+324,Talon
+324,Tea
+324,Terra
+324,TL-Verilog
+324,Toit
+324,TXL
+324,TypeSpec
+324,Unity3D Asset
+324,Uno
+324,UrWeb
+324,Velocity Template Language
+324,Volt
+324,WDL
+324,WebIDL
+324,wisp
+324,Witcher Script
+324,Wollok
+324,X10
+324,XC
+324,Xmake
+324,Xonsh
+324,XProc
+324,Yul
+324,Zephir
+324,Zimpl

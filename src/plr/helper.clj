@@ -8,7 +8,7 @@
    :so       "2024-07"
    :ieee     "2024-08"
    :octo     "2024-11"
-   :languish "2025-01"
+   :languish "2025-04"
    :jb       "2024-12"})
 
 (defn date-months-ago [date-str n]
