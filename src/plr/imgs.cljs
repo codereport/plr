@@ -65,6 +65,7 @@
    "R"                    "r_logo.png"
    "Racket"               "racket_logo.png"
    "Reason"               "reason.jpg"
+   "ReScript"             "rescript.png"
    "Ruby"                 "ruby_logo.png"
    "Rust"                 "rust_logo.png"
    "SAS"                  "sas_logo.png"
