@@ -7,7 +7,7 @@
 
 (def links {:octo     "https://github.blog/news-insights/octoverse/octoverse-2024/#the-most-popular-programming-languages"
             :ieee     "https://spectrum.ieee.org/top-programming-languages-2024"
-            :rm       "https://redmonk.com/sogrady/2024/09/12/language-rankings-6-24/"
+            :rm       "https://redmonk.com/sogrady/2025/06/18/language-rankings-1-25"
             :languish "https://tjpalmer.github.io/languish/"
             :jb       "https://www.jetbrains.com/lp/devecosystem-2024/"
             :so       "https://survey.stackoverflow.co/2024/technology/"
