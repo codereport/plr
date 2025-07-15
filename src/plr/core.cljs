@@ -65,7 +65,7 @@
 (defn format-delta [delta]
   (let [val (abs delta)]
     (cond
-      (= (- (@state :actual-langs) 1) delta) [:img {:src "/media/emojis/star.png" :alt "Star" :style styles/emoji-style}]
+      (= delta :new) [:img {:src "/media/emojis/star.png" :alt "Star" :style styles/emoji-style}]
       (zero? delta) "-"
       (neg? delta) [:span [:img {:src "/media/emojis/green_circle.png" :alt "Green Up" :style styles/emoji-style}] (str " (" val ")")]
       :else [:span [:img {:src "/media/emojis/red_circle.png" :alt "Red Down" :style styles/emoji-style}] (str " (" val ")")])))
@@ -78,14 +78,17 @@
     24 (read/get-all-sites 24)))
 
 (defn generate-row [rank [avg stdev n lang] prev-rankings]
-  [:tr
-   [:td styles/cell (str (+ rank 1))]
-   [:td [:img {:src (str/join ["/media/logos/" (get imgs/logo-map lang)]) :width "40px" :height "40px"}]]
-   [:td styles/cell lang]
-   [:td styles/cell (format avg)]
-   [:td styles/cell (format stdev)]
-   [:td styles/cell n]
-   [:td styles/cell (format-delta (- rank (prev-rankings lang)))]])
+  (let [delta (if (contains? prev-rankings lang)
+                (- rank (prev-rankings lang))
+                :new)]
+    [:tr
+     [:td styles/cell (str (+ rank 1))]
+     [:td [:img {:src (str/join ["/media/logos/" (get imgs/logo-map lang)]) :width "40px" :height "40px"}]]
+     [:td styles/cell lang]
+     [:td styles/cell (format avg)]
+     [:td styles/cell (format stdev)]
+     [:td styles/cell n]
+     [:td styles/cell (format-delta delta)]]))
 
 (defn make-table [rows]
   (let [mask            (map #(@state-check-boxes %) data/sites)
