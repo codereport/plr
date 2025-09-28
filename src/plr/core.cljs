@@ -226,7 +226,7 @@
                           (-> e .-target .-style .-transform (set! "scale(1)")))}]]
    [:label (styles/font 40) 
     (str (title-prefix (@state :which-langs)) 
-         " Programming Language Rankings (2025 Aug)")] [:br] 
+         " Programming Language Rankings (2025 Sep)")] [:br] 
    [:label (styles/font 25) "by code_report"]
    [social-links]
    [:br]

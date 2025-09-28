@@ -6,7 +6,7 @@
             :pypl "PYPL" :ieee "IEEE Spectrum" :tiobe "TIOBE" :githut "GitHut 2.0"})
 
 (def links {:octo     "https://github.blog/news-insights/octoverse/octoverse-2024/#the-most-popular-programming-languages"
-            :ieee     "https://spectrum.ieee.org/top-programming-languages-2024"
+            :ieee     "https://spectrum.ieee.org/top-programming-languages-2025"
             :rm       "https://redmonk.com/sogrady/2025/06/18/language-rankings-1-25"
             :languish "https://tjpalmer.github.io/languish/"
             :jb       "https://www.jetbrains.com/lp/devecosystem-2024/"

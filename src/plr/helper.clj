@@ -6,7 +6,7 @@
 (def current-dates
   {:rm       "2025-01"
    :so       "2025-07"
-   :ieee     "2024-08"
+   :ieee     "2025-09"
    :octo     "2024-11"
    :languish "2025-07"
    :jb       "2024-12"})

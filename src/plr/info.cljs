@@ -5,9 +5,9 @@
    [plr.styles :as styles]
    [plr.imgs :as imgs]))
 
-(def num-langs   {:so "42"      :octo "10"      :rm "20"       :languish "544"       :jb "27"      :pypl "29"      :ieee "55"      :tiobe "50"      :githut "50"        })
+(def num-langs   {:so "42"      :octo "10"      :rm "20"       :languish "544"       :jb "27"      :pypl "29"      :ieee "52"      :tiobe "50"      :githut "50"        })
 (def freq        {:so "Annual"  :octo "Annual"  :rm "Biannual" :languish "Quarterly" :jb "Annual"  :pypl "Monthly" :ieee "Annual"  :tiobe "Monthly" :githut "Quarterly" })
-(def last-update {:so "2025-07" :octo "2024-11" :rm "2025-01"  :languish "2025-04"   :jb "2024-12" :pypl "-"       :ieee "2024-08" :tiobe "-"       :githut "-"         })
+(def last-update {:so "2025-07" :octo "2024-11" :rm "2025-01"  :languish "2025-04"   :jb "2024-12" :pypl "-"       :ieee "2025-09" :tiobe "-"       :githut "-"         })
 
 (def problems {:octo     "Limitation of only showing \"top 10\" languages  since 2014 in graphic."
                :ieee     "JavaScript seems low."
