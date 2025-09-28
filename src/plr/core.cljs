@@ -23,7 +23,6 @@
                         :show-info-modal false}))
 
 (defonce state-check-boxes (r/atom {:so true :octo true :rm true :languish true :jb false :pypl false :ieee false :tiobe false :githut false}))
-(def sites [:so :octo :rm :languish :jb :ieee])
 
 (def avg (partial transduce identity kixi/mean))
 (def stdev (partial transduce identity kixi/standard-deviation))
@@ -91,7 +90,7 @@
      [:td styles/cell (format-delta delta)]]))
 
 (defn make-table [rows]
-  (let [mask            (map #(@state-check-boxes %) data/sites)
+  (let [mask            (map #(@state-check-boxes %) [:so :octo :rm :languish :jb :ieee])
         prev-site-langs (get-prev-site-langs (@state :delta))
         prev-rankings   (simplify-row-data (generate-row-data prev-site-langs mask true))]
     [:table (styles/table is-mobile?)
@@ -232,7 +231,7 @@
    [:br]
    [info-modal]
    [:div [language-filters] [:br] [filter-controls] [:br]
-    (generate-table (read/get-all-sites 0) (map #(@state-check-boxes %) data/sites))
+    (generate-table (read/get-all-sites 0) (map #(@state-check-boxes %) [:so :octo :rm :languish :jb :ieee]))
     [footnotes]]])
 
 (defn render! []
