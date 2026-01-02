@@ -5,7 +5,7 @@
 (def names {:so "StackOverflow" :octo "Octoverse" :rm "RedMonk" :languish "Languish" :jb "JetBrains"
             :pypl "PYPL" :ieee "IEEE Spectrum" :tiobe "TIOBE" :githut "GitHut 2.0"})
 
-(def links {:octo     "https://github.blog/news-insights/octoverse/octoverse-2024/#the-most-popular-programming-languages"
+(def links {:octo     "https://github.blog/news-insights/octoverse/octoverse-a-new-developer-joins-github-every-second-as-ai-leads-typescript-to-1/#the-top-programming-languages-of-2025-typescript-jumps-to-1-while-python-takes-2"
             :ieee     "https://spectrum.ieee.org/top-programming-languages-2025"
             :rm       "https://redmonk.com/sogrady/2025/06/18/language-rankings-1-25"
             :languish "https://tjpalmer.github.io/languish/"
