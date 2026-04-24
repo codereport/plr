@@ -1,4 +1,5 @@
-(ns plr.imgs)
+(ns plr.imgs
+  (:require [clojure.string :as str]))
 
 (def logo-map
   {"Ada"                  "ada.png"
@@ -84,6 +85,15 @@
    "Vim Script"           "vim.png"
    "Vue"                  "vue.png"
    "Zig"                  "zig.svg"})
+
+(def darkmode-logos #{"Julia" "Rust"})
+
+(defn get-logo-filename [lang theme]
+  (let [base (get logo-map lang)
+        dot  (str/last-index-of base ".")]
+    (if (and (= theme :dark) (contains? darkmode-logos lang))
+      (str (subs base 0 dot) "_darkmode" (subs base dot))
+      base)))
 
 (def site-logos
   {:so       "stackoverflow.png"

@@ -20,7 +20,8 @@
                         :toggle-info     false
                         :omit-edge-langs true
                         :which-langs     "All"
-                        :show-info-modal false}))
+                        :show-info-modal false
+                        :theme           :light}))
 
 (defonce state-check-boxes (r/atom {:so true :octo true :rm true :languish true :jb false :pypl false :ieee false :tiobe false :githut false}))
 
@@ -79,10 +80,11 @@
 (defn generate-row [rank [avg stdev n lang] prev-rankings]
   (let [delta (if (contains? prev-rankings lang)
                 (- rank (prev-rankings lang))
-                :new)]
+                :new)
+        theme (@state :theme)]
     [:tr
      [:td styles/cell (str (+ rank 1))]
-     [:td [:img {:src (str/join ["/media/logos/" (get imgs/logo-map lang)]) :width "40px" :height "40px"}]]
+     [:td [:img {:src (str "/media/logos/" (imgs/get-logo-filename lang theme)) :width "40px" :height "40px"}]]
      [:td styles/cell lang]
      [:td styles/cell (format avg)]
      [:td styles/cell (format stdev)]
@@ -149,17 +151,20 @@
 
 (defn info-modal []
   (when (@state :show-info-modal)
-    [:div (styles/modal-overlay)
-     [:div (styles/modal-content)
-      [:button (merge (styles/modal-close-button)
-                     {:on-click #(swap! state assoc :show-info-modal false)})
-       "×"]
-      [:h2 "Rankings Overview"]
-      (info/table is-mobile?)]]))
+    (let [theme (@state :theme)]
+      [:div (styles/modal-overlay)
+       [:div (styles/modal-content theme)
+        [:button (merge (styles/modal-close-button theme)
+                       {:on-click #(swap! state assoc :show-info-modal false)})
+         "×"]
+        [:h2 "Rankings Overview"]
+        (info/table is-mobile?)]])))
 
 (defn language-filters []
   (let [sites-order [:so :octo :rm :languish :jb :ieee :pypl :tiobe :githut]
-        disabled-langs #{:pypl :tiobe :githut}]
+        disabled-langs #{:pypl :tiobe :githut}
+        theme (@state :theme)
+        colors (get styles/theme-colors theme)]
     [:div 
      (doall
        (map-indexed 
@@ -169,15 +174,15 @@
              (language-check-box lang (contains? disabled-langs lang))
              (when (and (= idx 4) (< idx (dec (count sites-order)))) [:br])])
          sites-order))
-     [:button (merge (styles/button)
+     [:button (merge (styles/button theme)
                     {:on-mouse-over (fn [e] 
-                                     (-> e .-target .-style .-backgroundColor (set! "#e0e0e0"))
+                                     (-> e .-target .-style .-backgroundColor (set! (:button-bg-hover colors)))
                                      (-> e .-target .-style .-transform (set! "scale(1.05)"))
-                                     (-> e .-target .-style .-boxShadow (set! "0 2px 5px rgba(0,0,0,0.15)")))
+                                     (-> e .-target .-style .-boxShadow (set! (str "0 2px 5px " (:shadow-hover colors)))))
                      :on-mouse-out (fn [e] 
-                                    (-> e .-target .-style .-backgroundColor (set! "#f0f0f0"))
+                                    (-> e .-target .-style .-backgroundColor (set! (:button-bg colors)))
                                     (-> e .-target .-style .-transform (set! "scale(1)"))
-                                    (-> e .-target .-style .-boxShadow (set! "0 1px 2px rgba(0,0,0,0.1)")))
+                                    (-> e .-target .-style .-boxShadow (set! (str "0 1px 2px " (:shadow colors)))))
                      :on-click #(swap! state assoc :show-info-modal true)})
       "Rankings Overview"]]))
 
@@ -213,28 +218,61 @@
    [:a {:href "https://github.com/codereport/plr/issues/new"} [:label "issue"]]
    [:label " here."]])
 
+(defn save-theme-to-storage [theme]
+  (.setItem js/localStorage "plr-theme" (name theme)))
+
+(defn load-theme-from-storage []
+  (if-let [saved (.getItem js/localStorage "plr-theme")]
+    (keyword saved)
+    :light))
+
+(defn update-body-styles [theme]
+  (let [colors (get styles/theme-colors theme)
+        body-style (.-style (.-body js/document))]
+    (set! (.-backgroundColor body-style) (:background colors))
+    (set! (.-color body-style) (:text colors))
+    (set! (.-colorScheme body-style) (name theme))))
+
+(defn init-theme []
+  (let [saved-theme (load-theme-from-storage)]
+    (swap! state assoc :theme saved-theme)
+    (update-body-styles saved-theme)))
+
+(defn theme-toggle []
+  (let [current-theme (@state :theme)]
+    [:button
+     {:style (styles/theme-toggle-style current-theme)
+      :on-click #(let [new-theme (if (= (@state :theme) :light) :dark :light)]
+                   (save-theme-to-storage new-theme)
+                   (update-body-styles new-theme)
+                   (swap! state assoc :theme new-theme))}
+     (if (= current-theme :light) "🌙 Dark" "☀️ Light")]))
+
 (defn app-view []
-  [:div (styles/app-container)
-   [:a {:href "https://www.youtube.com/c/codereport"
-        :style (styles/youtube-link)}
-    [:img {:src "/media/code_report_circle.png"
-           :style (styles/youtube-image)
-           :on-mouse-over (fn [e] 
-                           (-> e .-target .-style .-transform (set! "scale(1.25)")))
-           :on-mouse-out (fn [e] 
-                          (-> e .-target .-style .-transform (set! "scale(1)")))}]]
-   [:label (styles/font 40) 
-    (str (title-prefix (@state :which-langs)) 
-         " Programming Language Rankings")] [:br] 
-   [:label (styles/font 25) "by code_report"]
-   [social-links]
-   [:br]
-   [info-modal]
-   [:div [language-filters] [:br] [filter-controls] [:br]
-    (generate-table (read/get-all-sites 0) (map #(@state-check-boxes %) [:so :octo :rm :languish :jb :ieee]))
-    [footnotes]]])
+  (let [current-theme (@state :theme)]
+    [:div (styles/app-container current-theme)
+     [theme-toggle]
+     [:a {:href "https://www.youtube.com/c/codereport"
+          :style (styles/youtube-link)}
+      [:img {:src "/media/code_report_circle.png"
+             :style (styles/youtube-image)
+             :on-mouse-over (fn [e] 
+                             (-> e .-target .-style .-transform (set! "scale(1.25)")))
+             :on-mouse-out (fn [e] 
+                            (-> e .-target .-style .-transform (set! "scale(1)")))}]]
+     [:label (styles/font 40) 
+      (str (title-prefix (@state :which-langs)) 
+           " Programming Language Rankings")] [:br] 
+     [:label (styles/font 25) "by code_report"]
+     [social-links]
+     [:br]
+     [info-modal]
+     [:div [language-filters] [:br] [filter-controls] [:br]
+      (generate-table (read/get-all-sites 0) (map #(@state-check-boxes %) [:so :octo :rm :languish :jb :ieee]))
+      [footnotes]]]))
 
 (defn render! []
+  (init-theme)
   (rdom/render
    [app-view]
    (js/document.getElementById "app")))

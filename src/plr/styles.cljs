@@ -1,12 +1,43 @@
 (ns plr.styles)
 
+(def theme-colors
+  {:light {:background "white"
+           :text "black"
+           :border "#ccc"
+           :button-bg "#f0f0f0"
+           :button-bg-hover "#e0e0e0"
+           :shadow "rgba(0,0,0,0.1)"
+           :shadow-hover "rgba(0,0,0,0.15)"}
+   :dark  {:background "#121212"
+           :text "white"
+           :border "#555"
+           :button-bg "#2a2a2a"
+           :button-bg-hover "#3a3a3a"
+           :shadow "rgba(255,255,255,0.05)"
+           :shadow-hover "rgba(255,255,255,0.1)"}})
+
+(defn theme-toggle-style [theme]
+  {:position "absolute"
+   :left "30px"
+   :top "30px"
+   :background "transparent"
+   :border (str "2px solid " (get-in theme-colors [theme :border]))
+   :border-radius "25px"
+   :padding "8px 16px"
+   :color (get-in theme-colors [theme :text])
+   :cursor "pointer"
+   :font-family "'JetBrains Mono', monospace"
+   :font-weight "bold"
+   :transition "all 0.2s ease-in-out"})
+
 (defn table [is-mobile?]
   {:style (merge {:font-family "JetBrains Mono, monospace"
                   :padding "10px 10px"
                   :font-size "20"
                   :margin-left "auto"
                   :margin-right "auto"
-                  :text-align "center"}
+                  :text-align "center"
+                  :color "inherit"}
                  (if is-mobile? {} {:display "inline"}))})
 
 (defn font [font-size]
@@ -40,42 +71,53 @@
            :background-color "rgba(0, 0, 0, 0.5)"
            :z-index 1000}})
 
-(defn modal-content []
-  {:style {:background-color "white"
-           :padding "20px"
-           :border-radius "8px"
-           :max-width "80%"
-           :max-height "80%"
-           :overflow "auto"
-           :position "relative"}})
+(defn modal-content [theme]
+  (let [colors (get theme-colors theme)]
+    {:style {:background-color (:background colors)
+             :color (:text colors)
+             :padding "20px"
+             :border-radius "8px"
+             :max-width "80%"
+             :max-height "80%"
+             :overflow "auto"
+             :position "relative"}}))
 
-(defn modal-close-button []
-  {:style {:position "absolute"
-           :top "10px"
-           :right "10px"
-           :border "none"
-           :background "none"
-           :font-size "20px"
-           :cursor "pointer"}})
+(defn modal-close-button [theme]
+  (let [colors (get theme-colors theme)]
+    {:style {:position "absolute"
+             :top "10px"
+             :right "10px"
+             :border "none"
+             :background "none"
+             :font-size "20px"
+             :color (:text colors)
+             :cursor "pointer"}}))
 
-(defn button []
-  {:style {:text-decoration "none"
-           :background-color "#f0f0f0"
-           :border "1px solid #ccc"
-           :border-radius "4px"
-           :padding "5px 10px"
-           :margin-left "10px"
-           :font-family "inherit"
-           :font-size "0.9em"
-           :cursor "pointer"
-           :transition "all 0.2s ease-in-out"
-           :box-shadow "0 1px 2px rgba(0,0,0,0.1)"}})
+(defn button [theme]
+  (let [colors (get theme-colors theme)]
+    {:style {:text-decoration "none"
+             :background-color (:button-bg colors)
+             :border (str "1px solid " (:border colors))
+             :border-radius "4px"
+             :padding "5px 10px"
+             :margin-left "10px"
+             :font-family "inherit"
+             :font-size "0.9em"
+             :color (:text colors)
+             :cursor "pointer"
+             :transition "all 0.2s ease-in-out"
+             :box-shadow (str "0 1px 2px " (:shadow colors))}}))
 
-(defn app-container []
-  {:style {:text-align "center"
-           :padding "30px"
-           :font-family "JetBrains Mono, monospace"
-           :position "relative"}})
+(defn app-container [theme]
+  (let [colors (get theme-colors theme)]
+    {:style {:text-align "center"
+             :padding "30px"
+             :font-family "JetBrains Mono, monospace"
+             :position "relative"
+             :background-color (:background colors)
+             :color (:text colors)
+             :min-height "100vh"
+             :box-sizing "border-box"}}))
 
 (defn youtube-link []
   {:position "absolute"

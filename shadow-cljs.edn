@@ -1,4 +1,5 @@
 {:source-paths ["src"]
+ :jvm-opts ["--add-opens=java.base/sun.misc=ALL-UNNAMED"]
  :dependencies [[reagent "1.2.0"]
                 [stylefy "3.2.0"]
                 [kixi/stats "0.5.5"]]
