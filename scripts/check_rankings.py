@@ -15,7 +15,7 @@ import urllib.error
 SOURCES = [
     (
         "Stack Overflow Developer Survey",
-        2024,
+        2025,
         ["https://survey.stackoverflow.co/{year}/technology/"],
     ),
     (
@@ -31,12 +31,12 @@ SOURCES = [
     (
         "GitHub Octoverse",
         2025,
-        [("search", "https://github.blog/news-insights/octoverse/", r"octoverse.*{year}")],
+        [("search", "https://github.blog/news-insights/octoverse/", r'href="[^"]*octoverse[^"]*{year}')],
     ),
     (
         "RedMonk Programming Language Rankings",
         2025,
-        [("search", "https://redmonk.com/sogrady/", r"sogrady/{year}/\d+/\d+/language-rankings")],
+        [("search", "https://redmonk.com/sogrady/", r"https://redmonk\.com/sogrady/{year}/\d+/\d+/language-rankings[^\"]*")],
     ),
 ]
 
@@ -60,18 +60,33 @@ def url_exists(url: str) -> bool:
         return False
 
 
-def page_matches(url: str, pattern: str) -> bool:
+def page_matches(url: str, pattern: str) -> str | None:
+    """Return the matched text if pattern is found on the page, else None."""
     req = urllib.request.Request(url)
     req.add_header("User-Agent", "PLR-Rankings-Checker/1.0")
     try:
         with urllib.request.urlopen(req, timeout=15) as resp:
             body = resp.read().decode("utf-8", errors="replace")
-            return bool(re.search(pattern, body))
+            m = re.search(pattern, body)
+            return m.group(0) if m else None
     except (urllib.error.HTTPError, urllib.error.URLError, OSError):
+        return None
+
+
+def gh_available() -> bool:
+    try:
+        subprocess.run(["gh", "--version"], capture_output=True, check=True)
+        return True
+    except FileNotFoundError:
         return False
 
 
+HAS_GH = gh_available()
+
+
 def open_issue_exists(source_name: str) -> bool:
+    if not HAS_GH:
+        return False
     result = subprocess.run(
         ["gh", "issue", "list", "--state", "open", "--search", source_name, "--json", "title"],
         capture_output=True, text=True,
@@ -88,6 +103,9 @@ def create_issue(source_name: str, year: int, url: str) -> None:
         f"URL: {url}\n\n"
         f"Please update the ranking data."
     )
+    if not HAS_GH:
+        print(f"  -> Would create issue: {title} (gh CLI not available, skipping)")
+        return
     subprocess.run(
         ["gh", "issue", "create", "--title", title, "--body", body],
         check=True,
@@ -103,15 +121,19 @@ def check_source(name: str, current_year: int, patterns: list) -> None:
             if isinstance(pat, tuple):
                 _, url, regex = pat
                 regex_resolved = regex.replace("{year}", str(year))
-                if page_matches(url, regex_resolved):
+                match = page_matches(url, regex_resolved)
+                if match:
                     found_url = url
+                    print(f"  Found new ranking: {name} {year}")
+                    print(f"  Matched: {match}")
             else:
                 url = pat.replace("{year}", str(year))
                 if url_exists(url):
                     found_url = url
+                    print(f"  Found new ranking: {name} {year}")
+                    print(f"  URL: {url}")
 
             if found_url:
-                print(f"  Found new ranking: {name} {year}")
                 if open_issue_exists(name):
                     print(f"  Open issue already exists, skipping.")
                 else:
