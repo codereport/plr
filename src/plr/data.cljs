@@ -1,6 +1,6 @@
 (ns plr.data)
 
-(def sites [:so :octo :rm :languish :jb :pypl :ieee :tiobe :githut])
+(def sites [:so :octo :rm :ieee :jb :pypl :languish :tiobe :githut])
 
 (def names {:so "StackOverflow" :octo "Octoverse" :rm "RedMonk" :languish "Languish" :jb "JetBrains"
             :pypl "PYPL" :ieee "IEEE Spectrum" :tiobe "TIOBE" :githut "GitHut 2.0"})

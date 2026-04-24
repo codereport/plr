@@ -23,7 +23,7 @@
                         :show-info-modal false
                         :theme           :light}))
 
-(defonce state-check-boxes (r/atom {:so true :octo true :rm true :languish true :jb false :pypl false :ieee false :tiobe false :githut false}))
+(defonce state-check-boxes (r/atom {:so true :octo true :rm true :ieee false :jb false :languish false :pypl false :tiobe false :githut false}))
 
 (def avg (partial transduce identity kixi/mean))
 (def stdev (partial transduce identity kixi/standard-deviation))
@@ -92,7 +92,7 @@
      [:td styles/cell (format-delta delta)]]))
 
 (defn make-table [rows]
-  (let [mask            (map #(@state-check-boxes %) [:so :octo :rm :languish :jb :ieee])
+  (let [mask            (map #(@state-check-boxes %) [:so :octo :rm :ieee :jb :languish])
         prev-site-langs (get-prev-site-langs (@state :delta))
         prev-rankings   (simplify-row-data (generate-row-data prev-site-langs mask true))]
     [:table (styles/table is-mobile?)
@@ -161,8 +161,8 @@
         (info/table is-mobile?)]])))
 
 (defn language-filters []
-  (let [sites-order [:so :octo :rm :languish :jb :ieee :pypl :tiobe :githut]
-        disabled-langs #{:pypl :tiobe :githut}
+  (let [sites-order [:so :octo :rm :ieee :jb :languish :pypl :tiobe :githut]
+        disabled-langs #{:languish :pypl :tiobe :githut}
         theme (@state :theme)
         colors (get styles/theme-colors theme)]
     [:div 
@@ -268,7 +268,7 @@
      [:br]
      [info-modal]
      [:div [language-filters] [:br] [filter-controls] [:br]
-      (generate-table (read/get-all-sites 0) (map #(@state-check-boxes %) [:so :octo :rm :languish :jb :ieee]))
+      (generate-table (read/get-all-sites 0) (map #(@state-check-boxes %) [:so :octo :rm :ieee :jb :languish]))
       [footnotes]]]))
 
 (defn render! []

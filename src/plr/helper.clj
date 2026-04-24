@@ -42,5 +42,5 @@
 (defmacro get-data [site-kw months-ago] (get-data-content site-kw months-ago))
 
 (defmacro get-all-sites [months-ago]
-  (let [sites [:so :octo :rm :languish :jb :ieee]]
+  (let [sites [:so :octo :rm :ieee :jb :languish]]
     (vec (map #(get-data-content % months-ago) sites))))
