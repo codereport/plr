@@ -25,7 +25,7 @@ SOURCES = [
     ),
     (
         "JetBrains Developer Ecosystem Survey",
-        2024,
+        2025,
         ["https://www.jetbrains.com/lp/devecosystem-{year}/"],
     ),
     (
@@ -35,7 +35,7 @@ SOURCES = [
     ),
     (
         "RedMonk Programming Language Rankings",
-        2025,
+        2026,
         [("search", "https://redmonk.com/sogrady/", r"https://redmonk\.com/sogrady/{year}/\d+/\d+/language-rankings[^\"]*")],
     ),
 ]

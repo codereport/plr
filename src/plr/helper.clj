@@ -4,12 +4,12 @@
 
 ;; Current month references for each site
 (def current-dates
-  {:rm       "2025-01"
+  {:rm       "2026-01"
    :so       "2025-07"
    :ieee     "2025-08"
    :octo     "2025-11"
    :languish "2025-07"
-   :jb       "2024-12"})
+   :jb       "2025-12"})
 
 (defn date-months-ago [date-str n]
   (let [[year month] (map #(Integer/parseInt %) (str/split date-str #"-"))

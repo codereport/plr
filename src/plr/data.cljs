@@ -7,9 +7,9 @@
 
 (def links {:octo     "https://github.blog/news-insights/octoverse/octoverse-a-new-developer-joins-github-every-second-as-ai-leads-typescript-to-1/#the-top-programming-languages-of-2025-typescript-jumps-to-1-while-python-takes-2"
             :ieee     "https://spectrum.ieee.org/top-programming-languages-2025"
-            :rm       "https://redmonk.com/sogrady/2025/06/18/language-rankings-1-25"
+            :rm       "https://redmonk.com/sogrady/2026/04/14/language-rankings-1-26"
             :languish "https://tjpalmer.github.io/languish/"
-            :jb       "https://www.jetbrains.com/lp/devecosystem-2024/"
+            :jb       "https://devecosystem-2025.jetbrains.com/tools-and-trends"
             :so       "https://survey.stackoverflow.co/2025/technology/"
             :pypl     "https://pypl.github.io/PYPL.html"
             :tiobe    "https://www.tiobe.com/tiobe-index/"
