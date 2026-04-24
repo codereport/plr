@@ -1,0 +1,3 @@
+[submodule "public/media/logos"]
+	path = public/media/logos
+	url = git@github.com:codereport/logos.git
