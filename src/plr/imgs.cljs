@@ -89,11 +89,13 @@
 (def darkmode-logos #{"Julia" "Rust"})
 
 (defn get-logo-filename [lang theme]
-  (let [base (get logo-map lang)
-        dot  (str/last-index-of base ".")]
-    (if (and (= theme :dark) (contains? darkmode-logos lang))
-      (str (subs base 0 dot) "_darkmode" (subs base dot))
-      base)))
+  (let [base (get logo-map lang)]
+    (if base
+      (let [dot (str/last-index-of base ".")]
+        (if (and (= theme :dark) (contains? darkmode-logos lang))
+          (str (subs base 0 dot) "_darkmode" (subs base dot))
+          base))
+      "")))
 
 (def site-logos
   {:so       "stackoverflow.png"
