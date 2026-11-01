@@ -5,9 +5,9 @@
    [plr.styles :as styles]
    [plr.imgs :as imgs]))
 
-(def num-langs   {:so "42"      :octo "10"      :rm "20"       :languish "544"       :jb "28"      :pypl "29"      :ieee "52"      :tiobe "50"      :githut "50"        })
+(def num-langs   {:so "50"      :octo "10"      :rm "20"       :languish "544"       :jb "28"      :pypl "29"      :ieee "52"      :tiobe "50"      :githut "50"        })
 (def freq        {:so "Annual"  :octo "Annual"  :rm "Biannual" :languish "Quarterly" :jb "Annual"  :pypl "Monthly" :ieee "Annual"  :tiobe "Monthly" :githut "Quarterly" })
-(def last-update {:so "2025-07" :octo "2025-11" :rm "2026-01"  :languish "2025-04"   :jb "2025-12" :pypl "-"       :ieee "2025-09" :tiobe "-"       :githut "-"         })
+(def last-update {:so "2026-10" :octo "2025-11" :rm "2026-01"  :languish "2025-04"   :jb "2025-12" :pypl "-"       :ieee "2025-09" :tiobe "-"       :githut "-"         })
 
 (def problems {:octo     "Limitation of only showing \"top 10\" languages  since 2014 in graphic."
                :ieee     "JavaScript seems low."
@@ -32,7 +32,7 @@
              :rm       [:div (icon :octo) " Pull Requests, " (icon :so) " Questions"]
              :languish [:div (icon :octo) " Issues, " (icon :octo) " Stars, " (icon :so) " Questions"]
              :jb       [:div (icon :so) " Survey of 23,000+ developers"]
-             :so       [:div (icon :so) " Survey of 70,000+ developers"]
+             :so       [:div (icon :so) " Survey of 30,903 respondents (14,099 answered the language question)"]
              :pypl     [:div (icon :google) " Trends"]
              :githut   [:div (icon :octo) " All Metrics"]
              :tiobe    "\"The ratings are based on the number of skilled engineers world-wide, courses and third party vendors. Popular search engines such as Google, Bing, Yahoo!, Wikipedia, Amazon, YouTube and Baidu are used to calculate the ratings.\""})

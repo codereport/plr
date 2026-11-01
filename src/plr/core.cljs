@@ -81,10 +81,12 @@
   (let [delta (if (contains? prev-rankings lang)
                 (- rank (prev-rankings lang))
                 :new)
-        theme (@state :theme)]
+        theme (@state :theme)
+        logo (imgs/get-logo-filename lang theme)]
     [:tr
      [:td styles/cell (str (+ rank 1))]
-     [:td [:img {:src (str "/media/logos/" (imgs/get-logo-filename lang theme)) :width "40px" :height "40px"}]]
+     [:td (when (seq logo)
+            [:img {:src (str "/media/logos/" logo) :width "40px" :height "40px"}])]
      [:td styles/cell lang]
      [:td styles/cell (format avg)]
      [:td styles/cell (format stdev)]

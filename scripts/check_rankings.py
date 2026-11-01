@@ -15,7 +15,7 @@ import urllib.error
 SOURCES = [
     (
         "Stack Overflow Developer Survey",
-        2025,
+        2026,
         ["https://survey.stackoverflow.co/{year}/technology/"],
     ),
     (
