@@ -5,7 +5,7 @@
 ;; Current month references for each site
 (def current-dates
   {:rm       "2026-01"
-   :so       "2025-07"
+   :so       "2026-10"
    :ieee     "2025-08"
    :octo     "2025-11"
    :languish "2025-07"

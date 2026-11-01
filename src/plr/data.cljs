@@ -10,7 +10,7 @@
             :rm       "https://redmonk.com/sogrady/2026/04/14/language-rankings-1-26"
             :languish "https://tjpalmer.github.io/languish/"
             :jb       "https://devecosystem-2025.jetbrains.com/tools-and-trends"
-            :so       "https://survey.stackoverflow.co/2025/technology/"
+            :so       "https://survey.stackoverflow.co/2026/technology/data#languages"
             :pypl     "https://pypl.github.io/PYPL.html"
             :tiobe    "https://www.tiobe.com/tiobe-index/"
             :githut   "https://madnight.github.io/githut/"})
